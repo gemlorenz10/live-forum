@@ -1,0 +1,13 @@
+@import '~sass/variables';
+
+.banner {
+    background-color: $primary-color;
+    h1 {
+        color: white;
+    }
+}
+
+.plain {
+    background-color: $primary-color;
+    color: white;
+}
