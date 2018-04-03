@@ -2,6 +2,8 @@
 
 .banner {
     background-color: $primary-color;
+    width: 100%;
+    overflow: hidden;
     h1 {
         color: white;
     }
@@ -10,4 +12,21 @@
 .plain {
     background-color: $primary-color;
     color: white;
+}
+
+.line {
+    padding: 0;
+    margin: 0;
+    color: $primary-shade;
+}
+
+nav {
+    a {
+        color: black;
+        padding: 5px;
+    }
+    a:hover {
+        color: $secondary-color;
+        background-color: $light;
+    }
 }

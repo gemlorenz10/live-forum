@@ -1,8 +1,14 @@
-<div class="banner"><h1>Live Forum</h1></div>
 
-<nav>
-  <a routerLink="/" routerLinkActive="active">Home</a> |
-  <a routerLink="/register" routerLinkActive="active">Register</a> |
-  <a routerLink="/login" routerLinkActive="active">Login</a>
-</nav>
-<router-outlet></router-outlet>
+<div class="banner">
+  <h1>Live Forum</h1>
+</div>
+
+<div class="container">
+  <nav>
+    <a routerLink="/" routerLinkActive="active">Home</a> |
+    <a routerLink="/register" routerLinkActive="active">Register</a> |
+    <a routerLink="/login" routerLinkActive="active">Login</a>
+  </nav>
+  <hr class="line">
+  <router-outlet></router-outlet>
+</div>
