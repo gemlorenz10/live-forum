@@ -1,3 +1,24 @@
-<p>
-  login-page works!
-</p>
+<div class="login-container">
+
+    <div class="row">
+        <div class="col-sm">
+          <div class="title">
+            <h4>User Login</h4>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <div class="center">
+            <input class="form-item" type="email" name="email" id="email" placeholder="Email" [(ngModel)]="user.email"><br>
+            <input class="form-item" type="password" name="password" id="password" placeholder="Password" [(ngModel)]="user.password"><br>
+            <button class="btn btn-primary form-item" type="submit"  (click)="onClickLogin()" [disabled]="loader">
+              <span>{{ (loader) ? 'Please wait...' : 'Login' }}</span>
+            </button>
+            <!-- <p>{{ userData.password + '===' + passwordConfirmation  }}</p> -->
+          </div>
+        </div>
+      </div>
+
+</div>
+

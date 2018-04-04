@@ -1,4 +1,11 @@
+import { LibService } from './../../providers/lib.service';
+import { FireService, USER, DATA_UPLOAD } from './../../modules/firelibrary/core';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+
+import * as settings from '../../../settings/settings';
+import * as firebase from 'firebase';
+import { Router } from '@angular/router';
+// import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-register-page',
@@ -6,29 +13,56 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   styleUrls: ['./register-page.scss']
 })
 export class RegisterPage implements OnInit, OnDestroy {
-  profilePhoto;
-  private reader;
-  constructor() { }
+  private userData = <USER>{};
+  private loader = false;
+  private passwordConfirmation: string;
+  constructor(
+    private fire: FireService,
+    private lib: LibService
+  ) { }
 
   ngOnInit() {
+    if (this.fire.user.isLogin) {
+      this.lib.goToHomePage(); // go to home
+    }
   }
 
   ngOnDestroy() {
-    this.reader = null;
   }
 
-  onChangePhoto(e) {
-    console.log('CHanged!', e);
-    const file = e.target.files[0];
-    this.reader = new FileReader();
-    this.reader.onloadend = () => {
-      this.profilePhoto = this.reader.result;
-      console.log('OnLoad', this.reader.result);
-    };
-    if (file) {
-      this.reader.readAsDataURL(file);
+  onClickRegister() {
+    this.loader = true;
+    if (this.registerValidator()) {
+      this.fire.user.register(this.userData)
+      .then(user => {
+        alert(`Registration successful you are now logged in as ${this.userData.displayName}`);
+        this.lib.goToHomePage(); // go to home
+      })
+      .catch(e => {
+        alert('ERROR: ' + e);
+        this.loader = false;
+      });
     } else {
-      this.profilePhoto = '';
+      this.loader = false;
     }
   }
+
+  private registerValidator() {
+    if (!this.userData.email) {
+      alert('Email field is required');
+      return false;
+    } else if (!this.userData.password) {
+      alert('Password field is required.');
+      return false;
+    } else if (this.userData.password !== this.passwordConfirmation ) {
+      alert('Password did not match!');
+      return false;
+    } else if (!this.userData.displayName) {
+      alert('Display name field is required!');
+      return false;
+    } else {
+      return true;
+    }
+  }
+
 }

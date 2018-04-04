@@ -8,9 +8,13 @@
     text-align: center;
 }
 
+.title {
+    margin: auto;
+    text-align: center;
+}
 
-.button-primary {
-    background-color: $secondary-color;
-    color: white;
-    border: 0;
+.form-item {
+    margin: 0.5em 0.5em;
+    padding: 0.5em;
+    width: 25em;
 }

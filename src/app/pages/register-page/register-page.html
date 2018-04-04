@@ -1,22 +1,21 @@
 
-  <div class="row">
-    <div class="col-sm">
-      <div class="title">
-        <h4>User Registration</h4>
-      </div>
+<div class="row">
+  <div class="col-sm">
+    <div class="title">
+      <h4>User Registration</h4>
     </div>
   </div>
-  <div class="row">
-    <div class="col-sm">
-      <div class="center">
-          <div class="profile-photo">
-            <img src="{{ profilePhoto }}">
-          </div><br>
-          <input type="file" name="file" id="file" (change)="onChangePhoto($event)"><br>
-          <input type="email" name="email" id="email" placeholder="Email"><br>
-          <input type="password" name="password" id="password" placeholder="Password"><br>
-          <input type="text" name="name" id="name" placeholder="Name"><br>
-          <button type="submit" class="btn button-primary">Submit</button>
-      </div>
+</div>
+<div class="row">
+  <div class="col-sm">
+    <div class="center">
+      <input class="form-item" type="email" name="email" id="email" placeholder="Email" [(ngModel)]="userData.email"><br>
+      <input class="form-item" type="password" name="password" id="password" placeholder="Password" [(ngModel)]="userData.password"><br>
+      <input class="form-item" type="password" name="confirm-password" id="confirm-password" placeholder="Confirm password" [(ngModel)]="passwordConfirmation"><br>
+      <input class="form-item" type="text" name="display-name" id="display-name" placeholder="Display Name" [(ngModel)]="userData.displayName"><br>
+      <button class="btn btn-primary form-item" type="submit" (click)="onClickRegister()" [disabled]="loader">
+          <span>{{ (loader) ? 'Please wait...' : 'Register' }}</span>
+      </button>
     </div>
   </div>
+</div>

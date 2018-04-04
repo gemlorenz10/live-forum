@@ -9,24 +9,33 @@
     }
 }
 
-.plain {
-    background-color: $primary-color;
-    color: white;
-}
-
 .line {
     padding: 0;
     margin: 0;
     color: $primary-shade;
 }
 
-nav {
-    a {
-        color: black;
-        padding: 5px;
-    }
-    a:hover {
+.nav-container {
+    .nav-item{
+        padding: 0.5em;
+        margin: 0;
+        display: inline;
         color: $secondary-color;
-        background-color: $light;
+        
     }
+    .nav-item:hover {
+        background-color: $primary-color;
+        text-decoration: none;
+        color: $light;
+    }
+    
+    .active {
+        text-decoration: none;
+        background-color: $primary-color;
+        color: $light;
+    }
+}
+
+.outlet {
+    margin-top: 1em;
 }

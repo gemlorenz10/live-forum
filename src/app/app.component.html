@@ -4,11 +4,22 @@
 </div>
 
 <div class="container">
-  <nav>
-    <a routerLink="/" routerLinkActive="active">Home</a> |
-    <a routerLink="/register" routerLinkActive="active">Register</a> |
-    <a routerLink="/login" routerLinkActive="active">Login</a>
-  </nav>
-  <hr class="line">
-  <router-outlet></router-outlet>
+  <div *ngIf="systemInstalled === true">
+    <nav class="nav-container">
+      <a routerLink="/" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> Home </a>
+      <a routerLink="/register" class="nav-item" routerLinkActive="active" *ngIf="isLogout()"> Register </a>
+      <a routerLink="/login" class="nav-item" routerLinkActive="active" *ngIf="isLogout()"> Login </a>
+      <a (click)="onClickLogout()" class="nav-item" routerLinkActive="active" *ngIf="isLogin()"> Logout </a>
+    </nav>
+    <hr class="line">
+    <div class="outlet">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+  <div class="outlet">
+    <install-page *ngIf="systemInstalled === false" (finishedInstall)="onFinishInstall($event)"></install-page>
+  </div>
+  <div class="outlet">
+     <p *ngIf="!systemInstalled">Loading...</p>
+    </div>
 </div>
