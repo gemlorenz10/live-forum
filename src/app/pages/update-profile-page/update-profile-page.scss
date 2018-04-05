@@ -1,0 +1,33 @@
+@import '~sass/mixins';
+@import '~sass/variables';
+
+.gender-container {
+    margin: 0.5em;
+    overflow: auto;
+    .gender-label {
+        margin: 0 2.3em 0 0;
+        padding: 0.5em 0 0.5em 0;
+        background-color: $secondary-shade;
+        span {
+            margin: 0 0.3em 0 0.3em;
+            
+        }
+        
+    }
+}
+
+.birthday-container {
+    margin: 0.5em;
+    padding: 0;
+    overflow: auto;
+    label {
+        background-color: $secondary-shade;
+        padding: 0 0 0 0.2rem;
+        margin: 0.5em;
+        input {
+            width: 20.5rem;
+            margin: 0;
+        }
+    }
+
+}

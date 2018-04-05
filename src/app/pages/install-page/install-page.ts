@@ -34,6 +34,9 @@ export class InstallPage implements OnInit {
       alert('Admin password did not match!');
 
     } else {
+
+
+
       this.fire.install({email: this.admin.email})
       .then(re => {
         if (re) {

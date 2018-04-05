@@ -1,9 +1,13 @@
-<h3>Install App</h3>
-<input type="text" name="admin-email" id="admin-email" placeholder="Admin Email" [(ngModel)]="admin.email"><br>
-<input type="password" name="admin-password" id="admin-password" placeholder="Admin password" [(ngModel)]="admin.password"><br>
-<input type="password" name="confirm-admin-password" id="confirm-admin-password" placeholder="Confirm admin password" [(ngModel)]="confirmPassword"><br>
-<input type="text" name="admin-display-name" id="admin-display-name" placeholder="Admin Display Name" [(ngModel)]="admin.displayName" value="admin.displayName"><br>
 
-<button class="btn btn-primary" type="submit" (click)="onClickInstall()" [disabled]="loader">
-<span *ngIf="loader">{{ (loader) ? 'Please wait...' : 'Install Now' }}</span>
-</button>
+
+<div class="center">
+    <h3>Install App</h3>
+    <input [(ngModel)]="admin.email" type="text" name="admin-email" id="admin-email" placeholder="Admin Email" class="form-item-text" ><br>
+    <input [(ngModel)]="admin.password" type="password" name="admin-password" id="admin-password" placeholder="Admin password" class="form-item-text"><br>
+    <input [(ngModel)]="confirmPassword" type="password" name="confirm-admin-password" id="confirm-admin-password" placeholder="Confirm admin password"  class="form-item-text"><br>
+    <input [(ngModel)]="admin.displayName" value="admin.displayName"  type="text" name="admin-display-name" id="admin-display-name" placeholder="Admin Display Name"  class="form-item-text"><br>
+    
+    <button class="btn btn-primary" type="submit" (click)="onClickInstall()" [disabled]="loader">
+        <span *ngIf="loader">{{ (loader) ? 'Please wait...' : 'Install Now' }}</span>
+    </button>
+</div>

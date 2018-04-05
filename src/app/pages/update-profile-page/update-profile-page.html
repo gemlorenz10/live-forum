@@ -1,4 +1,52 @@
-<app-file-upload 
-[pathToStorage]="'profile-photo'"
-[allowMultipleFiles]="true"
-(uploadDone)="onUploadDone($event)"></app-file-upload>
+
+<div class="title">
+    <h2>Update Profile</h2>
+</div>
+<div class="row">
+    <div class="col-sm">
+        <div class="file-upload-container center margin-0-5-em">
+            <app-file-upload
+            [pathToStorage]="'profile-photo'"
+            [allowMultipleFiles]="false"
+            (uploadDone)="onUploadDone($event)"
+            (uploadStart)="onUploadStart($event)"></app-file-upload>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm">
+        <div class="form-container center">
+            <input type="text" class="form-item-text" placeholder="*Firstname" [(ngModel)]="user.firstName" ><br>
+            <input type="text" class="form-item-text" placeholder="Middlename"  [(ngModel)]="user.middleName" ><br>
+            <input type="text" class="form-item-text" placeholder="*Lastname" [(ngModel)]="user.lastName" ><br>
+            <!-- Gender -->
+            <div class="gender-container">
+                <div class="gender-label form-item-radio">
+                    <span>*Gender:</span>
+                </div>
+                <div class="form-item-radio">
+                    <label class="pointer">
+                        Male: <input type="radio" name="gender" id="gender-m" value="M" class="pointer" [(ngModel)]="user.gender" >
+                    </label>
+                </div>
+                <div class="form-item-radio">
+                    <label class="pointer">
+                        Female: <input type="radio"  name="gender" id="gender-f" value="F" class="pointer" [(ngModel)]="user.gender">
+                    </label>
+                </div>
+            </div>
+            <!-- Birthdate -->
+            <div class="birthday-container">
+                <label>
+                    *Birthday: <input type="date" class="form-item-text" [(ngModel)]="user.birthday">
+                </label>
+            </div>
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary form-item-text" [disabled]="loader" (click)="onClickSubmit()">{{ (loader) ? 'Please wait...' : 'Submit' }}</button>
+            <p>Fields with asterisk '*' are required.</p>
+        </div>
+        <!-- {{ user | json }} -->
+    </div>
+</div>
+

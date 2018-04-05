@@ -6,10 +6,14 @@
 <div class="container">
   <div *ngIf="isSystemInstalled === true">
     <nav class="nav-container">
+      
       <a routerLink="/" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> Home </a>
       <a routerLink="/register" class="nav-item" routerLinkActive="active" *ngIf="! isLogin"> Register </a>
       <a routerLink="/login" class="nav-item" routerLinkActive="active" *ngIf="! isLogin"> Login </a>
+
+      <a routerLink="/update-profile" class="nav-item" routerLinkActive="active" *ngIf="isLogin"> Update Profile </a>
       <a (click)="onClickLogout()" class="nav-item" *ngIf="isLogin"> Logout </a>
+      
     </nav>
     <hr class="line">
     <div class="outlet">

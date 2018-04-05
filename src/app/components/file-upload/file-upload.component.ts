@@ -35,6 +35,7 @@ export class FileUploadComponent implements OnInit {
   */
   @Output() uploadDone = new EventEmitter<Array<DATA_UPLOAD>>();
 
+
   previewList = []; // raw images
   thumbnailUrls = [];
   uploadList: Array<DATA_UPLOAD> = [];
@@ -57,7 +58,7 @@ export class FileUploadComponent implements OnInit {
     }
 
     const file: File = files[0];
-    console.log('files :', files);
+    // console.log('files :', files);
     this.uploadFile(file);
     // if (!this.allowMultipleFiles) {
     //   this.uploadFile(file);
@@ -101,6 +102,7 @@ export class FileUploadComponent implements OnInit {
         this.loader = false;
         this.renderFile(file);
         closeUploadTask();
+        this.uploadDone.emit(this.uploadList);
         /**
         * Delete older files if needed.
         */
@@ -142,10 +144,12 @@ export class FileUploadComponent implements OnInit {
   private renderFile(file) {
     const reader = new FileReader();
     reader.onload = (event: ProgressEvent) => {
+      if (this.previewList.length > 0 && !this.allowMultipleFiles) {
+        this.previewList.shift();
+      }
       this.previewList.push(event.target['result']);
-      console.log(event.target['result']);
+      // console.log(this.previewList);
     };
     reader.readAsDataURL(file);
   }
-
 }

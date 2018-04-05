@@ -6,7 +6,7 @@ import { FireService } from '../modules/firelibrary/core';
 export class LibService {
 
   constructor(
-    public router: Router
+    private router: Router
   ) { }
 
   goToHomePage() {

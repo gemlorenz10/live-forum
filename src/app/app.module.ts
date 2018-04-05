@@ -33,9 +33,9 @@ const appRoutes: Routes = [
   { path: 'register', component: RegisterPage },
   { path: 'login', component: LoginPage },
   { path: 'install', component: InstallPage },
-  // { path: 'update-profile', component: UpdateProfilePage },
-  // { path: '', component: ForumPage }
-  { path: '', component: UpdateProfilePage }
+  { path: 'update-profile', component: UpdateProfilePage },
+  { path: '', component: ForumPage }
+  // { path: '', component: UpdateProfilePage }
 ];
 
 

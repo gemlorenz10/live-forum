@@ -12,8 +12,27 @@
     text-align: center;
 }
 
-.form-item {
-    margin: 0.5em 0.5em;
+.form-item-text {
+    margin: 0.5em;
     padding: 0.5em;
     width: 25em;
+}
+
+.form-item-radio {
+    display: inline;
+    margin:  0 2em 0 2em;
+    padding: 0;
+    label {
+        // background-color: $secondary-shade;
+        margin: 0;
+        padding: 0.5em 0.5em 0.5em 0.5em;
+        @include no-select();
+    }
+}
+.pointer {
+    cursor: pointer;
+}
+
+.margin-0-5-em {
+    margin: 0.5em;
 }
