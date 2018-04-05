@@ -13,9 +13,11 @@ import { RegisterPage } from './pages/register-page/register-page';
 import { ForumPage } from './pages/forum-page/forum-page';
 import { LoginPage } from './pages/login-page/login-page';
 import { InstallPage } from './pages/install-page/install-page';
+import { UpdateProfilePage } from './pages/update-profile-page/update-profile-page';
 
 import * as firebase from 'firebase';
 import 'firebase/firestore';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 
 firebase.initializeApp({
@@ -31,18 +33,23 @@ const appRoutes: Routes = [
   { path: 'register', component: RegisterPage },
   { path: 'login', component: LoginPage },
   { path: 'install', component: InstallPage },
-  { path: '', component: ForumPage }
+  // { path: 'update-profile', component: UpdateProfilePage },
+  // { path: '', component: ForumPage }
+  { path: '', component: UpdateProfilePage }
 ];
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    AlertComponent,
+    FileUploadComponent,
+
     RegisterPage,
     ForumPage,
     LoginPage,
-    AlertComponent,
-    InstallPage
+    InstallPage,
+    UpdateProfilePage,
   ],
   imports: [
     FormsModule,

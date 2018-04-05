@@ -1,0 +1,38 @@
+@import '~sass/variables';
+.single-file {
+    .image-container {
+        background-color: $secondary-shade;
+        width: auto;
+        height: auto;
+        margin: 0.3em;
+        overflow: hidden;
+            img {
+                max-height: 15em;
+                max-width: 15em;
+                width: auto;
+                height: auto;
+                margin: 0; 
+            }
+    
+    }
+}
+
+.multiple-file {
+    .image-container {
+        float: left;
+        width: auto;
+        height: auto;
+        margin: 0.3em;
+        overflow: hidden;
+            img {
+                max-height: 15em;
+                max-width: 15em;
+                width: auto;
+                height: auto;
+                margin: 0; 
+            }
+    
+    }
+}
+
+

@@ -2,7 +2,6 @@ import { LibService } from './../../providers/lib.service';
 import { FireService, USER, DATA_UPLOAD } from './../../modules/firelibrary/core';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import * as settings from '../../../settings/settings';
 import * as firebase from 'firebase';
 import { Router } from '@angular/router';
 // import { NgModel } from '@angular/forms';
@@ -16,6 +15,7 @@ export class RegisterPage implements OnInit, OnDestroy {
   private userData = <USER>{};
   private loader = false;
   private passwordConfirmation: string;
+  private authStateUnsubscribe;
   constructor(
     private fire: FireService,
     private lib: LibService
@@ -36,7 +36,7 @@ export class RegisterPage implements OnInit, OnDestroy {
       this.fire.user.register(this.userData)
       .then(user => {
         alert(`Registration successful you are now logged in as ${this.userData.displayName}`);
-        this.lib.goToHomePage(); // go to home
+        // this.lib.goToHomePage(); // go to home
       })
       .catch(e => {
         alert('ERROR: ' + e);

@@ -1,10 +1,9 @@
 @import './mixins';
 @import './variables';
 
-
 .center {
     margin: auto;
-    padding: 0;
+    padding: auto;
     text-align: center;
 }
 

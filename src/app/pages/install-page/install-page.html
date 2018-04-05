@@ -5,6 +5,5 @@
 <input type="text" name="admin-display-name" id="admin-display-name" placeholder="Admin Display Name" [(ngModel)]="admin.displayName" value="admin.displayName"><br>
 
 <button class="btn btn-primary" type="submit" (click)="onClickInstall()" [disabled]="loader">
-<span *ngIf="loader">Please wait...</span>
-<span *ngIf="!loader">Install now</span>
+<span *ngIf="loader">{{ (loader) ? 'Please wait...' : 'Install Now' }}</span>
 </button>

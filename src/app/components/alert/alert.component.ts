@@ -1,4 +1,3 @@
-import { ALERT_TIMEOUT } from './../../../settings/settings';
 import { Component, OnInit, Input } from '@angular/core';
 import { RESPONSE } from '../../modules/firelibrary/core';
 
@@ -30,18 +29,7 @@ export class AlertComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.response.code === null) {
-      this.type = 'success';
-      this.show = true;
-    } else {
-      this.type = 'danger';
-      this.code = this.response.code;
-      this.message = (this.message) ? this.message : this.response.message || 'No message passed.';
-      this.show = true;
-    }
-    setTimeout(() => {
-      this.show = false;
-    }, ALERT_TIMEOUT);
+
   }
 
 }
