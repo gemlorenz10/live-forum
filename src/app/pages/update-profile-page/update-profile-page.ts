@@ -11,7 +11,6 @@ import { USER, DATA_UPLOAD, FireService, USER_CREATE, USER_DATA } from '../../mo
 export class UpdateProfilePage implements OnInit, OnDestroy {
 
   user = <USER>{};
-  node = null;
 
   loader;
   label;
@@ -54,6 +53,8 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
       if ( user.profilePhoto && user.profilePhoto.thumbnailUrl ) {
         this.data = user.profilePhoto;
         this.fileLoader = false;
+      } else {
+        // this.data
       }
       // if ('profilePhoto' in user) {
       //   if ('thumbnailUrl' in user.profilePhoto) {
