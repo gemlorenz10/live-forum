@@ -1,7 +1,13 @@
 
-<div class="banner">
-  <h1>Live Forum</h1>
+<div class="app-head">
+  <div class="banner left">
+    <h1>Live Forum</h1>
+  </div>
+  <!-- <div class="avatar-container right" *ngIf="isLogin">
+    <app-avatar [profilePhoto]="profilePhoto" [displayName]="displayName"></app-avatar>
+  </div> -->
 </div>
+
 
 <div class="container">
   <div *ngIf="isSystemInstalled === true">
@@ -10,7 +16,7 @@
       <a routerLink="/" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> Home </a>
       <a routerLink="/register" class="nav-item" routerLinkActive="active" *ngIf="! isLogin"> Register </a>
       <a routerLink="/login" class="nav-item" routerLinkActive="active" *ngIf="! isLogin"> Login </a>
-
+      
       <a routerLink="/update-profile" class="nav-item" routerLinkActive="active" *ngIf="isLogin"> Update Profile </a>
       <a (click)="onClickLogout()" class="nav-item" *ngIf="isLogin"> Logout </a>
       

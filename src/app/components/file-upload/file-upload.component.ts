@@ -1,7 +1,7 @@
-import { DATA_UPLOAD } from './../../modules/firelibrary/providers/etc/interface';
+import { DATA_UPLOAD, USER } from './../../modules/firelibrary/providers/etc/interface';
 import { LibService } from './../../providers/lib.service';
 
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { FireService } from '../../modules/firelibrary/core';
 
 import * as firebase from 'firebase';
@@ -11,7 +11,7 @@ import * as firebase from 'firebase';
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss']
 })
-export class FileUploadComponent implements OnInit {
+export class FileUploadComponent implements OnInit, OnChanges {
 
   /**
   * Path to firebase storage.
@@ -29,6 +29,7 @@ export class FileUploadComponent implements OnInit {
   */
   @Input() deleteOldFiles: Array<DATA_UPLOAD>;
 
+  @Input() currentPhoto = 'assets/profile.png';
 
   /**
   * Emits Array<DATA_UPLOAD>
@@ -44,11 +45,21 @@ export class FileUploadComponent implements OnInit {
 
   ngOnInit() {
     if (this.fire.user.isLogout) {
-
-      this.lib.goToHomePage();
-
+      this.lib.openHomePage();
     }
+    this.previewList.push(this.currentPhoto);
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // only run when property "data" changed
+    if (changes['currentPhoto']) {
+        if (!this.allowMultipleFiles) {
+          this.previewList = [];
+        }
+        this.previewList.push(this.currentPhoto);
+        console.log('current photo changes');
+    }
+}
 
   onChangeFile(e) {
     this.loader = true;
@@ -58,24 +69,11 @@ export class FileUploadComponent implements OnInit {
     }
 
     const file: File = files[0];
-    // console.log('files :', files);
+    if (!this.allowMultipleFiles) {
+      this.previewList.shift();
+    }
     this.uploadFile(file);
-    // if (!this.allowMultipleFiles) {
-    //   this.uploadFile(file);
-    // } else {
-    //   alert('Upload multiple file selection is not yet working!');
-    //   this.loader = false;
-    // let i;
-    // for ( i = 0; i < files.length - 1;) {
-    //   this.uploadFile(files[i])
-    //   .then((upload: DATA_UPLOAD) => {
-    //     this.uploadList.push(upload);
-    //   })
-    //   .catch(er => { alert(er); });
-    // }
-    // }
 
-    // closeUploadTask();
   }
 
   private uploadFile(file: File) {
@@ -89,6 +87,9 @@ export class FileUploadComponent implements OnInit {
       },
       (err) => {
         console.error('Upload Error', err);
+        if ( err.message ) {
+          alert(err.message);
+        }
         this.loader = false;
         closeUploadTask();
       },
@@ -98,9 +99,13 @@ export class FileUploadComponent implements OnInit {
         upload.name = uploadTask.snapshot.metadata.name;
 
 
+        if (!this.allowMultipleFiles) {
+          this.uploadList = [];
+          this.previewList = [];
+        }
         this.uploadList.push(upload);
         this.loader = false;
-        this.renderFile(file);
+        // this.renderFile(file);
         closeUploadTask();
         this.uploadDone.emit(this.uploadList);
         /**
@@ -118,28 +123,16 @@ export class FileUploadComponent implements OnInit {
         //   }
 
         // }
-
-        /**
-        * Get thumbnailUrl before emitting.
-        */
-        // this.fire.data.getThumbnailUrl(upload.fullPath)
-        // .then( thumbUrl => {
-        //   this.thumbnailUrls.push(thumbUrl);
-        //   upload.thumbnailUrl = thumbUrl;
-        //   this.uploadList.push(upload);
-        //   this.loader = false;
-        //   this.renderFile(file);
-        //   closeUploadTask();
-        // })
-        // .catch(error => {
-        //   alert('Error on getThumbnail' + error.message);
-        //   console.error(error);
-        //   this.loader = false;
-        //   closeUploadTask();
-        // });
-      }
-    );
+      });
   }
+
+  // displayThumbnail() {
+  //   this.fire.user.listen((user: USER) => {
+  //     if (user.profilePhoto.thumbnailUrl) {
+  //       this.currentPhoto = user.profilePhoto.thumbnailUrl;
+  //     }
+  //   });
+  // }
 
   private renderFile(file) {
     const reader = new FileReader();
@@ -148,7 +141,6 @@ export class FileUploadComponent implements OnInit {
         this.previewList.shift();
       }
       this.previewList.push(event.target['result']);
-      // console.log(this.previewList);
     };
     reader.readAsDataURL(file);
   }

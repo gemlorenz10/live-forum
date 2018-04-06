@@ -18,7 +18,7 @@ export class LoginPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.fire.user.isLogin) {
-      this.lib.goToHomePage();
+      this.lib.openHomePage();
     }
     // this.authStateUnsubscribe = this.fire.auth.onAuthStateChanged(user => {
     //   if (user) {
@@ -40,7 +40,7 @@ export class LoginPage implements OnInit, OnDestroy {
       this.fire.user.login(this.user.email, this.user.password)
       .then(a => {
         this.loader = false;
-        this.lib.goToHomePage();
+        this.lib.openHomePage();
       })
       .catch(e => {
         alert(e);
