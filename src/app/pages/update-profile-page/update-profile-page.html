@@ -1,9 +1,10 @@
 
-<div class="title">
-    <h2>{{ (loader) ? 'Loading...' : label }}</h2>
+<div class="title" *ngIf=" loader ">
+    <h2>Loading...</h2>
 </div>
 
-<div class="update-profile-container" *ngIf="!loader">
+<div class="update-profile-container" *ngIf=" user ">
+    <h2>Update Profile</h2>
     <div class="row">
         <div class="col-sm">
             <div class="file-upload-container center margin-0-5-em">

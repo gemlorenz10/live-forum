@@ -10,10 +10,10 @@ import { USER, DATA_UPLOAD, FireService, USER_CREATE, USER_DATA } from '../../mo
 })
 export class UpdateProfilePage implements OnInit, OnChanges, DoCheck, OnDestroy {
 
-  user = <USER>{};
+  user: USER = null;
 
   loader;
-  label;
+  // label;
   fileLoader;
   data = <DATA_UPLOAD>{};
 
@@ -24,39 +24,49 @@ export class UpdateProfilePage implements OnInit, OnChanges, DoCheck, OnDestroy 
 
   }
   ngOnInit() {
-    this.fileLoader = true;
     this.loader = true;
     if (this.fire.user.isLogin) {
       this.fire.user.data()
-      .then((re: USER_DATA) => {
-        this.lib.sanitize(re.data.user);
-        if (re.data.user.updated) {
-          this.label = 'Update Profile';
-          this.user.firstName = re.data.user.firstName;
-          this.user.middleName = re.data.user.middleName;
-          this.user.lastName = re.data.user.lastName;
-          this.user.gender = re.data.user.gender;
-          this.user.birthday = re.data.user.birthday;
-          this.user.profilePhoto = re.data.user.profilePhoto;
-          if ( re.data.user.profilePhoto.thumbnailUrl ) {
-            this.fileLoader = false;
-            this.data.thumbnailUrl = re.data.user.profilePhoto.thumbnailUrl;
+        .then((re: USER_DATA) => {
+
+          this.loader = false;
+
+          this.user = re.data.user;
+
+
+
+          this.lib.sanitize(re.data.user);
+          if (re.data.user.updated) {
+            // this.label = 'Update Profile';
+            // this.user.firstName = re.data.user.firstName;
+            // this.user.middleName = re.data.user.middleName;
+            // this.user.lastName = re.data.user.lastName;
+            // this.user.gender = re.data.user.gender;
+            // this.user.birthday = re.data.user.birthday;
+            // this.user.profilePhoto = re.data.user.profilePhoto;
+
+            // if ( re.data.user.profilePhoto.thumbnailUrl ) {
+            //   this.data.thumbnailUrl = re.data.user.profilePhoto.thumbnailUrl;
+            // }
+          } else {
+            // this.label = 'Welcome, ' + this.fire.user.displayName;
           }
-        } else {
-          this.label = 'Welcome, ' + this.fire.user.displayName;
-        }
-        this.loader = false;
-      })
-      .catch(e => {
-        this.loader = false;
-        alert('Error on getting data: ' + e.message);
-      });
+        })
+        .catch(e => {
+          this.loader = false;
+          alert('Error on getting data: ' + e.message);
+        });
     }
 
     this.fire.user.listen((user: USER) => {
-      this.data = user.profilePhoto;
+      if (user.profilePhoto && user.profilePhoto.thumbnailUrl) {
+        this.data = user.profilePhoto;
+        const url = this.data.thumbnailUrl + '&v=2';
+      }
     });
 
+
+    /// Why the `this.use` is null here?
     console.log('User after init', this.user);
 
   }
@@ -86,9 +96,9 @@ export class UpdateProfilePage implements OnInit, OnChanges, DoCheck, OnDestroy 
   }
 
   onUploadDone(e: DATA_UPLOAD) {
-    console.log('Upload Emits: ', e);
+    // console.log('Upload Emits: ', e);
     // thumbnail is being updated by firebase-backend
-    if ( e[0] ) {
+    if (e[0]) {
       this.user.profilePhoto = e[0];
       this.user.photoURL = e[0].url;
     }
@@ -102,23 +112,23 @@ export class UpdateProfilePage implements OnInit, OnChanges, DoCheck, OnDestroy 
       this.loader = true;
       this.lib.sanitize(this.user);
       this.fire.user.update(this.user)
-      .then((res: USER_CREATE) => {
-        if (res.data.id) {
+        .then((res: USER_CREATE) => {
+          if (res.data.id) {
+            // this.fire.user.unlisten();
+            alert('Profile Updated!');
+            this.lib.openHomePage();
+            this.loader = false;
+          } else {
+            alert('Error on update return');
+            console.log('Error on update return', res);
+          }
+        })
+        .catch(e => {
           // this.fire.user.unlisten();
-          alert('Profile Updated!');
-          this.lib.openHomePage();
+          alert(e.message);
+          console.error(e);
           this.loader = false;
-        } else {
-          alert('Error on update return');
-          console.log('Error on update return', res);
-        }
-      })
-      .catch(e => {
-        // this.fire.user.unlisten();
-        alert(e.message);
-        console.error(e);
-        this.loader = false;
-      });
+        });
     } else {
       // alert('Validator fails');
       this.loader = false;
@@ -130,13 +140,13 @@ export class UpdateProfilePage implements OnInit, OnChanges, DoCheck, OnDestroy 
     if (this.validateBirthday()) {
       alert('Invalid Birthday');
       return false;
-    } else if (! this.user.firstName) {
+    } else if (!this.user.firstName) {
       alert('Firstname field is required.');
       return false;
-    } else if (! this.user.lastName) {
+    } else if (!this.user.lastName) {
       alert('Lastname field is required.');
       return false;
-    } else if (! this.user.gender) {
+    } else if (!this.user.gender) {
       alert('Gender field is required.');
       return false;
     } else {
