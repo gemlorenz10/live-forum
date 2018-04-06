@@ -12,12 +12,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./register-page.scss']
 })
 export class RegisterPage implements OnInit, OnDestroy {
-  private userData = <USER>{};
-  private loader = false;
-  private passwordConfirmation: string;
-  private authStateUnsubscribe;
+  public userData = <USER>{};
+  public loader = false;
+  public passwordConfirmation: string;
+  authStateUnsubscribe;
   constructor(
-    private fire: FireService,
+    public fire: FireService,
     private lib: LibService
   ) { }
 
@@ -37,6 +37,7 @@ export class RegisterPage implements OnInit, OnDestroy {
       .then(user => {
         alert(`Registration successful you are now logged in as ${this.userData.displayName}`);
         // this.lib.goToHomePage(); // go to home
+        this.lib.openProfile();
       })
       .catch(e => {
         alert('ERROR: ' + e);

@@ -10,10 +10,15 @@ export class LibService {
   ) { }
 
   goToHomePage() {
-    this.router.navigate(['']);
+    this.goTo('');
   }
 
   goTo(route: string): void {
     this.router.navigate([route]);
   }
+
+  openProfile() {
+    this.goTo('/update-profile');
+  }
+
 }
