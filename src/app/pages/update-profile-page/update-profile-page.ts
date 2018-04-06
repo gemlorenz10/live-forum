@@ -11,12 +11,19 @@ import { USER, DATA_UPLOAD, FireService, USER_CREATE, USER_DATA } from '../../mo
 export class UpdateProfilePage implements OnInit, OnDestroy {
 
   user = <USER>{};
-  constructor(private fire: FireService, private lib: LibService, public route: ActivatedRoute) { }
+  node = null;
+
   loader;
   label;
   fileLoader;
   data = <DATA_UPLOAD>{};
 
+
+  constructor(private fire: FireService, private lib: LibService, public route: ActivatedRoute) {
+
+
+
+  }
   ngOnInit() {
 
     this.loader = true;
@@ -44,16 +51,20 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
     }
 
     this.fire.user.listen((user: USER) => {
-      if ('profilePhoto' in user) {
-        if ('thumbnailUrl' in user.profilePhoto) {
-          this.data = user.profilePhoto;
-          this.fileLoader = false;
-        } else {
-          // console.log('No thumbnail.');
-          alert('Photo is not uploaded properly.');
-        }
+      if ( user.profilePhoto && user.profilePhoto.thumbnailUrl ) {
+        this.data = user.profilePhoto;
+        this.fileLoader = false;
       }
-      console.log('Im listening to thumbnail changes');
+      // if ('profilePhoto' in user) {
+      //   if ('thumbnailUrl' in user.profilePhoto) {
+      //     this.data = user.profilePhoto;
+      //     this.fileLoader = false;
+      //   } else {
+      //     // console.log('No thumbnail.');
+      //     alert('Photo is not uploaded properly.');
+      //   }
+      // }
+      // console.log('Im listening to thumbnail changes');
     });
 
   }
