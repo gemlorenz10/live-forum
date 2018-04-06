@@ -38,6 +38,9 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
           this.user.gender = re.data.user.gender;
           this.user.birthday = re.data.user.birthday;
           this.user.profilePhoto = re.data.user.profilePhoto;
+          if ( re.data.user.profilePhoto.thumbnailUrl ) {
+            this.data.thumbnailUrl = re.data.user.profilePhoto.thumbnailUrl;
+          }
         } else {
           this.label = 'Welcome, ' + this.fire.user.displayName;
         }
@@ -50,23 +53,16 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
     }
 
     this.fire.user.listen((user: USER) => {
-      if ( user.profilePhoto && user.profilePhoto.thumbnailUrl ) {
-        this.data = user.profilePhoto;
-        this.fileLoader = false;
-      } else {
-        // this.data
-      }
-      // if ('profilePhoto' in user) {
-      //   if ('thumbnailUrl' in user.profilePhoto) {
-      //     this.data = user.profilePhoto;
-      //     this.fileLoader = false;
-      //   } else {
-      //     // console.log('No thumbnail.');
-      //     alert('Photo is not uploaded properly.');
-      //   }
+      // console.log('Waiting for user collection updates');
+      // if ( user.profilePhoto && user.profilePhoto.thumbnailUrl ) {
+      //   this.data = user.profilePhoto;
+      //   this.fileLoader = false;
+      // } else {
       // }
-      // console.log('Im listening to thumbnail changes');
+      this.data = user.profilePhoto;
     });
+
+    console.log('User after init', this.user);
 
   }
 
@@ -82,7 +78,7 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
   onUploadDone(e: DATA_UPLOAD) {
     console.log('Upload Emits: ', e);
     // thumbnail is being updated by firebase-backend
-    this.user.profilePhoto = e;
+    this.user.profilePhoto = e[0];
     this.user.photoURL = e[0].url;
     this.loader = false;
     this.fileLoader = true;

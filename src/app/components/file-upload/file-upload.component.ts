@@ -62,7 +62,11 @@ export class FileUploadComponent implements OnInit, OnChanges {
         this.previewList = [];
         console.log(changes);
       }
-      this.previewList.push(this.data.thumbnailUrl);
+      if (this.data.thumbnailUrl) {
+        this.updatePreviewList(this.data.thumbnailUrl);
+      } else {
+        this.updatePreviewList(this.data.url);
+      }
       console.log('changes data', changes['data']);
     } else {
       console.log('No changes on data');
@@ -79,7 +83,7 @@ export class FileUploadComponent implements OnInit, OnChanges {
 
     const file: File = files[0];
     if (!this.allowMultipleFiles) {
-      this.previewList.shift();
+      this.previewList = [];
     }
     this.uploadFile(file);
 
@@ -113,6 +117,7 @@ export class FileUploadComponent implements OnInit, OnChanges {
           this.uploadList = [];
           this.previewList = [];
         }
+
         this.uploadList.push(upload);
         this.loader = false;
         // this.renderFile(file);
@@ -131,6 +136,12 @@ export class FileUploadComponent implements OnInit, OnChanges {
       });
     }
 
+    private updatePreviewList(image) {
+      if (!this.allowMultipleFiles) {
+        this.previewList = [];
+      }
+      this.previewList.push(image);
+    }
     // displayThumbnail() {
     //   this.fire.user.listen((user: USER) => {
     //     if (user.profilePhoto.thumbnailUrl) {
