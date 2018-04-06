@@ -29,37 +29,46 @@ export class FileUploadComponent implements OnInit, OnChanges {
   */
   @Input() deleteOldFiles: Array<DATA_UPLOAD>;
 
-  @Input() currentPhoto = 'assets/profile.png';
+  @Input() data: DATA_UPLOAD;
 
   /**
   * Emits Array<DATA_UPLOAD>
   */
   @Output() uploadDone = new EventEmitter<Array<DATA_UPLOAD>>();
+  /**
+   * Emit true when started
+   */
+  @Output() uploadStart = new EventEmitter<boolean>();
 
 
   previewList = []; // raw images
   thumbnailUrls = [];
   uploadList: Array<DATA_UPLOAD> = [];
   loader = false;
+  // currentData = <DATA_UPLOAD>{};
   constructor(private fire: FireService, private lib: LibService ) { }
 
   ngOnInit() {
     if (this.fire.user.isLogout) {
       this.lib.openHomePage();
     }
-    this.previewList.push(this.currentPhoto);
+    this.previewList.push(this.data.thumbnailUrl);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     // only run when property "data" changed
-    if (changes['currentPhoto']) {
-        if (!this.allowMultipleFiles) {
-          this.previewList = [];
-        }
-        this.previewList.push(this.currentPhoto);
-        console.log('current photo changes');
+    if (changes['data']) {
+      if (!this.allowMultipleFiles) {
+        this.previewList = [];
+        console.log(changes);
+      }
+      this.previewList.push(this.data.thumbnailUrl);
+      console.log('changes data', changes['data']);
+    } else {
+      console.log('No changes on data');
     }
-}
+    console.log('Changes on file upload', changes);
+  }
 
   onChangeFile(e) {
     this.loader = true;
@@ -76,7 +85,8 @@ export class FileUploadComponent implements OnInit, OnChanges {
 
   }
 
-  private uploadFile(file: File) {
+  uploadFile(file: File) {
+    this.uploadStart.emit(true);
     this.loader = true;
     const upload: DATA_UPLOAD = { name: '' };
     const fileRef = this.fire.data.getDataRef(this.pathToStorage, file);
@@ -106,42 +116,37 @@ export class FileUploadComponent implements OnInit, OnChanges {
         this.uploadList.push(upload);
         this.loader = false;
         // this.renderFile(file);
-        closeUploadTask();
-        this.uploadDone.emit(this.uploadList);
         /**
         * Delete older files if needed.
         */
-        // if (this.deleteOldFiles) {
-        //   if (this.deleteOldFiles.length) {
-        //     for (const deleteOldFiles of this.deleteOldFiles) {
-        //       if (deleteOldFiles.url) {
-        //         this.fire.data.delete(deleteOldFiles).catch(e => alert(e.message));
-        //       }
-        //     }
-        //     this.deleteOldFiles.splice(0, this.deleteOldFiles.length);
-        //     console.log(this.deleteOldFiles);
+        // if (!this.allowMultipleFiles) {
+        //   if (this.deleteOldFiles) {
+        //     this.fire.data.delete(this.currentData).then(a => alert('Old Data Deleted!')).catch(e => alert(e.message));
         //   }
-
         // }
+
+        closeUploadTask();
+        this.uploadDone.emit(this.uploadList);
+
       });
-  }
+    }
 
-  // displayThumbnail() {
-  //   this.fire.user.listen((user: USER) => {
-  //     if (user.profilePhoto.thumbnailUrl) {
-  //       this.currentPhoto = user.profilePhoto.thumbnailUrl;
-  //     }
-  //   });
-  // }
+    // displayThumbnail() {
+    //   this.fire.user.listen((user: USER) => {
+    //     if (user.profilePhoto.thumbnailUrl) {
+    //       this.currentPhoto = user.profilePhoto.thumbnailUrl;
+    //     }
+    //   });
+    // }
 
-  private renderFile(file) {
-    const reader = new FileReader();
-    reader.onload = (event: ProgressEvent) => {
-      if (this.previewList.length > 0 && !this.allowMultipleFiles) {
-        this.previewList.shift();
-      }
-      this.previewList.push(event.target['result']);
-    };
-    reader.readAsDataURL(file);
+    // private renderFile(file) {
+    //   const reader = new FileReader();
+    //   reader.onload = (event: ProgressEvent) => {
+    //     if (this.previewList.length > 0 && !this.allowMultipleFiles) {
+    //       this.previewList.shift();
+    //     }
+    //     this.previewList.push(event.target['result']);
+    //   };
+    //   reader.readAsDataURL(file);
+    // }
   }
-}
