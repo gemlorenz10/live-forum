@@ -12,7 +12,7 @@
                 [allowMultipleFiles]="false"
                 [deleteOldFiles]="true"
                 [data]="data"
-                (uploadStart)="onStartUpload($event)"
+                (uploadStart)="onUploadStart()"
                 (uploadDone)="onUploadDone($event)"></app-file-upload>
             </div>
         </div>
@@ -47,10 +47,10 @@
                     </label>
                 </div>
                 <!-- Submit button -->
-                <button type="submit" class="btn btn-primary form-item-text" [disabled]="fileLoader" (click)="onClickSubmit()">{{ (fileLoader) ? 'Please wait...' : 'Submit' }}</button>
+                <button type="submit" class="btn btn-primary form-item-text" [disabled]="fileLoader" (click)="onClickSubmit()">{{ (fileLoader) ? 'Uploading file...' : 'Submit' }}</button>
                 <p>Fields with asterisk '*' are required.</p>
             </div>
-            {{ user | json }}
+            {{ user.profilePhoto | json }}
         </div>
     </div>
 </div>

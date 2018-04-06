@@ -77,7 +77,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.authStateUnsubscribe = this.fire.auth.onAuthStateChanged(user => {
       if (user) {
         console.log('Logged in', user);
-        this.displayName = user.uid;
+        this.displayName = user.displayName;
         this.isLogin = true;
       } else {
         console.log('Logged out');

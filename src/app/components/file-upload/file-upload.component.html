@@ -11,7 +11,7 @@
         
         <div class="single-file" *ngIf="!allowMultipleFiles">
             <div class="image-container center">
-                <span *ngIf="previewList.length === 0">Loading Image...</span>
+                <span *ngIf="previewList.length === 0">{{(loader)? 'Loading Image...' : 'No image to display.'}}</span>
                 <img src="{{ previewList[0] }}" alt="" class="center">
             </div>
         </div>

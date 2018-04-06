@@ -36,11 +36,9 @@ export class FileUploadComponent implements OnInit, OnChanges {
   */
   @Output() uploadDone = new EventEmitter<Array<DATA_UPLOAD>>();
   /**
-   * Emit true when started
+   * Emit if upload is starts
    */
-  @Output() uploadStart = new EventEmitter<boolean>();
-
-
+  @Output() uploadStart = new EventEmitter();
   previewList = []; // raw images
   thumbnailUrls = [];
   uploadList: Array<DATA_UPLOAD> = [];
@@ -52,7 +50,9 @@ export class FileUploadComponent implements OnInit, OnChanges {
     if (this.fire.user.isLogout) {
       this.lib.openHomePage();
     }
-    this.previewList.push(this.data.thumbnailUrl);
+    if (this.data) {
+      this.previewList.push(this.data.thumbnailUrl);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -62,12 +62,15 @@ export class FileUploadComponent implements OnInit, OnChanges {
         this.previewList = [];
         console.log(changes);
       }
-      if (this.data.thumbnailUrl) {
-        this.updatePreviewList(this.data.thumbnailUrl);
-      } else {
+      if (this.data) {
         this.updatePreviewList(this.data.url);
+        if ( this.data.thumbnailUrl ) {
+          this.updatePreviewList(this.data.thumbnailUrl);
+        }
+      } else {
+        console.log('No data yet.');
       }
-      console.log('changes data', changes['data']);
+      this.uploadDone.emit(this.uploadList);
     } else {
       console.log('No changes on data');
     }
@@ -90,8 +93,8 @@ export class FileUploadComponent implements OnInit, OnChanges {
   }
 
   uploadFile(file: File) {
-    this.uploadStart.emit(true);
     this.loader = true;
+    this.uploadStart.emit();
     const upload: DATA_UPLOAD = { name: '' };
     const fileRef = this.fire.data.getDataRef(this.pathToStorage, file);
     const uploadTask = fileRef.put(file);
@@ -117,8 +120,6 @@ export class FileUploadComponent implements OnInit, OnChanges {
           this.uploadList = [];
           this.previewList = [];
         }
-
-        this.uploadList.push(upload);
         this.loader = false;
         // this.renderFile(file);
         /**
@@ -131,7 +132,7 @@ export class FileUploadComponent implements OnInit, OnChanges {
         // }
 
         closeUploadTask();
-        this.uploadDone.emit(this.uploadList);
+        // this.uploadDone.emit(this.uploadList);
 
       });
     }
@@ -139,8 +140,10 @@ export class FileUploadComponent implements OnInit, OnChanges {
     private updatePreviewList(image) {
       if (!this.allowMultipleFiles) {
         this.previewList = [];
+        this.uploadList = [];
       }
       this.previewList.push(image);
+      this.uploadList.push(this.data);
     }
     // displayThumbnail() {
     //   this.fire.user.listen((user: USER) => {

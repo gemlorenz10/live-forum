@@ -1,5 +1,5 @@
 import { LibService } from './../../providers/lib.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges, DoCheck } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { USER, DATA_UPLOAD, FireService, USER_CREATE, USER_DATA } from '../../modules/firelibrary/core';
 
@@ -8,7 +8,7 @@ import { USER, DATA_UPLOAD, FireService, USER_CREATE, USER_DATA } from '../../mo
   templateUrl: './update-profile-page.html',
   styleUrls: ['./update-profile-page.scss']
 })
-export class UpdateProfilePage implements OnInit, OnDestroy {
+export class UpdateProfilePage implements OnInit, OnChanges, DoCheck, OnDestroy {
 
   user = <USER>{};
 
@@ -24,7 +24,7 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
 
   }
   ngOnInit() {
-
+    this.fileLoader = true;
     this.loader = true;
     if (this.fire.user.isLogin) {
       this.fire.user.data()
@@ -39,6 +39,7 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
           this.user.birthday = re.data.user.birthday;
           this.user.profilePhoto = re.data.user.profilePhoto;
           if ( re.data.user.profilePhoto.thumbnailUrl ) {
+            this.fileLoader = false;
             this.data.thumbnailUrl = re.data.user.profilePhoto.thumbnailUrl;
           }
         } else {
@@ -53,12 +54,6 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
     }
 
     this.fire.user.listen((user: USER) => {
-      // console.log('Waiting for user collection updates');
-      // if ( user.profilePhoto && user.profilePhoto.thumbnailUrl ) {
-      //   this.data = user.profilePhoto;
-      //   this.fileLoader = false;
-      // } else {
-      // }
       this.data = user.profilePhoto;
     });
 
@@ -66,22 +61,39 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
 
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['data']) {
+      //
+    }
+  }
+
+  ngDoCheck() {
+    // if (this.data.thumbnailUrl) {
+    //   this.fileLoader = false;
+    // } else {
+    //   this.fileLoader = true;
+    // }
+    // console.log('Do CHeck', this.data.thumbnailUrl);
+  }
+
   ngOnDestroy() {
     this.fire.user.unlisten();
   }
 
-  onStartUpload(bool) {
-    if (bool) {
-      this.fileLoader = bool;
-    }
+  onUploadStart() {
+    this.fileLoader = true;
+    console.log('Upload starts...');
   }
+
   onUploadDone(e: DATA_UPLOAD) {
     console.log('Upload Emits: ', e);
     // thumbnail is being updated by firebase-backend
-    this.user.profilePhoto = e[0];
-    this.user.photoURL = e[0].url;
+    if ( e[0] ) {
+      this.user.profilePhoto = e[0];
+      this.user.photoURL = e[0].url;
+    }
     this.loader = false;
-    this.fileLoader = true;
+    this.fileLoader = false;
 
   }
 
