@@ -43,6 +43,7 @@ export class FileUploadComponent implements OnInit, OnChanges {
   thumbnailUrls = [];
   uploadList: Array<DATA_UPLOAD> = [];
   loader = false;
+  oldFile = <DATA_UPLOAD>{};
   // currentData = <DATA_UPLOAD>{};
   constructor(private fire: FireService, private lib: LibService ) { }
 
@@ -60,8 +61,16 @@ export class FileUploadComponent implements OnInit, OnChanges {
     if (changes['data']) {
       if (!this.allowMultipleFiles) {
         this.previewList = [];
-        console.log(changes);
+        if (changes['data'].previousValue) {
+          Object.assign(this.oldFile, changes['data'].previousValue);
+        } else if (changes['data'].currentValue) {
+          Object.assign(this.oldFile, changes['data'].currentValue);
+        } else {
+          console.log('No data at all.');
+        }
+        // console.log(changes);
       }
+      // update photo preview array and uploadList array.
       if (this.data) {
         this.updatePreviewList(this.data.url);
         if ( this.data.thumbnailUrl ) {
@@ -70,11 +79,14 @@ export class FileUploadComponent implements OnInit, OnChanges {
       } else {
         console.log('No data yet.');
       }
+      // emit upload done
       this.uploadDone.emit(this.uploadList);
     } else {
       console.log('No changes on data');
     }
-    console.log('Changes on file upload', changes);
+
+
+    console.log('Changes on file upload', changes['data']);
   }
 
   onChangeFile(e) {
@@ -87,12 +99,13 @@ export class FileUploadComponent implements OnInit, OnChanges {
     const file: File = files[0];
     if (!this.allowMultipleFiles) {
       this.previewList = [];
+      this.uploadSingleFile(file);
     }
-    this.uploadFile(file);
+
 
   }
 
-  uploadFile(file: File) {
+  uploadSingleFile(file: File) {
     this.loader = true;
     this.uploadStart.emit();
     const upload: DATA_UPLOAD = { name: '' };
@@ -125,15 +138,19 @@ export class FileUploadComponent implements OnInit, OnChanges {
         /**
         * Delete older files if needed.
         */
-        // if (!this.allowMultipleFiles) {
-        //   if (this.deleteOldFiles) {
-        //     this.fire.data.delete(this.currentData).then(a => alert('Old Data Deleted!')).catch(e => alert(e.message));
-        //   }
-        // }
+        if (!this.allowMultipleFiles) {
+          if (this.deleteOldFiles && this.oldFile.fullPath !== this.data.fullPath) {
+            console.log('This is old file', this.oldFile);
+            this.fire.data.delete(this.oldFile)
+            .then(a => alert('Old Data Deleted!'))
+            .catch(e => {
+              alert(e.message);
+              console.error('Error on delete:', e);
+            });
+          }
+        }
 
         closeUploadTask();
-        // this.uploadDone.emit(this.uploadList);
-
       });
     }
 
@@ -145,13 +162,6 @@ export class FileUploadComponent implements OnInit, OnChanges {
       this.previewList.push(image);
       this.uploadList.push(this.data);
     }
-    // displayThumbnail() {
-    //   this.fire.user.listen((user: USER) => {
-    //     if (user.profilePhoto.thumbnailUrl) {
-    //       this.currentPhoto = user.profilePhoto.thumbnailUrl;
-    //     }
-    //   });
-    // }
 
     // private renderFile(file) {
     //   const reader = new FileReader();
