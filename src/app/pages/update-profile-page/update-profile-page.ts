@@ -14,8 +14,11 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
   constructor(private fire: FireService, private lib: LibService, public route: ActivatedRoute) { }
   loader;
   label;
-  currentPhoto = 'assets/profile.png';
+  fileLoader;
+  data = <DATA_UPLOAD>{};
+
   ngOnInit() {
+
     this.loader = true;
     if (this.fire.user.isLogin) {
       this.fire.user.data()
@@ -43,28 +46,34 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
     this.fire.user.listen((user: USER) => {
       if ('profilePhoto' in user) {
         if ('thumbnailUrl' in user.profilePhoto) {
-          this.currentPhoto = user.profilePhoto.thumbnailUrl;
+          this.data = user.profilePhoto;
+          this.fileLoader = false;
         } else {
-          console.log('No thumbnail.');
+          // console.log('No thumbnail.');
+          alert('Photo is not uploaded properly.');
         }
-      } else {
-        console.log('No image');
       }
       console.log('Im listening to thumbnail changes');
     });
-    console.log(this.user);
+
   }
 
   ngOnDestroy() {
     this.fire.user.unlisten();
   }
 
+  onStartUpload(bool) {
+    if (bool) {
+      this.fileLoader = bool;
+    }
+  }
   onUploadDone(e: DATA_UPLOAD) {
     console.log('Upload Emits: ', e);
     // thumbnail is being updated by firebase-backend
     this.user.profilePhoto = e;
     this.user.photoURL = e[0].url;
     this.loader = false;
+    this.fileLoader = true;
 
   }
 
@@ -85,7 +94,7 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
         }
       })
       .catch(e => {
-        this.fire.user.unlisten();
+        // this.fire.user.unlisten();
         alert(e.message);
         console.error(e);
         this.loader = false;
