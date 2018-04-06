@@ -7,7 +7,8 @@ import { FirelibraryModule } from './modules/firelibrary/core';
 import { LibService } from './providers/lib.service';
 
 import { AppComponent } from './app.component';
-import { AlertComponent } from './components/alert/alert.component';
+import { AvatarComponent } from './components/avatar/avatar.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 import { RegisterPage } from './pages/register-page/register-page';
 import { ForumPage } from './pages/forum-page/forum-page';
@@ -17,7 +18,6 @@ import { UpdateProfilePage } from './pages/update-profile-page/update-profile-pa
 
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 
 firebase.initializeApp({
@@ -42,8 +42,8 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    AlertComponent,
     FileUploadComponent,
+    AvatarComponent,
 
     RegisterPage,
     ForumPage,

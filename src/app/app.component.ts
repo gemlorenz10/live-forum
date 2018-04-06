@@ -1,30 +1,51 @@
 import { FireService } from './modules/firelibrary/providers/fire.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LibService } from './providers/lib.service';
+import { USER, USER_CREATE } from './modules/firelibrary/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
 
-  private isSystemInstalled;
-  private authStateUnsubscribe;
-  private isLogin: boolean;
-  constructor(private fire: FireService, private router: Router) {
+  isSystemInstalled;
+  isLogin: boolean;
+  profilePhoto = 'assets/profile.png';
+  displayName = 'Please wait...';
+  authStateUnsubscribe;
+  constructor(public fire: FireService, public lib: LibService) {
 
   }
+
   ngOnInit() {
     this.watchAuth();
-    // console.log(sessionStorage.getItem('systemInstalled'));
-    // if (sessionStorage.getItem('systemInstalled') === 'yes') {
-    //   this.isSystemInstalled = true;
-    // }
     console.log('Installed?', this.isSystemInstalled);
     if ( !this.isSystemInstalled ) {
       this.systemInstall();
+    }
+  }
+  ngAfterViewInit() {
+    // this.fire.user.listen((u: USER) => {
+    //   this.displayName = u.displayName;
+    //   this.profilePhoto = u.profilePhoto.thumbnailUrl;
+    // });
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['displayName']) {
+      this.displayName = this.displayName;
+    }
+    if (changes['isLogin']) {
+      if (this.isLogin) {
+        this.fire.user.listen((u: USER) => {
+          this.displayName = u.displayName;
+          this.profilePhoto = u.profilePhoto.thumbnailUrl;
+        });
+      } else {
+        this.fire.user.unlisten();
+      }
     }
   }
 
@@ -32,6 +53,7 @@ export class AppComponent implements OnInit, OnDestroy {
     console.log('onDestry');
     if ( typeof this.authStateUnsubscribe === 'function' ) {
       this.authStateUnsubscribe();
+      this.fire.user.unlisten();
     }
   }
 
@@ -43,25 +65,24 @@ export class AppComponent implements OnInit, OnDestroy {
     this.fire.user.logout();
   }
 
-  private systemInstall() {
+  systemInstall() {
     this.fire.checkInstall()
     .then(res => {
-      // if ( res.data.installed ) {
-      //   sessionStorage.setItem('systemInstalled', 'yes');
-      // }
       this.isSystemInstalled = res.data.installed;
       console.log('Is system installed?', this.isSystemInstalled);
     });
   }
 
-  private watchAuth() {
+  watchAuth() {
     this.authStateUnsubscribe = this.fire.auth.onAuthStateChanged(user => {
       if (user) {
-        console.log('Logged in');
+        console.log('Logged in', user);
+        this.displayName = user.displayName;
         this.isLogin = true;
       } else {
         console.log('Logged out');
         this.isLogin = false;
+        this.lib.openHomePage();
       }
     });
   }
