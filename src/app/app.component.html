@@ -24,7 +24,10 @@
     </nav>
     <hr class="line">
     <div class="outlet">
-      <router-outlet></router-outlet>
+      <router-outlet
+      (activate)='onRouteActivate($event)'
+      (deactivate)='onRouteDeactivate($event)'
+      ></router-outlet>
     </div>
   </div>
   <div class="outlet">

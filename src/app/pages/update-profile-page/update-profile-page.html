@@ -1,18 +1,21 @@
 
-<div class="title" *ngIf=" loader ">
+<div class="title" *ngIf=" ! user ">
     <h2>Loading...</h2>
 </div>
 
 <div class="update-profile-container" *ngIf=" user ">
-    <h2>Update Profile</h2>
+    <h2 class="center">{{label}}</h2>
     <div class="row">
         <div class="col-sm">
-            <div class="file-upload-container center margin-0-5-em">
+            <div class="file-upload-container center">
+                <img [src]="photo" alt="">
+                <!-- <div></div> -->
                 <app-file-upload
+                [hidden] = "loader"
                 [pathToStorage]="'profile-photo'"
                 [allowMultipleFiles]="false"
                 [deleteOldFiles]="true"
-                [data]="data"
+                [data]="user.profilePhoto"
                 (uploadStart)="onUploadStart()"
                 (uploadDone)="onUploadDone($event)"></app-file-upload>
             </div>
@@ -48,10 +51,10 @@
                     </label>
                 </div>
                 <!-- Submit button -->
-                <button type="submit" class="btn btn-primary form-item-text" [disabled]="fileLoader" (click)="onClickSubmit()">{{ (fileLoader) ? 'Uploading file...' : 'Submit' }}</button>
+                <button type="submit" class="btn btn-primary form-item-text" [disabled]="loader" (click)="onClickSubmit()">{{ (loader) ? 'Please wait...' : 'Submit' }}</button>
                 <p>Fields with asterisk '*' are required.</p>
             </div>
-            {{ user.profilePhoto | json }}
+            {{ user | json }}
         </div>
     </div>
 </div>

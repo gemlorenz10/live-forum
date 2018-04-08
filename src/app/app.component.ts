@@ -1,6 +1,6 @@
 import { FireService } from './modules/firelibrary/providers/fire.service';
-import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { LibService } from './providers/lib.service';
 import { USER, USER_CREATE } from './modules/firelibrary/core';
 
@@ -9,29 +9,23 @@ import { USER, USER_CREATE } from './modules/firelibrary/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class AppComponent implements OnInit, OnChanges, OnDestroy {
 
   isSystemInstalled;
   isLogin: boolean;
-  profilePhoto = 'assets/profile.png';
-  displayName = 'Please wait...';
+  profilePhoto;
+  displayName;
   authStateUnsubscribe;
   constructor(public fire: FireService, public lib: LibService) {
+    this.profilePhoto = this.lib.DEFAULT_PROFILE_PHOTO;
 
   }
 
   ngOnInit() {
     this.watchAuth();
-    console.log('Installed?', this.isSystemInstalled);
     if ( !this.isSystemInstalled ) {
       this.systemInstall();
     }
-  }
-  ngAfterViewInit() {
-    // this.fire.user.listen((u: USER) => {
-    //   this.displayName = u.displayName;
-    //   this.profilePhoto = u.profilePhoto.thumbnailUrl;
-    // });
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes['displayName']) {
@@ -85,6 +79,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         this.lib.openHomePage();
       }
     });
+  }
+
+  onRouteActivate( e ) {
+    // console.log('Route activated', e);
+    // this.loader = false;
+  }
+
+  onRouteDeactivate(e ) {
+    // console.log('Route Deactivated', e );
+    // this.loader = true;
   }
 
 }

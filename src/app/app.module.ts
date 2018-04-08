@@ -49,7 +49,7 @@ const appRoutes: Routes = [
     ForumPage,
     LoginPage,
     InstallPage,
-    UpdateProfilePage,
+    UpdateProfilePage
   ],
   imports: [
     FormsModule,

@@ -5,8 +5,9 @@ import { FireService, _ } from '../modules/firelibrary/core';
 @Injectable()
 export class LibService {
 
+  DEFAULT_PROFILE_PHOTO = 'assets/profile.png';
   constructor(
-    private router: Router,
+    public router: Router,
     private fire: FireService
   ) { }
 

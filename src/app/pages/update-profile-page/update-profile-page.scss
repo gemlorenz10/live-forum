@@ -1,6 +1,11 @@
 @import '~sass/mixins';
 @import '~sass/variables';
-
+.file-upload-container {
+    img {
+        max-width: 10em;
+        max-height: 10em;
+    }
+}
 .gender-container {
     margin: 0.5em;
     overflow: auto;
