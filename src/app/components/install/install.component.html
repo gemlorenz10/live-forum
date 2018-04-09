@@ -8,6 +8,6 @@
     <input [(ngModel)]="admin.displayName" value="admin.displayName"  type="text" name="admin-display-name" id="admin-display-name" placeholder="Admin Display Name"  class="form-item-text"><br>
     
     <button class="btn btn-primary" type="submit" (click)="onClickInstall()" [disabled]="loader">
-        <span *ngIf="loader">{{ (loader) ? 'Please wait...' : 'Install Now' }}</span>
+        {{ (loader) ? 'Please wait...' : 'Install Now' }}
     </button>
 </div>

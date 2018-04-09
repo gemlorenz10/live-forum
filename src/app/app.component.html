@@ -3,7 +3,7 @@
   <div class="banner left">
     <h1>Live Forum</h1>
   </div>
-  <div class="user-container" *ngIf="isLogin">
+  <div class="user-container" *ngIf="fire.user.isLogin">
     <app-avatar class="right" [profilePhoto]="profilePhoto"></app-avatar>
     <div class="display-name right">{{ user.displayName }}</div>
   </div>  
@@ -16,11 +16,11 @@
     <nav class="nav-container">
       
       <a routerLink="/" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> Home </a>
-      <a routerLink="/register" class="nav-item" routerLinkActive="active" *ngIf="! isLogin"> Register </a>
-      <a routerLink="/login" class="nav-item" routerLinkActive="active" *ngIf="! isLogin"> Login </a>
+      <a routerLink="/register" class="nav-item" routerLinkActive="active" *ngIf="fire.user.isLogout"> Register </a>
+      <a routerLink="/login" class="nav-item" routerLinkActive="active" *ngIf="fire.user.isLogout"> Login </a>
       
-      <a routerLink="/update-profile" class="nav-item" routerLinkActive="active" *ngIf="isLogin"> Update Profile </a>
-      <a (click)="onClickLogout()" class="nav-item" *ngIf="isLogin"> Logout </a>
+      <a routerLink="/update-profile" class="nav-item" routerLinkActive="active" *ngIf="fire.user.isLogin"> Update Profile </a>
+      <a (click)="onClickLogout()" class="nav-item" *ngIf="fire.user.isLogin"> Logout </a>
       
     </nav>
     <hr class="line">
@@ -32,7 +32,7 @@
     </div>
   </div>
   <div class="outlet">
-    <install-page *ngIf="isSystemInstalled === false" (finishedInstall)="onFinishInstall($event)"></install-page>
-    <p *ngIf="!isSystemInstalled">Loading...</p>
+    <app-install *ngIf="isSystemInstalled === false" (finishedInstall)="onFinishInstall($event)"></app-install>
+    <p *ngIf="isSystemInstalled === undefined">Loading...</p>
   </div>
 </div>

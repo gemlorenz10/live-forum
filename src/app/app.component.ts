@@ -1,10 +1,13 @@
-import { FireService } from './modules/firelibrary/providers/fire.service';
 import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
+import { FireService } from './modules/firelibrary/providers/fire.service';
+
+
 import { LibService } from './providers/lib.service';
 import { USER, USER_CREATE } from './modules/firelibrary/core';
 
 import * as firebase from 'firebase';
+
 
 @Component({
   selector: 'app-root',
@@ -14,7 +17,6 @@ import * as firebase from 'firebase';
 export class AppComponent implements OnInit, OnChanges, OnDestroy {
 
   isSystemInstalled;
-  isLogin: boolean;
   profilePhoto;
   user = <USER>{};
   authStateUnsubscribe;
@@ -26,7 +28,7 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit() {
     this.watchAuth();
     if ( !this.isSystemInstalled ) {
-      this.systemInstall();
+      this.checkSystemInstall();
     }
 
   }
@@ -51,16 +53,30 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onFinishInstall(isInstalled: boolean) {
-    this.isSystemInstalled = isInstalled;
+    if ( isInstalled ) {
+      this.isSystemInstalled = isInstalled;
+    } else {
+      window.location.reload();
+    }
+
   }
 
   onClickLogout() {
-    this.fire.user.logout();
+    this.fire.user.logout()
+    .then(a => {
+      this.fire.user.unlisten();
+    })
+    .catch(e => {
+      if (e.message) {
+        alert('Error logging out ' + e.message);
+      }
+      console.log('Error logging out', e);
+    });
     // this.authStateUnsubscribe();
     // this.fire.user.unlisten();
   }
 
-  systemInstall() {
+  checkSystemInstall() {
     this.fire.checkInstall()
     .then(res => {
       this.isSystemInstalled = res.data.installed;
@@ -71,37 +87,35 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
   watchAuth() {
     this.authStateUnsubscribe = this.fire.auth.onAuthStateChanged(user => {
       if (user) {
-        console.log('Logged in', user);
+        console.log('Auth State: Logged in', user);
         this.user.displayName = user.displayName;
-        this.isLogin = true;
         this.listenUserChanges();
       } else {
-        console.log('Logged out');
-        this.isLogin = false;
+        console.log('Auth state: Logged out');
         this.lib.openHomePage();
-        this.fire.user.unlisten();
       }
     });
   }
 
   onRouteActivate( e ) {
-    // console.log('Route activated', e);
+    console.log('Route activated', e);
     // this.loader = false;
   }
 
   onRouteDeactivate(e ) {
-    // console.log('Route Deactivated', e );
+    console.log('Route Deactivated', e );
     // this.loader = true;
   }
 
   listenUserChanges() {
     console.log('Listening to user changes');
-    this.fire.user.listen((user: USER) => {
-      this.user.displayName = user.firstName;
-      this.profilePhoto = user.profilePhoto.thumbnailUrl;
-      console.log('User updated!', user);
-    });
-
-  }
+      this.fire.user.listen((user: USER) => {
+        this.user.displayName = user.displayName;
+        if (user.profilePhoto && user.profilePhoto.thumbnailUrl) {
+          this.profilePhoto = user.profilePhoto.thumbnailUrl;
+        }
+        console.log('User updated!', user);
+      });
+    }
 
 }

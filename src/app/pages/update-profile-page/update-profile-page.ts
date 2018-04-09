@@ -48,9 +48,12 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    delete this.fire;
-    delete this.lib;
-    delete this.user;
+    // delete this.lib;
+    // delete this.user;
+    // delete this.fire;
+    // delete this.loader;
+    // delete this.label;
+    // delete this.photo;
   }
 
   onUploadStart() {
@@ -130,11 +133,15 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
   }
 
   listenToUserChanges() {
-    this.fire.user.listen((user: USER) => {
-      if (user.profilePhoto && user.profilePhoto.thumbnailUrl) {
-        this.user = user;
-        this.photo = this.user.profilePhoto.thumbnailUrl;
-      }
-    });
-  }
+    if (this.fire.user.isLogin) {
+      this.fire.user.listen((user: USER) => {
+        if (user.profilePhoto && user.profilePhoto.thumbnailUrl) {
+          this.user = user;
+          this.photo = this.user.profilePhoto.thumbnailUrl;
+        }
+      });
+    }
+    }
+
+
 }

@@ -4,11 +4,11 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { USER } from '../../modules/firelibrary/core';
 
 @Component({
-  selector: 'install-page',
-  templateUrl: './install-page.html',
-  styleUrls: ['./install-page.scss']
+  selector: 'app-install',
+  templateUrl: './install.component.html',
+  styleUrls: ['./install.component.scss']
 })
-export class InstallPage implements OnInit {
+export class InstallComponent implements OnInit {
   /**
   * Emits `true` if system installed correctly. otherwise `false`.
   */
@@ -17,8 +17,8 @@ export class InstallPage implements OnInit {
   admin = <USER>{
     displayName: 'Admin'
   };
-  private loader = false; // to prevent double action when waiting.
-  private confirmPassword;
+  loader; // to prevent double action when waiting.
+  confirmPassword;
   constructor( private fire: FireService ) { }
 
   ngOnInit() {
@@ -35,22 +35,33 @@ export class InstallPage implements OnInit {
 
     } else {
 
-
-
-      this.fire.install({email: this.admin.email})
-      .then(re => {
-        if (re) {
-          return this.fire.user.register(this.admin);
+      this.fire.user.register(this.admin)
+      .then((re) => {
+        const user = <USER>{ };
+        if (re.data) {
+          user.displayName = this.fire.user.displayName;
+          return this.fire.user.create(user);
         }
+
       })
-      .then((user: USER_CREATE ) => {
-        alert('Installation complete. You are now logged in as Admin');
-        this.finishedInstall.emit(true);
+      .then(user => {
+        if (user.data.id) {
+          return this.fire.install(this.admin);
+        }
+
+      })
+      .then((re) => {
+        if (re.data === true) {
+          alert('Installation complete. You are now logged in as Admin');
+          this.finishedInstall.emit(re.data);
+        }
+
       })
       .catch(e => {
         alert(e);
         this.finishedInstall.emit(false);
         this.loader = false;
+
       });
     }
 

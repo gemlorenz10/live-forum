@@ -7,13 +7,14 @@ import { FirelibraryModule } from './modules/firelibrary/core';
 import { LibService } from './providers/lib.service';
 
 import { AppComponent } from './app.component';
+
 import { AvatarComponent } from './components/avatar/avatar.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import { InstallComponent } from './components/install/install.component';
 
 import { RegisterPage } from './pages/register-page/register-page';
 import { ForumPage } from './pages/forum-page/forum-page';
 import { LoginPage } from './pages/login-page/login-page';
-import { InstallPage } from './pages/install-page/install-page';
 import { UpdateProfilePage } from './pages/update-profile-page/update-profile-page';
 
 import * as firebase from 'firebase';
@@ -32,7 +33,6 @@ firebase.initializeApp({
 const appRoutes: Routes = [
   { path: 'register', component: RegisterPage },
   { path: 'login', component: LoginPage },
-  { path: 'install', component: InstallPage },
   { path: 'update-profile', component: UpdateProfilePage },
   { path: '', component: ForumPage }
 ];
@@ -43,11 +43,11 @@ const appRoutes: Routes = [
     AppComponent,
     FileUploadComponent,
     AvatarComponent,
+    InstallComponent,
 
     RegisterPage,
     ForumPage,
     LoginPage,
-    InstallPage,
     UpdateProfilePage
   ],
   imports: [
