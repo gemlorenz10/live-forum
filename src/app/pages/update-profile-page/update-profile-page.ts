@@ -12,33 +12,32 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
   user: USER = null;
   loader;
   photo = 'assets/profile.png';
-  defaultPhoto = 'assets/profile.png';
   label;
-  // data = <DATA_UPLOAD>{};
   constructor(private fire: FireService, private lib: LibService, public route: ActivatedRoute) {
   }
   ngOnInit() {
     if (this.fire.user.isLogin) {
       this.fire.user.data()
-        .then((re: USER_DATA) => {
-            this.user = re.data.user;
+      .then((re: USER_DATA) => {
+        this.user = re.data.user;
 
-            if ( ! re.data.user.updated && re.data.user.created ) {
-              this.label = 'Welcome! ' + re.data.user.displayName;
-            } else {
-              this.label = 'Update Profile';
-            }
+        // Set label
+        if ( ! re.data.user.updated && re.data.user.created ) {
+          this.label = 'Welcome! ' + re.data.user.displayName;
+        } else {
+          this.label = 'Update Profile';
+        }
 
-            if (this.user.profilePhoto && this.user.profilePhoto.thumbnailUrl) {
-              this.photo = this.user.profilePhoto.thumbnailUrl;
-            }
+        // Set profile image
+        if (this.user.profilePhoto && this.user.profilePhoto.thumbnailUrl) {
+          this.photo = this.user.profilePhoto.thumbnailUrl;
+        }
 
-        })
-        .catch(e => {
-          alert('Error on getting data: ' + e.message);
-        });
+      })
+      .catch(e => {
+        alert('Error on getting data: ' + e.message);
+      });
     }
-
 
     this.listenToUserChanges();
 
@@ -49,7 +48,6 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // delete this.data;
     delete this.fire;
     delete this.lib;
     delete this.user;
@@ -60,15 +58,15 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
     console.log('Upload starts...');
   }
 
-  onUploadDone(e: DATA_UPLOAD) {
-    console.log('Upload Emits: ', e);
+  onUploadDone(data: DATA_UPLOAD) {
+    console.log('Upload Emits: ', data);
     // thumbnail is being updated by firebase-functions
-    if (e[0]) {
-      this.user.profilePhoto = e[0];
-      this.user.photoURL = e[0].url;
+    if (data[0]) {
+      this.user.profilePhoto = data[0];
+      this.user.photoURL = data[0].url;
     }
     this.loader = false;
-    console.log('Upload done.', this.loader);
+    console.log('Upload done.', data);
 
   }
 
@@ -78,22 +76,26 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
       this.fire.user.unlisten(); // User will be updated before we changed route then loader will be false.
       this.lib.sanitize(this.user);
       this.fire.user.update(this.user)
-        .then((res: USER_CREATE) => {
-          if (res.data.id) {
-            this.lib.openHomePage();
-          } else {
-            alert('Error on update return');
-            console.log('Error on update didnt return id', res);
-            this.loader = false;
-            this.listenToUserChanges();
-          }
-        })
-        .catch(e => {
-          alert(e.message);
-          console.error(e);
+      .then((res: USER_CREATE) => {
+
+        if (res.data.id) {
+          this.lib.openHomePage();
+        } else {
+          alert('Error on update return');
+          console.log('Error on update didnt return id', res);
           this.loader = false;
           this.listenToUserChanges();
-        });
+        }
+
+      })
+      .catch(e => {
+
+        alert(e.message);
+        console.error(e);
+        this.loader = false;
+        this.listenToUserChanges();
+
+      });
     } else {
       console.log('Validator falsy');
       this.loader = false;
@@ -102,6 +104,7 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
   }
 
   formValidator() {
+
     if (this.validateBirthday()) {
       alert('Invalid Birthday');
       return false;
@@ -117,7 +120,9 @@ export class UpdateProfilePage implements OnInit, OnDestroy {
     } else {
       return true;
     }
+
   }
+
   validateBirthday(): boolean {
     const now = (new Date()).getTime();
     const bday = (new Date(this.user.birthday)).getTime();

@@ -11,6 +11,15 @@ import * as firebase from 'firebase';
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss']
 })
+
+/**
+ * Uploads data into firebase storage.
+ *
+ * It waits for the @`Input data` to be updated before emiting done.
+ *
+ * Therefore the parent component should listen to data pdates then pass it on `@Input data`.
+ *
+ */
 export class FileUploadComponent implements OnInit, OnChanges {
 
   /**
@@ -30,26 +39,30 @@ export class FileUploadComponent implements OnInit, OnChanges {
   @Input() deleteOldFiles: Array<DATA_UPLOAD>;
 
   /**
-   * The data to be processed.
-   */
+  * The data to be processed.
+  */
   @Input() data: DATA_UPLOAD;
   /**
   * Emit if upload is starts
   */
- @Output() uploadStart = new EventEmitter();
+  @Output() uploadStart = new EventEmitter();
   /**
   * Emits Array<DATA_UPLOAD>
   */
   @Output() uploadDone = new EventEmitter<Array<DATA_UPLOAD>>();
+
   loader: boolean;
   uploadList: Array<DATA_UPLOAD> = [];
   oldFile = <DATA_UPLOAD>{};
+
   constructor(private fire: FireService, private lib: LibService ) { }
 
   ngOnInit() {
+
     if (this.fire.user.isLogout) {
       this.lib.openHomePage();
     }
+
     if (this.data && this.data.url && this.data.thumbnailUrl) {
       this.oldFile = this.data;
     }
@@ -57,22 +70,12 @@ export class FileUploadComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // only run when property "data" changed
+    // Emit done once data updates
     if (changes['data']) {
-      // console.log('Data changes', this.data);
-      if (!this.allowMultipleFiles) {
+
+      if (!this.allowMultipleFiles && this.deleteOldFiles) {
         this.oldFile = this.data;
-
       }
-
-      // update photo preview array and uploadList array.
-      // if (this.data.thumbnailUrl) {
-      //   this.updateUploadList(this.data.thumbnailUrl);
-      // } else if ( this.data.url ) {
-      //   this.updateUploadList(this.data.url);
-      // } else {
-      //   console.log('No data yet.');
-      // }
       this.emitDone();
 
     } else {
@@ -80,17 +83,12 @@ export class FileUploadComponent implements OnInit, OnChanges {
       console.log('No changes on data');
     }
 
-
-    // if (changes['oldFile']) {
-    //   console.log('Old file changes', changes['oldFile']);
-    // }
-
-    // console.log('Changes on file upload', changes['data']);
   }
 
   onChangeFile(e) {
     this.loader = true;
     const files: FileList = e.target.files;
+
     if (files.length === 0) {
       alert('No data to upload');
     }
@@ -99,7 +97,6 @@ export class FileUploadComponent implements OnInit, OnChanges {
     if (!this.allowMultipleFiles) {
       this.uploadFile(file);
     }
-
 
   }
 
@@ -110,9 +107,11 @@ export class FileUploadComponent implements OnInit, OnChanges {
     const fileRef = this.fire.data.getDataRef(this.pathToStorage, file);
     const uploadTask = fileRef.put(file);
     const closeUploadTask = uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+      // Upload process
       (snapshot: firebase.storage.UploadTaskSnapshot) => {
         console.log('Upload State', Math.round(snapshot.bytesTransferred / snapshot.totalBytes * 100) + '%');
       },
+      // Upload error
       (err) => {
         console.error('Upload Error', err);
         if ( err.message ) {
@@ -121,8 +120,8 @@ export class FileUploadComponent implements OnInit, OnChanges {
         this.loader = false;
         closeUploadTask();
       },
+      // Upload success
       () => {
-        // console.log(this.oldFile)
         upload.url = uploadTask.snapshot.downloadURL;
         upload.fullPath = fileRef.fullPath;
         upload.name = uploadTask.snapshot.metadata.name;
@@ -131,24 +130,19 @@ export class FileUploadComponent implements OnInit, OnChanges {
         if (!this.allowMultipleFiles) {
           this.uploadList = [];
         }
-        // this.loader = false;
         /**
         * Delete older files if needed.
-        *
         */
-        if (!this.allowMultipleFiles) {
-          if (this.deleteOldFiles && this.oldFile.fullPath !== upload.fullPath) {
-            // console.log('This is old file', this.oldFile);
+          if (!this.allowMultipleFiles && this.deleteOldFiles && this.oldFile.fullPath !== upload.fullPath) {
             this.fire.data.delete(this.oldFile)
             .then(a => {
               console.log('Old file deleted.');
             })
             .catch(e => {
-              alert(e.message);
+              alert('Error deleting old file' + e.message);
               console.error('Error on delete:', e);
             });
           }
-        }
 
         closeUploadTask();
       });
@@ -162,11 +156,7 @@ export class FileUploadComponent implements OnInit, OnChanges {
     }
 
     private emitDone() {
-      if ( this.updateUploadList.length === 0 ) {
-        this.uploadDone.emit([]);
-      } else {
-        this.uploadDone.emit(this.uploadList);
-      }
+      this.uploadDone.emit(this.uploadList);
       this.loader = false;
     }
 

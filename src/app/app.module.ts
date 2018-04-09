@@ -35,7 +35,6 @@ const appRoutes: Routes = [
   { path: 'install', component: InstallPage },
   { path: 'update-profile', component: UpdateProfilePage },
   { path: '', component: ForumPage }
-  // { path: '', component: UpdateProfilePage }
 ];
 
 

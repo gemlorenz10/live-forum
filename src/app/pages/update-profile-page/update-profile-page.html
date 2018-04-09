@@ -9,7 +9,6 @@
         <div class="col-sm">
             <div class="file-upload-container center">
                 <img [src]="photo" alt="">
-                <!-- <div></div> -->
                 <app-file-upload
                 [hidden] = "loader"
                 [pathToStorage]="'profile-photo'"
@@ -26,7 +25,7 @@
         <div class="col-sm">
             <div class="form-container center">
                 <input type="text" class="form-item-text" placeholder="*Firstname" [(ngModel)]="user.firstName" ><br>
-                <input type="text" class="form-item-text" placeholder="Middlename"  [(ngModel)]="user.middleName" ><br>
+                <input type="text" class="form-item-text" placeholder="Middlename" [(ngModel)]="user.middleName" ><br>
                 <input type="text" class="form-item-text" placeholder="*Lastname" [(ngModel)]="user.lastName" ><br>
                 <!-- Gender -->
                 <div class="gender-container">
@@ -47,14 +46,14 @@
                 <!-- Birthdate -->
                 <div class="birthday-container">
                     <label>
-                        *Birthday: <input type="date" class="form-item-text" [(ngModel)]="user.birthday">
+                        <span>*Birthday:</span> <input type="date" class="form-item-text" [(ngModel)]="user.birthday">
                     </label>
                 </div>
                 <!-- Submit button -->
                 <button type="submit" class="btn btn-primary form-item-text" [disabled]="loader" (click)="onClickSubmit()">{{ (loader) ? 'Please wait...' : 'Submit' }}</button>
                 <p>Fields with asterisk '*' are required.</p>
             </div>
-            {{ user | json }}
+            <!-- {{ user | json }} -->
         </div>
     </div>
 </div>
