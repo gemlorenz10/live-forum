@@ -4,6 +4,8 @@ import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { LibService } from './providers/lib.service';
 import { USER, USER_CREATE } from './modules/firelibrary/core';
 
+import * as firebase from 'firebase';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -14,7 +16,7 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
   isSystemInstalled;
   isLogin: boolean;
   profilePhoto;
-  displayName;
+  user = <USER>{};
   authStateUnsubscribe;
   constructor(public fire: FireService, public lib: LibService) {
     this.profilePhoto = this.lib.DEFAULT_PROFILE_PHOTO;
@@ -26,25 +28,22 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
     if ( !this.isSystemInstalled ) {
       this.systemInstall();
     }
+
   }
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['displayName']) {
-      this.displayName = this.displayName;
-    }
-    if (changes['isLogin']) {
-      if (this.isLogin) {
-        this.fire.user.listen((u: USER) => {
-          this.displayName = u.displayName;
-          this.profilePhoto = u.profilePhoto.thumbnailUrl;
-        });
-      } else {
-        this.fire.user.unlisten();
-      }
-    }
+
+    // if (changes['isLogin']) {
+    //   if (this.isLogin) {
+    //     this.listenUserChanges();
+    //   } else {
+    //     this.fire.user.unlisten();
+    //   }
+    // }
+
   }
 
   ngOnDestroy() {
-    console.log('onDestry');
+    console.log('App component destroyed');
     if ( typeof this.authStateUnsubscribe === 'function' ) {
       this.authStateUnsubscribe();
       this.fire.user.unlisten();
@@ -57,6 +56,8 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
 
   onClickLogout() {
     this.fire.user.logout();
+    // this.authStateUnsubscribe();
+    // this.fire.user.unlisten();
   }
 
   systemInstall() {
@@ -71,12 +72,14 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
     this.authStateUnsubscribe = this.fire.auth.onAuthStateChanged(user => {
       if (user) {
         console.log('Logged in', user);
-        this.displayName = user.uid;
+        this.user.displayName = user.displayName;
         this.isLogin = true;
+        this.listenUserChanges();
       } else {
         console.log('Logged out');
         this.isLogin = false;
         this.lib.openHomePage();
+        this.fire.user.unlisten();
       }
     });
   }
@@ -89,6 +92,16 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
   onRouteDeactivate(e ) {
     // console.log('Route Deactivated', e );
     // this.loader = true;
+  }
+
+  listenUserChanges() {
+    console.log('Listening to user changes');
+    this.fire.user.listen((user: USER) => {
+      this.user.displayName = user.firstName;
+      this.profilePhoto = user.profilePhoto.thumbnailUrl;
+      console.log('User updated!', user);
+    });
+
   }
 
 }

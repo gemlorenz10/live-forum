@@ -3,10 +3,11 @@
   <div class="banner left">
     <h1>Live Forum</h1>
   </div>
-  <!-- <div class="avatar-container right" *ngIf="isLogin">
-    <app-avatar [profilePhoto]="profilePhoto" [displayName]="displayName"></app-avatar>
-  </div> -->
-  <div class="right" style="color: white;">{{ displayName }}</div>
+  <div class="user-container" *ngIf="isLogin">
+    <app-avatar class="right" [profilePhoto]="profilePhoto"></app-avatar>
+    <div class="display-name right">{{ user.displayName }}</div>
+  </div>  
+  <!-- <div class="right" style="color: white;">{{ displayName }}</div> -->
 </div>
 
 

@@ -1,4 +1,5 @@
 @import '~sass/variables';
+@import '~sass/mixins';
 
 .app-head {
     background-color: $primary-color;
@@ -11,17 +12,22 @@
         }
     }
 
-    .avatar-container {
+    .user-container {
         margin: 0.12em 0.5em 0.12em 0.5em;
-    }
-    .right {
-        float: right;
-    }
-    .left {
-        float: left;
+        display: inline;
+        .display-name {
+            color: $light;
+            margin: 0.8em 0.5em;
+            @include no-select;
+        }
     }
 }
-
+.right {
+    float: right;
+}
+.left {
+    float: left;
+}
 
 .line {
     padding: 0;

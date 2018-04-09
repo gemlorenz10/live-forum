@@ -11,7 +11,6 @@ export class AvatarComponent implements OnInit, OnChanges {
    * Pass thumbnail or photo if thumbnail doesn't exists.
    */
   @Input() profilePhoto;
-  @Input() displayName;
   constructor() { }
 
   ngOnInit() {

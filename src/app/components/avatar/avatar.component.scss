@@ -1,24 +1,14 @@
-@import '~sass/variables';
+// @import '~sass/variables';
 
-.avatar-container {
-    border: 0;
     .image-container {
-        margin: 0.1em;
+        margin: 0.2em;
         width: 3em;
         height: 3em;
+        border: 0;
+        border-radius: 50%;
         img {
-            max-width: 3em;
-            max-height: 3em;
-            // border: 0;
-            // border-radius: 50%;
+            width: inherit;
+            height: inherit;
+
         }
     }
-    .display-name {
-        color: $light;
-    }
-    div {
-        display: inline;
-    }
-
-
-}
