@@ -62,9 +62,11 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onClickLogout() {
+    this.fire.user.unlisten();
     this.fire.user.logout()
     .then(a => {
-      this.fire.user.unlisten();
+      // console.log('Logged out.');
+      this.lib.openHomePage();
     })
     .catch(e => {
       if (e.message) {
@@ -92,7 +94,6 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
         this.listenUserChanges();
       } else {
         console.log('Auth state: Logged out');
-        this.lib.openHomePage();
       }
     });
   }
