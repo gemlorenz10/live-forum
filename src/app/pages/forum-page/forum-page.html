@@ -1,3 +1,13 @@
-<p>
-  Forum Page works! Forum is the home page.
-</p>
+Category: <button class="btn {{ activeCategory.id ? 'btn-outline-secondary' : 'btn-secondary' }} category-list" (click)="onClickAllCategory()">All</button>
+<div class="category-container" *ngFor="let category of categoryList">
+    <button 
+    class="btn {{ (activeCategory.id === category.id) ? 'btn-secondary' : 'btn-outline-secondary' }} category-list"
+    [value]="category" 
+    (click)="onClickCategory(category)">{{ category.name }}</button>
+</div>
+
+
+<hr>
+<app-post-form [categoryId]="activeCategory.id" *ngIf="fire.user.isLogin && activeCategory.id"></app-post-form>
+<!-- {{ post | json }} -->
+<hr>

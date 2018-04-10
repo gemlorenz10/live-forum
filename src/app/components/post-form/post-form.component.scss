@@ -1,0 +1,22 @@
+@import '~sass/mixins';
+
+.post-form-container {
+    .post-title {
+        margin: 0.5em 0 0.5em 0;
+        padding: 0.5em;
+        width: 32em;
+    }
+    .post-content {
+        margin:0 0 0.5em 0;
+        padding: 0.8em;
+    }
+
+    .live-chat {
+        @include no-select;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        width: 5em;
+    }
+}
