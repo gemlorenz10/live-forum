@@ -13,6 +13,11 @@ export class PostItemComponent implements OnInit {
    */
   @Input() post: POST;
 
+  /**
+   * Option to show category.
+   */
+  @Input() showCategory: boolean;
+
   author = <USER>{};
 
   constructor( public fire: FireService ) { }

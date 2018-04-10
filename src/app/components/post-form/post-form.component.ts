@@ -25,7 +25,6 @@ export class PostFormComponent implements OnInit, OnChanges {
   constructor( public fire: FireService, public lib: LibService ) { }
 
   ngOnInit() {
-    this.post.options = { liveChat: false };
   }
 
   ngOnChanges(changes: SimpleChanges) {

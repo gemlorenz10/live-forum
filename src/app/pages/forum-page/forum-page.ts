@@ -13,14 +13,15 @@ export class ForumPage implements OnInit {
   postList = <Array<POST>>[];
   categoryList: Array<CATEGORY> = [];
   activeCategory = <CATEGORY>{id: ''};
+  showCategory: boolean;
 
 
   constructor( public fire: FireService, public lib: LibService ) { }
 
   ngOnInit() {
-    this.post.options = { liveChat: false };
-
+    // this.activeCategory =
     this.getCategories();
+
   }
 
   getCategories() {
@@ -34,11 +35,13 @@ export class ForumPage implements OnInit {
     });
   }
 
-  onClickCategory(category: CATEGORY) {
-    // Category = e.target.value
-    this.activeCategory = category;
-    this.postList = []; // clear post list when jumping to another category
-    this.getPostPage();
+  onClickCategory(category?: CATEGORY) {
+    if (category) {
+      this.activeCategory = category;
+      this.postList = []; // clear post list when jumping to another category
+      this.getPostPage();
+    }
+
     // console.log(this.activeCategory);
   }
 

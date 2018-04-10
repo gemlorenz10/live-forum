@@ -11,11 +11,6 @@
         padding: 0.8em;
     }
 
-    .live-chat {
-        @include no-select;
-        cursor: pointer;
-    }
-
     .btn-primary {
         width: 5em;
     }

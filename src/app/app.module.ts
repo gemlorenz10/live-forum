@@ -11,6 +11,9 @@ import { AppComponent } from './app.component';
 import { AvatarComponent } from './components/avatar/avatar.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { InstallComponent } from './components/install/install.component';
+import { PostFormComponent } from './components/post-form/post-form.component';
+import { PostItemComponent } from './components/post-item/post-item.component';
+import { CategoryComponent } from './components/category/category.component';
 
 import { RegisterPage } from './pages/register-page/register-page';
 import { ForumPage } from './pages/forum-page/forum-page';
@@ -20,8 +23,6 @@ import { AdminPage } from './pages/admin-page/admin-page';
 
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import { PostFormComponent } from './components/post-form/post-form.component';
-import { PostItemComponent } from './components/post-item/post-item.component';
 
 
 
@@ -49,14 +50,16 @@ const appRoutes: Routes = [
     FileUploadComponent,
     AvatarComponent,
     InstallComponent,
+    CategoryComponent,
+    PostFormComponent,
+    PostItemComponent,
 
     RegisterPage,
     ForumPage,
     LoginPage,
     UpdateProfilePage,
-    AdminPage,
-    PostFormComponent,
-    PostItemComponent
+    AdminPage
+
   ],
   imports: [
     FormsModule,

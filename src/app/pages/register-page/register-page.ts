@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 // import { NgModel } from '@angular/forms';
 
 @Component({
-  selector: 'app-register-page',
+  selector: 'register-page',
   templateUrl: './register-page.html',
   styleUrls: ['./register-page.scss']
 })

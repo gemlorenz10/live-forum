@@ -1,4 +1,4 @@
-Category: <button class="btn {{ activeCategory.id ? 'btn-outline-secondary' : 'btn-secondary' }} category-list" (click)="onClickAllCategory()">All</button>
+Category:
 <div class="category-container" *ngFor="let category of categoryList">
     <button 
     class="btn {{ (activeCategory.id === category.id) ? 'btn-secondary' : 'btn-outline-secondary' }} category-list"
@@ -13,5 +13,5 @@ Category: <button class="btn {{ activeCategory.id ? 'btn-outline-secondary' : 'b
 <hr>
 
 <div class="post-list" *ngFor=" let post of postList">
-    <app-post-item [post]="post"></app-post-item>
+    <app-post-item [post]="post" [showCategory]="activeCategory.id === 'all' ? true : false"></app-post-item>
 </div>

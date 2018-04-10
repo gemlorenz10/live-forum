@@ -1,65 +1,46 @@
+import { Category } from './../../modules/firelibrary/providers/category/category';
 import { Component, OnInit } from '@angular/core';
-import { CATEGORY, FireService, CATEGORY_CREATE, CATEGORY_GET } from '../../modules/firelibrary/core';
+import { CATEGORY, FireService, CATEGORY_CREATE, CATEGORY_GET, CATEGORY_EDIT } from '../../modules/firelibrary/core';
 
 @Component({
-  selector: 'app-admin-page',
+  selector: 'admin-page',
   templateUrl: './admin-page.html',
   styleUrls: ['./admin-page.scss']
 })
 export class AdminPage implements OnInit {
 
-  categoryList = <Array<CATEGORY>>[];
-  category = <CATEGORY>{ numberOfPostsPerPage: 5 };
-  loader;
-  constructor( public fire: FireService ) { }
+  /**
+   * This is where you initialize submenus.
+   *
+   * `true` is active otherwise inactive.
+   *
+   * Beware that you should only put 1 true value on menu keys.
+   *
+   * `Keys` - will be the name of the menu as well.
+   */
+  menu = { Category: true, Fake1: false, Fake2: false }; // default is Category so that oninit category component will be shown.
+  menuKeys = [];
+  constructor( public fire: FireService, public lib: FireService ) { }
 
   ngOnInit() {
-    this.fire.category.categories()
-    .then(categories => {
-      this.categoryList = categories;
-    });
+    // this.onClickMenu(this.menu.Category); // populate menu keys
+    this.pushMenuKeys();
   }
 
-  onClickCreateCategory() {
-    this.loader = true;
-    if ( this.categoryValidator() ) {
-      this.fire.category.create(this.category)
-      .then((cat: CATEGORY_CREATE) => {
-        alert(`Category ${cat.data.id} is created!`);
-        return this.getCategory(cat.data.id);
-      })
-      .then((category: CATEGORY_GET) => {
-        this.categoryList.push(category.data);
-      })
-      .catch(e => {
-        if (e.message) {
-          alert('Error on Creating Category: ' + e.message);
-          console.log('Error on Creating Category: ', e.message);
-          this.loader = false;
-        }
-      });
-    } else {
-      this.loader = false;
-      console.log('FIelds did not pass validator');
+  onClickMenu(menuKey) {
+    for (const key in this.menu) {
+      if (this.menu.hasOwnProperty(key)) {
+        this.menu[key] = false;
+      }
+    }
+    this.menu[menuKey] = true;
+  }
+
+  private pushMenuKeys() {
+    for (const key in this.menu) {
+      if (this.menu.hasOwnProperty(key)) {
+        this.menuKeys.push(key);
+      }
     }
   }
-
-  private categoryValidator(): boolean {
-    if ( ! this.category.name ) {
-      alert('Category name is required.');
-      return false;
-    } else {
-      return true;
-    }
-    // else if ( this.category.numberOfPostsPerPage > 0 && this.category.numberOfPostsPerPage <= 10 ) {
-    //   alert('Category number of posts per page should be 1 - 10.');
-    //   return false;
-    // }
-
-  }
-
-  getCategory(categoryId: string): Promise<CATEGORY_GET> {
-    return this.fire.category.get(categoryId);
-  }
-
 }

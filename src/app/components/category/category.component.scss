@@ -1,0 +1,6 @@
+@import '~sass/mixins';
+
+.live-chat {
+    @include no-select;
+    cursor: pointer;
+}

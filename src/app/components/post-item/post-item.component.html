@@ -1,6 +1,5 @@
 <div class="post-container" *ngIf="post">
-    <h6 *ngIf="post.title">{{ post.title }}</h6><br>
+    <h6 *ngIf="post.title">{{ post.title }}<span *ngIf="showCategory">  /{{ post.category }}</span></h6><br>
     <p>{{ post.content }}</p><br>
-    <!-- <span class="author">{{ author.displayName }}</span> -->
     <hr>
 </div>
