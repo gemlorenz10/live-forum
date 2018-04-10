@@ -16,9 +16,11 @@ import { RegisterPage } from './pages/register-page/register-page';
 import { ForumPage } from './pages/forum-page/forum-page';
 import { LoginPage } from './pages/login-page/login-page';
 import { UpdateProfilePage } from './pages/update-profile-page/update-profile-page';
+import { AdminPage } from './pages/admin-page/admin-page';
 
 import * as firebase from 'firebase';
 import 'firebase/firestore';
+
 
 
 firebase.initializeApp({
@@ -34,6 +36,7 @@ const appRoutes: Routes = [
   { path: 'register', component: RegisterPage },
   { path: 'login', component: LoginPage },
   { path: 'update-profile', component: UpdateProfilePage },
+  { path: 'admin', component: AdminPage },
   { path: '', component: ForumPage }
 ];
 
@@ -48,7 +51,8 @@ const appRoutes: Routes = [
     RegisterPage,
     ForumPage,
     LoginPage,
-    UpdateProfilePage
+    UpdateProfilePage,
+    AdminPage
   ],
   imports: [
     FormsModule,

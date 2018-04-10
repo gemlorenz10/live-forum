@@ -1,7 +1,7 @@
-import { DATA_UPLOAD, USER } from './../../modules/firelibrary/providers/etc/interface';
+import { DATA_UPLOAD, USER, USER_CREATE } from './../../modules/firelibrary/providers/etc/interface';
 import { LibService } from './../../providers/lib.service';
 
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange, SimpleChanges, OnDestroy } from '@angular/core';
 import { FireService } from '../../modules/firelibrary/core';
 
 import * as firebase from 'firebase';
@@ -13,14 +13,14 @@ import * as firebase from 'firebase';
 })
 
 /**
- * Uploads data into firebase storage.
- *
- * It waits for the @`Input data` to be updated before emiting done.
- *
- * Therefore the parent component should listen to data pdates then pass it on `@Input data`.
- *
- */
-export class FileUploadComponent implements OnInit, OnChanges {
+* Uploads data into firebase storage.
+*
+* It waits for the @`Input data` to be updated before emiting done.
+*
+* Therefore the parent component should listen to data pdates then pass it on `@Input data`.
+*
+*/
+export class FileUploadComponent implements OnInit, OnDestroy, OnChanges {
 
   /**
   * Path to firebase storage.
@@ -39,9 +39,15 @@ export class FileUploadComponent implements OnInit, OnChanges {
   @Input() deleteOldFiles: Array<DATA_UPLOAD>;
 
   /**
-  * The data to be processed.
+  * `true` if will wait for thumbnail before emitting. Otherwise just display raw.
   */
-  @Input() data: DATA_UPLOAD;
+  // @Input() waitForThumbnail: boolean;
+
+  /**
+  * The data to be deleted
+  */
+  @Input() currentData: DATA_UPLOAD;
+
   /**
   * Emit if upload is starts
   */
@@ -53,7 +59,7 @@ export class FileUploadComponent implements OnInit, OnChanges {
 
   loader: boolean;
   uploadList: Array<DATA_UPLOAD> = [];
-  oldFile = <DATA_UPLOAD>{};
+  // oldFile = <DATA_UPLOAD>{};
 
   constructor(private fire: FireService, private lib: LibService ) { }
 
@@ -63,26 +69,30 @@ export class FileUploadComponent implements OnInit, OnChanges {
       this.lib.openHomePage();
     }
 
-    if (this.data && this.data.url && this.data.thumbnailUrl) {
-      this.oldFile = this.data;
-    }
+    // if (this.data && this.data.url && this.data.thumbnailUrl) {
+    //   this.oldFile = this.data;
+    // }
     // console.log('Get old file on Init', this.oldFile);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     // Emit done once data updates
-    if (changes['data']) {
+    // if (changes['currentData']) {
+    //   console.log('There should be changes in data');
+    //   // if (!this.allowMultipleFiles && this.deleteOldFiles) {
+    //   //   this.oldFile = this.data;
+    //   // }
+    //   this.emitDone();
 
-      if (!this.allowMultipleFiles && this.deleteOldFiles) {
-        this.oldFile = this.data;
-      }
-      this.emitDone();
+    // } else {
+    //   this.emitDone();
+    //   console.log('No changes on data');
+    // }
 
-    } else {
-      this.emitDone();
-      console.log('No changes on data');
-    }
+  }
 
+  ngOnDestroy() {
+    // this.fire.user.unlisten();
   }
 
   onChangeFile(e) {
@@ -103,9 +113,12 @@ export class FileUploadComponent implements OnInit, OnChanges {
   uploadFile(file: File) {
     this.loader = true;
     this.uploadStart.emit();
+
     const upload: DATA_UPLOAD = { name: '' };
+    const user = <USER>{};
     const fileRef = this.fire.data.getDataRef(this.pathToStorage, file);
     const uploadTask = fileRef.put(file);
+
     const closeUploadTask = uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
       // Upload process
       (snapshot: firebase.storage.UploadTaskSnapshot) => {
@@ -125,49 +138,60 @@ export class FileUploadComponent implements OnInit, OnChanges {
         upload.url = uploadTask.snapshot.downloadURL;
         upload.fullPath = fileRef.fullPath;
         upload.name = uploadTask.snapshot.metadata.name;
-
-
-        if (!this.allowMultipleFiles) {
-          this.uploadList = [];
-        }
+        this.updateUploadList(upload);
         /**
         * Delete older files if needed.
         */
-          if (!this.allowMultipleFiles && this.deleteOldFiles && this.oldFile.fullPath !== upload.fullPath) {
-            this.fire.data.delete(this.oldFile)
-            .then(a => {
-              console.log('Old file deleted.');
-            })
-            .catch(e => {
-              alert('Error deleting old file' + e.message);
-              console.error('Error on delete:', e);
-            });
-          }
+        if (this.currentData && !this.allowMultipleFiles && this.deleteOldFiles && this.currentData.fullPath !== upload.fullPath) {
+          this.fire.data.delete(this.currentData)
+          .then(a => {
+            console.log('Old file deleted.');
+          })
+          .catch(e => {
+            alert('Error deleting old file' + e.message);
+            console.error('Error on delete:', e);
+          });
+        }
 
+        /**
+         * Listen to user changes specifically to thumbnailUrl
+         */
+        // this.listenToUserDoc();
+        console.log('UPLOAD IN FILE', upload);
+        this.emitDone();
         closeUploadTask();
       });
     }
 
-    private updateUploadList(image) {
+    updateUploadList(image) {
       if (!this.allowMultipleFiles) {
         this.uploadList = [];
       }
-      this.uploadList.push(this.data);
+      this.uploadList.push(image);
     }
 
-    private emitDone() {
+    emitDone() {
       this.uploadDone.emit(this.uploadList);
       this.loader = false;
     }
 
-    // private renderFile(file) {
-    //   const reader = new FileReader();
-    //   reader.onload = (event: ProgressEvent) => {
-    //     if (this.previewList.length > 0 && !this.allowMultipleFiles) {
-    //       this.previewList.shift();
+    // updateUserDoc(user) {
+    //   this.fire.user.update(user)
+    //   .then((re: USER_CREATE) => {
+    //     console.log('User data update correct!');
+    //   });
+
+    // }
+
+    // listenToUserDoc() {
+    //   console.log('Listening to user....');
+    //   this.fire.user.listen( (user: USER) => {
+    //     if (user.profilePhoto && user.profilePhoto.thumbnailUrl) {
+    //       this.updateUploadList(user.profilePhoto);
+    //       this.emitDone();
+    //       console.log('Changes on user: ', user);
     //     }
-    //     this.previewList.push(event.target['result']);
-    //   };
-    //   reader.readAsDataURL(file);
+    //   });
     // }
   }
+

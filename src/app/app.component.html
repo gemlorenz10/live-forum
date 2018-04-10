@@ -4,31 +4,30 @@
     <h1>Live Forum</h1>
   </div>
   <div class="user-container" *ngIf="fire.user.isLogin">
-    <app-avatar class="right" [profilePhoto]="profilePhoto"></app-avatar>
+    <!-- <app-avatar class="right" [profilePhoto]="profilePhoto"></app-avatar> -->
     <div class="display-name right">{{ user.displayName }}</div>
   </div>  
-  <!-- <div class="right" style="color: white;">{{ displayName }}</div> -->
 </div>
-
 
 <div class="container">
   <div *ngIf="isSystemInstalled === true">
     <nav class="nav-container">
-      
+
       <a routerLink="/" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> Home </a>
       <a routerLink="/register" class="nav-item" routerLinkActive="active" *ngIf="fire.user.isLogout"> Register </a>
       <a routerLink="/login" class="nav-item" routerLinkActive="active" *ngIf="fire.user.isLogout"> Login </a>
       
       <a routerLink="/update-profile" class="nav-item" routerLinkActive="active" *ngIf="fire.user.isLogin"> Update Profile </a>
-      <a (click)="onClickLogout()" class="nav-item" *ngIf="fire.user.isLogin"> Logout </a>
+
       
+      <a routerLink="/admin" class="nav-item" routerLinkActive="active" *ngIf="fire.user.isLogin && isAdmin"> Admin Panel </a>
+
+      <a (click)="onClickLogout()" class="nav-item" *ngIf="fire.user.isLogin"> Logout </a>
+
     </nav>
     <hr class="line">
     <div class="outlet">
-      <router-outlet
-      (activate)='onRouteActivate($event)'
-      (deactivate)='onRouteDeactivate($event)'
-      ></router-outlet>
+      <router-outlet></router-outlet>
     </div>
   </div>
   <div class="outlet">

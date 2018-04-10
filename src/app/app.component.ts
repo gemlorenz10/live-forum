@@ -4,7 +4,7 @@ import { FireService } from './modules/firelibrary/providers/fire.service';
 
 
 import { LibService } from './providers/lib.service';
-import { USER, USER_CREATE } from './modules/firelibrary/core';
+import { USER, USER_CREATE, IS_ADMIN, DATA_UPLOAD } from './modules/firelibrary/core';
 
 import * as firebase from 'firebase';
 
@@ -14,11 +14,12 @@ import * as firebase from 'firebase';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnChanges, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy {
 
   isSystemInstalled;
   profilePhoto;
   user = <USER>{};
+  isAdmin;
   authStateUnsubscribe;
   constructor(public fire: FireService, public lib: LibService) {
     this.profilePhoto = this.lib.DEFAULT_PROFILE_PHOTO;
@@ -27,29 +28,19 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.watchAuth();
+
     if ( !this.isSystemInstalled ) {
       this.checkSystemInstall();
     }
 
   }
-  ngOnChanges(changes: SimpleChanges) {
-
-    // if (changes['isLogin']) {
-    //   if (this.isLogin) {
-    //     this.listenUserChanges();
-    //   } else {
-    //     this.fire.user.unlisten();
-    //   }
-    // }
-
-  }
 
   ngOnDestroy() {
-    console.log('App component destroyed');
-    if ( typeof this.authStateUnsubscribe === 'function' ) {
-      this.authStateUnsubscribe();
-      this.fire.user.unlisten();
-    }
+  //   console.log('App component destroyed');
+  //   if ( typeof this.authStateUnsubscribe === 'function' ) {
+  //     this.authStateUnsubscribe();
+  //     this.fire.user.unlisten();
+  //   }
   }
 
   onFinishInstall(isInstalled: boolean) {
@@ -62,27 +53,15 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onClickLogout() {
-    this.fire.user.unlisten();
-    this.fire.user.logout()
-    .then(a => {
-      // console.log('Logged out.');
-      this.lib.openHomePage();
-    })
-    .catch(e => {
-      if (e.message) {
-        alert('Error logging out ' + e.message);
-      }
-      console.log('Error logging out', e);
-    });
-    // this.authStateUnsubscribe();
-    // this.fire.user.unlisten();
+    this.lib.openHomePage();
+    this.fire.user.logout();
   }
 
   checkSystemInstall() {
     this.fire.checkInstall()
     .then(res => {
       this.isSystemInstalled = res.data.installed;
-      console.log('Is system installed?', this.isSystemInstalled);
+      // console.log('Is system installed?', this.isSystemInstalled);
     });
   }
 
@@ -91,32 +70,40 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
       if (user) {
         console.log('Auth State: Logged in', user);
         this.user.displayName = user.displayName;
-        this.listenUserChanges();
+        this.checkIfAdmin();
       } else {
+        this.lib.openHomePage();
+        this.fire.user.unlisten();
         console.log('Auth state: Logged out');
       }
     });
   }
 
-  onRouteActivate( e ) {
-    console.log('Route activated', e);
-    // this.loader = false;
-  }
+  // listenUserChanges() {
+  //   console.log('Listening to user changes');
+  //   this.fire.user.get(this.fire.user.uid)
+  //   .then(u => {
+  //     this.fire.user.listen((user: USER) => {
+  //       this.user.displayName = user.displayName;
+  //       if (user.profilePhoto && user.profilePhoto.thumbnailUrl) {
+  //         this.profilePhoto = user.profilePhoto.thumbnailUrl;
+  //       }
+  //       console.log('User updated!', user);
+  //     });
+  //   });
 
-  onRouteDeactivate(e ) {
-    console.log('Route Deactivated', e );
-    // this.loader = true;
-  }
+  // }
 
-  listenUserChanges() {
-    console.log('Listening to user changes');
-      this.fire.user.listen((user: USER) => {
-        this.user.displayName = user.displayName;
-        if (user.profilePhoto && user.profilePhoto.thumbnailUrl) {
-          this.profilePhoto = user.profilePhoto.thumbnailUrl;
-        }
-        console.log('User updated!', user);
-      });
-    }
+  checkIfAdmin() {
+    this.fire.user.isAdmin()
+    .then((re: IS_ADMIN) => {
+      this.isAdmin = re.data.isAdmin;
+      console.log('Is it admin?', this.isAdmin);
+    })
+    .catch(e => {
+      alert('Error on checking if user is admin ' + e.message);
+      console.log('Error on checking if user is admin ', e);
+    });
+  }
 
 }

@@ -1,5 +1,5 @@
 import { LibService } from './../../providers/lib.service';
-import { FireService, USER, DATA_UPLOAD, USER_CREATE } from './../../modules/firelibrary/core';
+import { FireService, USER, DATA_UPLOAD, USER_CREATE, RESPONSE } from './../../modules/firelibrary/core';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import * as firebase from 'firebase';
@@ -33,9 +33,13 @@ export class RegisterPage implements OnInit, OnDestroy {
     this.loader = true;
     if (this.registerValidator()) {
       this.fire.user.register(this.userData)
-      .then((auth) => {
-        const u = <USER>{};
-        return this.fire.user.create(u);
+      .then((re: USER_CREATE) => {
+        if ( re.data ) {
+          const u = <USER>{
+            displayName: this.fire.user.displayName
+          };
+          return this.fire.user.create(u);
+        }
       })
       .then(user => {
         if (user.data.id) {
