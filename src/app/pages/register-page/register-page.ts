@@ -12,9 +12,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./register-page.scss']
 })
 export class RegisterPage implements OnInit, OnDestroy {
+
   userData = <USER>{};
   loader = false;
   passwordConfirmation: string;
+
   constructor(
     public fire: FireService,
     private lib: LibService

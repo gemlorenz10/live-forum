@@ -1,3 +1,4 @@
+import { LibService } from './../../providers/lib.service';
 import { Component, OnInit } from '@angular/core';
 import { POST, FireService, CATEGORY } from '../../modules/firelibrary/core';
 
@@ -9,9 +10,12 @@ import { POST, FireService, CATEGORY } from '../../modules/firelibrary/core';
 export class ForumPage implements OnInit {
 
   post = <POST>{};
+  postList = <Array<POST>>[];
   categoryList: Array<CATEGORY> = [];
   activeCategory = <CATEGORY>{id: ''};
-  constructor( public fire: FireService ) { }
+
+
+  constructor( public fire: FireService, public lib: LibService ) { }
 
   ngOnInit() {
     this.post.options = { liveChat: false };
@@ -33,10 +37,33 @@ export class ForumPage implements OnInit {
   onClickCategory(category: CATEGORY) {
     // Category = e.target.value
     this.activeCategory = category;
-    console.log(this.activeCategory);
+    this.postList = []; // clear post list when jumping to another category
+    this.getPostPage();
+    // console.log(this.activeCategory);
   }
 
   onClickAllCategory() {
     this.activeCategory = {id: ''};
   }
+
+  onPostCreate(post) {
+  }
+
+  getPostPage() {
+    if (this.activeCategory.id) {
+      this.fire.post.page({ category: this.activeCategory.id, limit: this.activeCategory.numberOfPostsPerPage})
+      .then((postObj: Array<POST>) => {
+        for (const postId in postObj) {
+          if (postObj.hasOwnProperty(postId)) {
+            this.postList.push(postObj[postId]);
+          }
+        }
+        console.log(postObj);
+      })
+      .catch(e => {
+        this.lib.failure(e, 'Error on geting post page.');
+      });
+    }
+  }
+
 }

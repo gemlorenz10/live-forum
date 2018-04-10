@@ -11,3 +11,7 @@ Category: <button class="btn {{ activeCategory.id ? 'btn-outline-secondary' : 'b
 <app-post-form [categoryId]="activeCategory.id" *ngIf="fire.user.isLogin && activeCategory.id"></app-post-form>
 <!-- {{ post | json }} -->
 <hr>
+
+<div class="post-list" *ngFor=" let post of postList">
+    <app-post-item [post]="post"></app-post-item>
+</div>

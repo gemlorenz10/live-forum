@@ -21,6 +21,7 @@ import { AdminPage } from './pages/admin-page/admin-page';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { PostFormComponent } from './components/post-form/post-form.component';
+import { PostItemComponent } from './components/post-item/post-item.component';
 
 
 
@@ -54,7 +55,8 @@ const appRoutes: Routes = [
     LoginPage,
     UpdateProfilePage,
     AdminPage,
-    PostFormComponent
+    PostFormComponent,
+    PostItemComponent
   ],
   imports: [
     FormsModule,

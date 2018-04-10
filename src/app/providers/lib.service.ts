@@ -25,4 +25,11 @@ export class LibService {
   sanitize(obj): any {
     return _.sanitize(obj);
   }
+
+  failure(e, info?) {
+   if (e.message) {
+     alert(info + ': ' + e.message);
+   }
+   console.log(info, e);
+  }
 }

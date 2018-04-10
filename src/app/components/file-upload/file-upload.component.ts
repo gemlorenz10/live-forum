@@ -68,31 +68,12 @@ export class FileUploadComponent implements OnInit, OnDestroy, OnChanges {
     if (this.fire.user.isLogout) {
       this.lib.openHomePage();
     }
-
-    // if (this.data && this.data.url && this.data.thumbnailUrl) {
-    //   this.oldFile = this.data;
-    // }
-    // console.log('Get old file on Init', this.oldFile);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // Emit done once data updates
-    // if (changes['currentData']) {
-    //   console.log('There should be changes in data');
-    //   // if (!this.allowMultipleFiles && this.deleteOldFiles) {
-    //   //   this.oldFile = this.data;
-    //   // }
-    //   this.emitDone();
-
-    // } else {
-    //   this.emitDone();
-    //   console.log('No changes on data');
-    // }
-
   }
 
   ngOnDestroy() {
-    // this.fire.user.unlisten();
   }
 
   onChangeFile(e) {

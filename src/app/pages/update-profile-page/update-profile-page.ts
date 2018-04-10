@@ -14,8 +14,10 @@ export class UpdateProfilePage implements OnInit, OnChanges, OnDestroy {
   loader;
   photo = 'assets/profile.png';
   label;
+
   constructor(private fire: FireService, private lib: LibService, public route: ActivatedRoute) {
   }
+
   ngOnInit() {
     if (this.fire.user.isLogin) {
       this.fire.user.data()
