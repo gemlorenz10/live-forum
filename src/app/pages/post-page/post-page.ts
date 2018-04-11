@@ -16,9 +16,9 @@ export class PostPage implements OnInit {
   constructor( public fire: FireService, public route: ActivatedRoute, public lib: LibService ) { }
 
   ngOnInit() {
-    this.post.id = this.route.snapshot.params['id'];
-    if (this.post.id) {
-      this.getPost()
+    const id = this.route.snapshot.params['id'];
+    if (id) {
+      this.getPost(id)
       .then(() => {
         this.getCategory();
       })
@@ -28,10 +28,11 @@ export class PostPage implements OnInit {
     }
   }
 
-  getPost() {
-    return this.fire.post.get(this.post.id)
+  getPost(id) {
+    return this.fire.post.get(id)
     .then((re: RESPONSE) => {
       this.post = re.data;
+      console.log('Parsed data on post-page', re.data);
     })
     .catch(e => {
       this.lib.failure(e, 'Error on getting the post');

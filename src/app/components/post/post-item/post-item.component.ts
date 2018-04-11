@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { POST, USER, FireService, RESPONSE } from '../../../modules/firelibrary/core';
 
 @Component({
@@ -6,31 +6,28 @@ import { POST, USER, FireService, RESPONSE } from '../../../modules/firelibrary/
   templateUrl: './post-item.component.html',
   styleUrls: ['./post-item.component.scss']
 })
-export class PostItemComponent implements OnInit {
-
-  /**
-   * Input post to be displayed.
-   */
-  @Input() post: POST;
+export class PostItemComponent implements OnInit, OnChanges {
 
   /**
    * Option to show category.
    */
   @Input() showCategory: boolean;
 
-  /**
-   * Category name;
-   */
-  @Input() categoryName;
+
+  @Input() isRouterLink = true;
+
+  @Input() post = <POST>{};
 
   constructor( public fire: FireService, public lib: FireService ) { }
 
   ngOnInit() {
-    this.post.created =  this.getPostDate();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
 
-  getPostDate() {
+  }
+
+  get getPostDate() {
     const createDate = (new Date(this.post.created)).toDateString();
     const createTime = (new Date(this.post.created)).toLocaleTimeString();
     if ( createDate === (new Date()).toDateString() ) {

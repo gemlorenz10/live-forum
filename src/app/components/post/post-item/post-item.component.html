@@ -3,10 +3,10 @@
         <div class="title-container">
             <h5>
                 <span class="title" *ngIf="post.title"> 
-                    <a [routerLink]="['/post', post.id]">{{ post.title }}</a> 
+                    <a [routerLink]="['/post', post.id]" [class.disabled]="! isRouterLink">{{ post.title }}</a> 
                 </span>
             </h5>
-            <span class="category" *ngIf="showCategory">Category: {{ categoryName }}</span>
+            <span class="category" *ngIf="showCategory">Category: {{ post.category }}</span>
         </div>
         <div class="content-container">
             <p>{{ post.content }}</p>
@@ -18,11 +18,8 @@
         </div>
         <div class="info">
             <span class="author-name"><b>{{ post.displayName }}</b></span>
-            <span>{{ post.created }}</span>
+            <span>{{ getPostDate }}</span>
         </div>
     </div>
-</div><br>
+</div>
 <!-- {{ author | json }} -->
-
-
-

@@ -22,7 +22,11 @@ export class PostFormComponent implements OnInit, OnChanges {
 
   post = <POST>{}; // post to be submitted.
   loader;
-  author = <USER>{};
+  author = <USER>{
+    profilePhoto: {
+      thumbnailUrl: '' // to prevent error on users without thumbnailUrl
+    }
+  };
   constructor( public fire: FireService, public lib: LibService ) { }
 
   ngOnInit() {
@@ -77,7 +81,8 @@ export class PostFormComponent implements OnInit, OnChanges {
   private getAuthorData() {
     this.fire.user.get(this.fire.user.uid)
     .then((re: RESPONSE) => {
-      this.author = re.data;
+      // this.author = re.data;
+      Object.assign(this.author, re.data);
     })
     .catch(e => {
       this.lib.failure(e, 'Error on getting author data on post');

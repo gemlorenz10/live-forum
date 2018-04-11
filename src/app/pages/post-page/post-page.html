@@ -1,11 +1,8 @@
-<div *ngIf="post.id">Post not found.</div>
-<p>
-  POST:
-  {{ post | json }}
-</p>
+<div *ngIf="! post">Loading...</div>
 
-<p>
-    CATEGORY:
-    {{ category | json }}
-  </p>
-  
+<app-post-item *ngIf="post"
+[post]="post"
+[isRouterLink]="false"
+></app-post-item>
+
+<app-comment></app-comment>
