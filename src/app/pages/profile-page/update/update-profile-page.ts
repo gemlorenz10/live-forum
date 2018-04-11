@@ -1,7 +1,7 @@
-import { LibService } from './../../providers/lib.service';
+import { LibService } from '../../../providers/lib.service';
 import { Component, OnInit, OnDestroy, SimpleChanges, OnChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { USER, DATA_UPLOAD, FireService, USER_CREATE, USER_DATA } from '../../modules/firelibrary/core';
+import { USER, DATA_UPLOAD, FireService, USER_CREATE, USER_DATA } from '../../../modules/firelibrary/core';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({

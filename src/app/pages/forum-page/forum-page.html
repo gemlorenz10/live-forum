@@ -9,11 +9,24 @@
     
 </div>
 
-<app-post-form [categoryId]="activeCategory.id" (posted)="onPostCreate($event)" *ngIf="fire.user.isLogin && activeCategory.id"></app-post-form>
-<!-- {{ post | json }} -->
-<!-- <div *ngIf="postList.length > 0">Loading ...</div> -->
-<div *ngIf="postList.length !== 0">
-    <div class="post-list" *ngFor=" let post of postList">
-        <app-post-item [post]="post" [showCategory]="activeCategory.id === 'all' ? true : false"></app-post-item>
+<div class="post-list-container">
+    <app-post-form [categoryId]="activeCategory.id" (posted)="onPostCreate($event)" *ngIf="fire.user.isLogin && activeCategory.id"></app-post-form>
+    <!-- {{ post | json }} -->
+    <!-- <div *ngIf="postList.length > 0">Loading ...</div> -->
+    <div *ngIf="postList.length !== 0">
+        <div class="post-list" *ngFor=" let post of postList">
+            <app-post-item 
+            [post]="post" 
+            [categoryName]="post.category" 
+            [showCategory]="activeCategory.id === 'all' ? true : false"></app-post-item>
+        </div>
     </div>
 </div>
+
+
+<!-- 
+    No need to do this because we view post thru routing
+    <div class="post-view-container">
+    <app-post></app-post>
+</div> -->
+

@@ -19,7 +19,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isSystemInstalled;
   profilePhoto;
   user = <USER>{};
-  isAdmin;
+  isAdmin = false;
   authStateUnsubscribe;
   constructor(public fire: FireService, public lib: LibService) {
     this.profilePhoto = this.lib.DEFAULT_PROFILE_PHOTO;
@@ -36,11 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-  //   console.log('App component destroyed');
-  //   if ( typeof this.authStateUnsubscribe === 'function' ) {
-  //     this.authStateUnsubscribe();
-  //     this.fire.user.unlisten();
-  //   }
+
   }
 
   onFinishInstall(isInstalled: boolean) {
@@ -72,8 +68,9 @@ export class AppComponent implements OnInit, OnDestroy {
         this.user.displayName = user.displayName;
         this.checkIfAdmin();
       } else {
+        this.isAdmin = false;
         this.lib.openHomePage();
-        this.fire.user.unlisten();
+        // this.fire.user.unlisten();
         console.log('Auth state: Logged out');
       }
     });

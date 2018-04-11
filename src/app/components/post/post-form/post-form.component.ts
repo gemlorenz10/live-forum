@@ -1,7 +1,7 @@
-import { RESPONSE, USER } from './../../modules/firelibrary/providers/etc/interface';
-import { LibService } from './../../providers/lib.service';
+import { RESPONSE, USER } from './../../../modules/firelibrary/providers/etc/interface';
+import { LibService } from './../../../providers/lib.service';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
-import { POST, FireService, POST_CREATE } from '../../modules/firelibrary/core';
+import { POST, FireService, POST_CREATE } from '../../../modules/firelibrary/core';
 
 @Component({
   selector: 'app-post-form',
@@ -46,6 +46,7 @@ export class PostFormComponent implements OnInit, OnChanges {
     if (this.postValidator()) {
       this.fire.post.create(this.post)
       .then((re: POST_CREATE) => {
+        re.data.post.created = (new Date).getTime();
         this.posted.emit(re.data.post);
         alert('Post created!');
         this.loader = false;

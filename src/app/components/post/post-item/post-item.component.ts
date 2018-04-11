@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { POST, USER, FireService, RESPONSE } from '../../modules/firelibrary/core';
+import { POST, USER, FireService, RESPONSE } from '../../../modules/firelibrary/core';
 
 @Component({
   selector: 'app-post-item',
@@ -18,6 +18,11 @@ export class PostItemComponent implements OnInit {
    */
   @Input() showCategory: boolean;
 
+  /**
+   * Category name;
+   */
+  @Input() categoryName;
+
   constructor( public fire: FireService, public lib: FireService ) { }
 
   ngOnInit() {
@@ -34,4 +39,5 @@ export class PostItemComponent implements OnInit {
       return createTime + '/' + createDate;
     }
   }
+
 }

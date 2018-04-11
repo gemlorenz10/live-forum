@@ -9,29 +9,35 @@ import { POST, FireService, CATEGORY } from '../../modules/firelibrary/core';
 })
 export class ForumPage implements OnInit {
 
-  post = <POST>{};
-  postList = <Array<POST>>[];
-  categoryList: Array<CATEGORY> = [];
-  activeCategory = <CATEGORY>{id: ''};
-  showCategory: boolean;
+  post = <POST>{}; // Post to be posted.
+  postList = <Array<POST>>[]; // List of loaded posts.
+  categoryList: Array<CATEGORY> = []; // List of all categories available.
+  activeCategory = <CATEGORY>{id: ''}; // Active category shown.
 
+  showCategory: boolean; // for post-list `true` if show in post-item otherwise `false`.
 
   constructor( public fire: FireService, public lib: LibService ) { }
 
   ngOnInit() {
-    // this.activeCategory =
-    this.getCategories();
-
+    this.getCategories()
+    .then(() => {
+      this.activeCategory = this.categoryList[this.categoryList.findIndex(e => e.id === 'all')];
+    })
+    .then(() => {
+      this.getPostPage();
+    })
+    .catch(e => {
+      this.lib.failure(e, 'Error on loading all posts on init.');
+    });
   }
 
   getCategories() {
-    this.fire.category.categories()
+    return this.fire.category.categories()
     .then((cat: Array<CATEGORY>) => {
       this.categoryList = cat;
     })
     .catch(e => {
-      alert('Error on getting categories: ' + e.message);
-      console.log('Error on getting categories: ', e);
+      this.lib.failure(e, 'Error on getting categories.');
     });
   }
 
@@ -41,15 +47,10 @@ export class ForumPage implements OnInit {
       this.postList = []; // clear post list when jumping to another category
       this.getPostPage();
     }
-
-    // console.log(this.activeCategory);
-  }
-
-  onClickAllCategory() {
-    this.activeCategory = {id: ''};
   }
 
   onPostCreate(post) {
+    // post.created = (new Date).getTime();
     this.postList.unshift(post);
   }
 
@@ -62,7 +63,6 @@ export class ForumPage implements OnInit {
             this.postList.push(postObj[postId]);
           }
         }
-        console.log(postObj);
       })
       .catch(e => {
         this.lib.failure(e, 'Error on geting post page.');

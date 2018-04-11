@@ -19,7 +19,7 @@ export class AvatarComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['profilePhoto']) {
-      console.log('ProfilePhoto changes', this.profilePhoto);
+      // console.log('ProfilePhoto changes', this.profilePhoto);
     }
   }
 }

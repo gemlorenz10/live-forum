@@ -11,15 +11,16 @@ import { AppComponent } from './app.component';
 import { AvatarComponent } from './components/avatar/avatar.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { InstallComponent } from './components/install/install.component';
-import { PostFormComponent } from './components/post-form/post-form.component';
-import { PostItemComponent } from './components/post-item/post-item.component';
+import { PostFormComponent } from './components/post/post-form/post-form.component';
+import { PostItemComponent } from './components/post/post-item/post-item.component';
 import { CategoryComponent } from './components/category/category.component';
 
 import { RegisterPage } from './pages/register-page/register-page';
 import { ForumPage } from './pages/forum-page/forum-page';
 import { LoginPage } from './pages/login-page/login-page';
-import { UpdateProfilePage } from './pages/update-profile-page/update-profile-page';
+import { UpdateProfilePage } from './pages/profile-page/update/update-profile-page';
 import { AdminPage } from './pages/admin-page/admin-page';
+import { PostPage } from './pages/post-page/post-page';
 
 import * as firebase from 'firebase';
 import 'firebase/firestore';
@@ -40,6 +41,7 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginPage },
   { path: 'update-profile', component: UpdateProfilePage },
   { path: 'admin', component: AdminPage },
+  { path: 'post/:id', component: PostPage },
   { path: '', component: ForumPage }
 ];
 
@@ -58,7 +60,8 @@ const appRoutes: Routes = [
     ForumPage,
     LoginPage,
     UpdateProfilePage,
-    AdminPage
+    AdminPage,
+    PostPage
 
   ],
   imports: [
