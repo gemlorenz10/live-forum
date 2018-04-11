@@ -1,17 +1,19 @@
-Category:
-<div class="category-container" *ngFor="let category of categoryList">
-    <button 
-    class="btn {{ (activeCategory.id === category.id) ? 'btn-secondary' : 'btn-outline-secondary' }} category-list"
-    [value]="category" 
-    (click)="onClickCategory(category)">{{ category.name }}</button>
+<div class="category-container">
+    Category:
+    <div class="category-list" *ngFor="let category of categoryList">
+        <button 
+        class="btn {{ (activeCategory.id === category.id) ? 'btn-secondary' : 'btn-outline-secondary' }}"
+        [value]="category" 
+        (click)="onClickCategory(category)">{{ category.name }}</button>
+    </div>
+    
 </div>
 
-
-<hr>
-<app-post-form [categoryId]="activeCategory.id" *ngIf="fire.user.isLogin && activeCategory.id"></app-post-form>
+<app-post-form [categoryId]="activeCategory.id" (posted)="onPostCreate($event)" *ngIf="fire.user.isLogin && activeCategory.id"></app-post-form>
 <!-- {{ post | json }} -->
-<hr>
-
-<div class="post-list" *ngFor=" let post of postList">
-    <app-post-item [post]="post" [showCategory]="activeCategory.id === 'all' ? true : false"></app-post-item>
+<!-- <div *ngIf="postList.length > 0">Loading ...</div> -->
+<div *ngIf="postList.length !== 0">
+    <div class="post-list" *ngFor=" let post of postList">
+        <app-post-item [post]="post" [showCategory]="activeCategory.id === 'all' ? true : false"></app-post-item>
+    </div>
 </div>

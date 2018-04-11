@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { POST, USER, FireService } from '../../modules/firelibrary/core';
+import { POST, USER, FireService, RESPONSE } from '../../modules/firelibrary/core';
 
 @Component({
   selector: 'app-post-item',
@@ -18,16 +18,20 @@ export class PostItemComponent implements OnInit {
    */
   @Input() showCategory: boolean;
 
-  author = <USER>{};
-
-  constructor( public fire: FireService ) { }
+  constructor( public fire: FireService, public lib: FireService ) { }
 
   ngOnInit() {
-    this.author.uid = this.post.uid;
-  }
-
-  getAuthor() {
+    this.post.created =  this.getPostDate();
   }
 
 
+  getPostDate() {
+    const createDate = (new Date(this.post.created)).toDateString();
+    const createTime = (new Date(this.post.created)).toLocaleTimeString();
+    if ( createDate === (new Date()).toDateString() ) {
+      return createTime;
+    } else {
+      return createTime + '/' + createDate;
+    }
+  }
 }

@@ -1,5 +1,9 @@
-@import '~sass/mixins';
 .category-container {
-    display: inline;
+    margin: 0;
+    padding: 0.5em 0 0.5em 0;
+    .category-list {
+        display: inline;
+    }
 }
+
 

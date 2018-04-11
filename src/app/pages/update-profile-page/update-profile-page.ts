@@ -54,6 +54,7 @@ export class UpdateProfilePage implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
     console.log('Update profile Destroyed');
+    this.fire.user.unlisten();
   }
 
   onUploadStart() {

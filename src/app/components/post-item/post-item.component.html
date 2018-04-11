@@ -1,5 +1,24 @@
-<div class="post-container" *ngIf="post">
-    <h6 *ngIf="post.title">{{ post.title }}<span *ngIf="showCategory">  /{{ post.category }}</span></h6><br>
-    <p>{{ post.content }}</p><br>
-    <hr>
-</div>
+<div *ngIf="post" class="post-item">
+    <div class="post-container">
+        <div class="title-container">
+            <h5><span class="title" *ngIf="post.title">{{ post.title }}</span></h5>
+            <span class="category" *ngIf="showCategory">Category: {{ post.category }}</span>
+        </div>
+        <div class="content-container">
+            <p>{{ post.content }}</p>
+        </div>
+    </div>
+    <div class="author-container">
+        <div class="photo">
+            <app-avatar [profilePhoto]="post.authorPhoto"></app-avatar>
+        </div>
+        <div class="info">
+            <span class="author-name"><b>{{ post.displayName }}</b></span>
+            <span>{{ post.created }}</span>
+        </div>
+    </div>
+</div><br>
+<!-- {{ author | json }} -->
+
+
+

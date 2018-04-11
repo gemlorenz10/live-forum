@@ -1,0 +1,20 @@
+@import '~sass/variables';
+.post-item {
+    border-top: 0.1em solid $secondary-shade;
+    overflow: hidden;
+    padding: 0.5em;
+    margin: 0;
+    .author-container {
+        float: left;
+        // width: 20em
+        margin: 0 0.5em 1em;
+        .photo {
+            display: inline;
+            margin: 0.4em;
+        }   
+        .info {
+            display: inline;
+            margin: 0em;
+        }
+    }
+}

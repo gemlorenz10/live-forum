@@ -50,6 +50,7 @@ export class ForumPage implements OnInit {
   }
 
   onPostCreate(post) {
+    this.postList.unshift(post);
   }
 
   getPostPage() {
