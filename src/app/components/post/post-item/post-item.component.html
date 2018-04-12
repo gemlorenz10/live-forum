@@ -2,11 +2,14 @@
     <div class="post-container">
         <div class="title-container">
             <h5>
-                <span class="title" *ngIf="post.title"> 
-                    <a [routerLink]="['/post', post.id]" [class.disabled]="! isRouterLink">{{ post.title }}</a> 
+                <span class="title pointer" *ngIf="post.title" (click)="open.emit()"> 
+                    {{ post.title }} 
                 </span>
+                <button class="btn btn-primary right" *ngIf="! hideCommentButton" (click)="open.emit()"> 
+                    {{ post.numberOfComments }} Comment 
+                </button>
             </h5>
-            <span class="category" *ngIf="showCategory">Category: {{ post.category }}</span>
+            <span class="category" *ngIf="showCategory" pointer>Category: {{ post.category }}</span>
         </div>
         <div class="content-container">
             <p>{{ post.content }}</p>

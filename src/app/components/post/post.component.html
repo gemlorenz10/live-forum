@@ -1,10 +1,16 @@
 <div class="post-list-container">
+  
   <app-post-form [categoryId]="category.id" *ngIf="fire.user.isLogin && category.id"></app-post-form>
+
+  <br>
+
   <div *ngIf="fire.post.pagePosts">
       <div class="post-list" *ngFor=" let id of postIds">
           <app-post-item 
           [post]="fire.post.pagePosts[id]" 
-          [showCategory]="category.id === 'all' ? true : false"></app-post-item>
+          [showCategory]="category.id === 'all' ? true : false"
+          (open) = "open.emit(fire.post.pagePosts[id])"
+          ></app-post-item>
       </div>
   </div>
 </div>

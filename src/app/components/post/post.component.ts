@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CATEGORY, POST, FireService } from '../../modules/firelibrary/core';
 
 @Component({
@@ -6,19 +6,14 @@ import { CATEGORY, POST, FireService } from '../../modules/firelibrary/core';
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.scss']
 })
-export class PostComponent implements OnInit, OnChanges {
+export class PostComponent {
 
   @Input() category = <CATEGORY>{};
 
   @Input() postIds = [];
 
+  @Output() open = new EventEmitter<POST>();
+
   constructor( public fire: FireService ) { }
-
-  ngOnInit() {
-  }
-
-
-  ngOnChanges(changes: SimpleChanges) {
-  }
 
 }

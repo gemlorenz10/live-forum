@@ -1,0 +1,7 @@
+<button class="btn btn-primary" (click)="close.emit()">{{'<<<' + ' Back to list'}}</button>
+
+<app-post-item [post]="post" [hideCommentButton]="true"></app-post-item>
+
+<app-comment [post]="post" [comment]="comment"></app-comment>
+
+<app-comment-list [post]="post"></app-comment-list>

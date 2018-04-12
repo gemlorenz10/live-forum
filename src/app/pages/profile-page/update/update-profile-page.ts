@@ -82,7 +82,10 @@ export class UpdateProfilePage implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  onClickSubmit() {
+  onClickSubmit(event) {
+    if (event) {
+      event.preventDefault();
+    }
     this.loader = true;
     if (this.formValidator()) {
 
@@ -91,7 +94,8 @@ export class UpdateProfilePage implements OnInit, OnChanges, OnDestroy {
       this.fire.user.update(this.user)
       .then((res: USER_CREATE) => {
         if (res.data.id) {
-          this.lib.openHomePage();
+          // this.lib.openHomePage();
+          this.loader = false;
         } else {
           alert('Error on update return');
           console.log('Error on update didnt return id', res);

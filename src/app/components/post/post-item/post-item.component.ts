@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { POST, USER, FireService, RESPONSE } from '../../../modules/firelibrary/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { POST, USER, FireService, RESPONSE, COMMENT } from '../../../modules/firelibrary/core';
 
 @Component({
   selector: 'app-post-item',
@@ -17,6 +17,10 @@ export class PostItemComponent implements OnInit, OnChanges {
   @Input() isRouterLink = true;
 
   @Input() post = <POST>{};
+
+  @Input() hideCommentButton: boolean;
+
+  @Output() open = new EventEmitter();
 
   constructor( public fire: FireService, public lib: FireService ) { }
 

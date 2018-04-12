@@ -39,7 +39,10 @@ export class PostFormComponent implements OnInit, OnChanges {
     // }
   }
 
-  onSubmit() {
+  onSubmit(event: Event) {
+    if (event) {
+      event.preventDefault();
+    }
     this.loader = true;
     this.post.category = this.categoryId;
     this.post.uid = this.fire.user.uid;

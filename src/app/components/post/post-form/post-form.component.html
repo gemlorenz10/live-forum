@@ -1,6 +1,8 @@
 <div class="post-form-container center" *ngIf="author">
-    <input type="text" name="" id="" class="post-title" placeholder="Post title..." [(ngModel)]="post.title"><br>
-    <textarea name="" id="" cols="60" rows="5" class="post-content" placeholder="Post content..." [(ngModel)]="post.content"></textarea><br>
-    <button class="btn btn-primary right" [disabled]="loader" (click)="onSubmit()">Submit</button><br>
-</div><br>
+    <form (ngSubmit)="onSubmit($event)">
+            <input type="text" name="title" id="" class="post-title" placeholder="Post title..." [(ngModel)]="post.title"><br>
+            <textarea name="content" cols="60" rows="5" class="post-content" placeholder="Post content..." [(ngModel)]="post.content"></textarea><br>
+            <button class="btn btn-primary right" [disabled]="loader">Submit</button><br>
+    </form>
+</div>
 <!-- {{ post | json }} / {{ loader }} -->

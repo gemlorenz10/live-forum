@@ -14,19 +14,21 @@ import { InstallComponent } from './components/install/install.component';
 import { PostFormComponent } from './components/post/post-form/post-form.component';
 import { PostItemComponent } from './components/post/post-item/post-item.component';
 import { CategoryComponent } from './components/category/category.component';
+import { PostComponent } from './components/post/post.component';
+import { PostViewComponent } from './components/post/post-view/post-view.component';
+import { CommentListComponent } from './components/comment/comment-list.component';
+import { CommentLiveComponent } from './components/comment/comment-live.component';
 import { CommentComponent } from './components/comment/comment.component';
-import { CommentItemComponent } from './components/comment/comment-item/comment-item.component';
 
 import { RegisterPage } from './pages/register-page/register-page';
 import { ForumPage } from './pages/forum-page/forum-page';
 import { LoginPage } from './pages/login-page/login-page';
 import { UpdateProfilePage } from './pages/profile-page/update/update-profile-page';
 import { AdminPage } from './pages/admin-page/admin-page';
-import { PostPage } from './pages/post-page/post-page';
+// import { PostPage } from './pages/post-page/post-page';
 
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import { PostComponent } from './components/post/post.component';
 
 
 
@@ -44,7 +46,7 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginPage },
   { path: 'update-profile', component: UpdateProfilePage },
   { path: 'admin', component: AdminPage },
-  { path: 'post/:id', component: PostPage },
+  // { path: 'post/:id', component: PostPage }, deprecated
   { path: '', component: ForumPage }
 ];
 
@@ -58,17 +60,18 @@ const appRoutes: Routes = [
     CategoryComponent,
     PostFormComponent,
     PostItemComponent,
+    CommentComponent,
+    CommentListComponent,
+    CommentLiveComponent,
+    PostComponent,
+    PostViewComponent,
+
 
     RegisterPage,
     ForumPage,
     LoginPage,
     UpdateProfilePage,
-    AdminPage,
-    PostPage,
-    CommentComponent,
-    CommentItemComponent,
-    PostComponent
-
+    AdminPage
   ],
   imports: [
     FormsModule,

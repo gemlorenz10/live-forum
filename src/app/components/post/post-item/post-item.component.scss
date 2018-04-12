@@ -4,6 +4,19 @@
     overflow: hidden;
     padding: 0.5em;
     margin: 0;
+    .post-container {
+        .title-container {
+            .title:hover {
+                color: $secondary-color;
+                border-bottom: 1px solid $secondary-color;
+            }
+        }   
+        // .content-container {
+        //     .content-container {
+        //     }
+
+        // }
+    }
     .author-container {
         float: left;
         margin: 0 0.5em 0.5em;
@@ -18,7 +31,7 @@
     }
 }
 
-a.disabled {
-    pointer-events: none;
-    cursor: default;
- }
+// a.disabled {
+//     pointer-events: none;
+//     cursor: default;
+//  }
