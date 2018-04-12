@@ -1,0 +1,19 @@
+.chat-box {
+    height: 63vh;
+    width: 100%;
+    padding: 0;
+    .balloon-container {
+        overflow-y: scroll;
+        height: 100%;
+    }
+    .text-area {
+        form {
+            textarea {
+                width: 100%;
+                padding: 0.4em;
+            }
+        }
+    }
+}
+
+

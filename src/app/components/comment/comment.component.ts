@@ -13,6 +13,7 @@ export class CommentComponent implements OnInit, OnChanges, OnDestroy {
   @Input() post: POST = {};
   @Input() comment: COMMENT = {};
   form: COMMENT;
+  liveChatStatus;
   loader = {
     progress: false
   };
@@ -31,16 +32,15 @@ export class CommentComponent implements OnInit, OnChanges, OnDestroy {
 
   initComment() {
     this.form = { id: this.fire.comment.getId(), data: [] };
+    this.comment.date = (new Date(this.comment.created)).toLocaleTimeString();
   }
   ngOnInit() {
     if (!this.post.id) {
       console.error('Post ID is empty. Something is wrong.');
       return;
     }
-    this.comment.date = (new Date(this.comment.created)).toLocaleTimeString();
-    // this.fire.comment.load(this.post.id).then(comments => {
-    //   console.log(`comments: `, comments);
-    // }).catch(e => alert(e.message));
+
+    this.liveChatStatus = true; // Determine live chat status by comparing date now and live chat expires
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -50,8 +50,6 @@ export class CommentComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    // console.log('Comment destroyed.');
-    // this.fire.comment.destory(this.post);
   }
 
   myComment() {

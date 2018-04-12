@@ -48,12 +48,13 @@ export class PostFormComponent implements OnInit, OnChanges {
     this.post.uid = this.fire.user.uid;
     this.post.displayName = this.fire.user.displayName;
     this.post.authorPhoto = this.author.profilePhoto.thumbnailUrl;
-    this.post.id = this.post.uid + '-' + (new Date).getTime();
+    this.post.liveChatExpires = (new Date()).getTime() + 86400000; // 24 hours from the time created.
+    this.post.id = this.post.uid + '-' + (new Date()).getTime();
 
     if (this.postValidator()) {
       this.fire.post.create(this.post)
       .then((re: POST_CREATE) => {
-        re.data.post.created = (new Date).getTime();
+        re.data.post.created = (new Date()).getTime();
         this.posted.emit(re.data.post);
         alert('Post created!');
         this.loader = false;

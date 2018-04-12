@@ -1,7 +1,15 @@
-<button class="btn btn-primary" (click)="close.emit()">{{'<<<' + ' Back to list'}}</button>
+<!-- <app-post-item [post]="post" [hideCommentButton]="true"></app-post-item> -->
+<div class="post-container">
+    <h4>
+        <span class="title">{{ post.title }}</span>
+        <span class="back"><button class="btn btn-outline-danger .right" (click)="close.emit()">Back</button></span>
+    </h4>
+    <!-- <div class="content toggle"></div> -->
+</div>
 
-<app-post-item [post]="post" [hideCommentButton]="true"></app-post-item>
 
-<app-comment [post]="post" [comment]="comment"></app-comment>
+<!-- <app-comment [post]="post" [comment]="comment"></app-comment> -->
 
-<app-comment-list [post]="post"></app-comment-list>
+<app-comment-live [post]="post"></app-comment-live>
+
+<!-- <app-comment-list [post]="post" *ngIf="post.liveChatExpires > now"></app-comment-list> -->

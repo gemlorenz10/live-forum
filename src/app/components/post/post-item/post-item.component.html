@@ -5,7 +5,7 @@
                 <span class="title pointer" *ngIf="post.title" (click)="open.emit()"> 
                     {{ post.title }} 
                 </span>
-                <button class="btn btn-primary right" *ngIf="! hideCommentButton" (click)="open.emit()"> 
+                <button class="btn btn-outline-primary right" *ngIf="! hideCommentButton" (click)="open.emit()"> 
                     {{ post.numberOfComments }} Comment 
                 </button>
             </h5>

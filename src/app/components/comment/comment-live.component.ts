@@ -1,20 +1,24 @@
-import { Component, Input, OnInit, OnDestroy, NgZone, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, NgZone, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FireService, POST, COMMENT } from '../../modules/firelibrary/core';
 
 
 
 @Component({
     selector: 'app-comment-live',
-    templateUrl: './comment-live.component.html'
+    templateUrl: './comment-live.component.html',
+    styleUrls: ['./comment-live.component.scss']
 })
 export class CommentLiveComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @Input() post: POST = {};
-    comment: COMMENT;
+
+    @ViewChild('balloon') balloon: ElementRef;
+    comment = <COMMENT>{};
     loader = {
         creating: false,
         commentList: false
     };
+    scroll;
     constructor(
         public ngZone: NgZone,
         public fire: FireService
@@ -23,12 +27,14 @@ export class CommentLiveComponent implements OnInit, AfterViewInit, OnDestroy {
 
     initComment() {
         this.comment = { id: this.fire.comment.getId(), date: '', data: [] };
+        this.scroll = this.balloon.nativeElement['scrollHeight'];
+        console.log('NATIVE ELEMENT BALLOON', this.balloon.nativeElement['scrollHeight']);
     }
     comments(id): COMMENT {
         return this.fire.comment.getComment(id);
     }
     get commentIds(): Array<string> {
-        return this.fire.comment.commentIds[this.post.id];
+        return this.fire.comment.commentIds[this.post.id].reverse();
     }
 
     ngOnInit() {
