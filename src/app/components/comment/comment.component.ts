@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { FireService, POST, COMMENT } from '../../modules/firelibrary/core';
 
 
@@ -7,13 +7,13 @@ import { FireService, POST, COMMENT } from '../../modules/firelibrary/core';
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss']
 })
-export class CommentComponent implements OnInit, OnChanges, OnDestroy {
+export class CommentComponent implements OnInit, OnDestroy {
 
 
   @Input() post: POST = {};
   @Input() comment: COMMENT = {};
   form: COMMENT;
-  liveChatStatus;
+  showEditForm = false;
   loader = {
     progress: false
   };
@@ -32,46 +32,50 @@ export class CommentComponent implements OnInit, OnChanges, OnDestroy {
 
   initComment() {
     this.form = { id: this.fire.comment.getId(), data: [] };
-    this.comment.date = (new Date(this.comment.created)).toLocaleTimeString();
   }
   ngOnInit() {
     if (!this.post.id) {
       console.error('Post ID is empty. Something is wrong.');
       return;
     }
-
-    this.liveChatStatus = true; // Determine live chat status by comparing date now and live chat expires
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['comments']) {
-      // this.comment.date = (new Date(this.comment.created)).toLocaleTimeString();
-    }
   }
 
   ngOnDestroy() {
+  }
+
+
+  get commentDate() {
+    return (new Date(this.comment.created)).toLocaleTimeString();
   }
 
   myComment() {
     return this.comment.uid === this.fire.user.uid;
   }
   /**
-   * Creates or Updates a comment.
-   * This is being invoked when user submits the comment form.
-   *
-   *
-   * @param parentnId is the parent id. if it is not set, it would be undefined.
-   */
+  * Creates or Updates a comment.
+  * This is being invoked when user submits the comment form.
+  *
+  *
+  * @param parentnId is the parent id. if it is not set, it would be undefined.
+  */
   onSubmit(event: Event) {
     console.log(`parentId: ${this.comment.parentId}`, 'form: ', this.form, 'comment:', this.comment);
-    event.preventDefault();
+    if (event) {
+      event.preventDefault();
+    }
     this.form.postId = this.post.id;
     if (this.comment) {
       this.form.parentId = this.comment.id;
     }
+    if (this.fire.user.photoURL) {
+      this.form.authorPhoto = this.fire.user.photoURL;
+    }
     this.loader.progress = true;
     if (this.form.created) {
-      this.fire.comment.edit(this.form).then(re => this.onSubmitThen(re)).catch(e => this.onSubmitCatch(e));
+      this.fire.comment.edit(this.form).then(re => {
+        this.onSubmitThen(re);
+        this.showEditForm = false;
+      }).catch(e => this.onSubmitCatch(e));
     } else {
       this.fire.comment.create(this.form).then(re => this.onSubmitThen(re)).catch(e => this.onSubmitCatch(e));
     }
@@ -88,16 +92,17 @@ export class CommentComponent implements OnInit, OnChanges, OnDestroy {
 
 
   /**
-   * Sets the form to edit.
-   */
+  * Sets the form to edit.
+  */
   onClickEdit() {
-    // this.form = this.comment;
-    // this.form.id = this.comment.id;
-    this.form = this.comment;
+    this.showEditForm = true;
+    // this.form = this.comment; @deprecated - deletes other properties.
+    Object.assign(this.form, this.comment);
+    console.log('Edit clicked!', this.form, this.comment);
   }
   /**
-   * Hide edit form and show comment.
-   */
+  * Hide edit form and show comment.
+  */
   onClickEditCancel() {
     this.form = this.comment;
   }
@@ -121,7 +126,7 @@ export class CommentComponent implements OnInit, OnChanges, OnDestroy {
     this.fire.comment.dislike(this.comment.id).then(re => {
       this.comment['dislikeInProgress'] = false;
     })
-      .catch(e => alert(e.message));
+    .catch(e => alert(e.message));
   }
 
 }

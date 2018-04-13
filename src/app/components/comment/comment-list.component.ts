@@ -49,7 +49,6 @@ export class CommentListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        // this.fire.comment.destory(this.post);
         this.fire.comment.destory(this.post);
         this.fire.comment.commentIds[this.post.id] = []; // clear commentIds
     }

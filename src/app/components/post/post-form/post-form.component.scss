@@ -1,17 +1,21 @@
 @import '~sass/mixins';
 
 .post-form-container {
-    .post-title {
-        margin: 0.5em 0 0.5em 0;
-        padding: 0.5em;
-        width: 32em;
-    }
-    .post-content {
-        margin:0 0 0.5em 0;
-        padding: 0.8em;
+    form {
+        .post-title {
+            margin: 0.5em 0 0.5em 0;
+            padding: 0.5em;
+            width: 32em;
+        }
+        .post-content {
+            margin:0 0 0.5em 0;
+            padding: 0.8em;
+            width: 100%;
+        }
+    
+        .btn-primary {
+            width: 5em;
+        }
     }
 
-    .btn-primary {
-        width: 5em;
-    }
 }

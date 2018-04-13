@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, NgZone, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, NgZone, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { FireService, POST, COMMENT } from '../../modules/firelibrary/core';
 
 
@@ -8,17 +8,24 @@ import { FireService, POST, COMMENT } from '../../modules/firelibrary/core';
     templateUrl: './comment-live.component.html',
     styleUrls: ['./comment-live.component.scss']
 })
-export class CommentLiveComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CommentLiveComponent implements OnInit, OnDestroy {
 
     @Input() post: POST = {};
 
-    @ViewChild('balloon') balloon: ElementRef;
+    @ViewChild('chat') set chatElement(content: ElementRef) {
+        if (content) {
+            setTimeout(() => {
+                this.scrollHeight = content.nativeElement['scrollHeight'];
+            }, 10);
+        }
+    }
+    scrollHeight;
     comment = <COMMENT>{};
     loader = {
         creating: false,
         commentList: false
     };
-    scroll;
+
     constructor(
         public ngZone: NgZone,
         public fire: FireService
@@ -27,14 +34,15 @@ export class CommentLiveComponent implements OnInit, AfterViewInit, OnDestroy {
 
     initComment() {
         this.comment = { id: this.fire.comment.getId(), date: '', data: [] };
-        this.scroll = this.balloon.nativeElement['scrollHeight'];
-        console.log('NATIVE ELEMENT BALLOON', this.balloon.nativeElement['scrollHeight']);
     }
     comments(id): COMMENT {
         return this.fire.comment.getComment(id);
     }
     get commentIds(): Array<string> {
-        return this.fire.comment.commentIds[this.post.id].reverse();
+        if (this.fire.comment.commentIds) {
+            return this.fire.comment.commentIds[this.post.id]; // .reverse();
+        }
+
     }
 
     ngOnInit() {
@@ -46,26 +54,26 @@ export class CommentLiveComponent implements OnInit, AfterViewInit, OnDestroy {
         this.fire.comment.load(this.post.id).then(comments => {
             console.log(`comments: `, comments);
             this.loader.commentList = false;
+            this.initComment();
             setTimeout(() => this.ngZone.run(() => {}), 2000);
         }).catch(e => alert(e.message));
     }
 
-    ngAfterViewInit() {
+    ngAfterViewinit() {
         this.initComment();
     }
 
     ngOnDestroy() {
-        // this.fire.comment.destory(this.post);
         this.fire.comment.destory(this.post);
         this.fire.comment.commentIds[this.post.id] = []; // clear commentIds
     }
 
     /**
-     * Creates a comment.
-     * This is being invoked when user submits the comment form.
-     *
-     *
-     */
+    * Creates a comment.
+    * This is being invoked when user submits the comment form.
+    *
+    *
+    */
     onSubmit(event: Event) {
         event.preventDefault();
         this.comment.postId = this.post.id;

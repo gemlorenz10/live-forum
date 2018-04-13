@@ -3,6 +3,7 @@
   <app-post-form [categoryId]="category.id" *ngIf="fire.user.isLogin && category.id"></app-post-form>
 
   <br>
+  <br>
 
   <div *ngIf="fire.post.pagePosts">
       <div class="post-list" *ngFor=" let id of postIds">
