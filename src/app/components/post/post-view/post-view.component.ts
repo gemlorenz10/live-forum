@@ -21,8 +21,6 @@ export class PostViewComponent implements OnInit, OnDestroy {
     if (this.post.id) {
       this.fire.setSettings(<FIRESERVICE_SETTINGS>{
         // When handing live chat status
-        // listenOnCommentChange: this.post.liveChatExpires <= this.now,
-        // listenOnCommentLikes:  this.post.liveChatExpires <= this.now,
         listenOnCommentChange: true,
         listenOnCommentLikes: true,
       });

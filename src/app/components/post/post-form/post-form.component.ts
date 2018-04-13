@@ -47,7 +47,10 @@ export class PostFormComponent implements OnInit, OnChanges {
     this.post.category = this.categoryId;
     this.post.uid = this.fire.user.uid;
     this.post.displayName = this.fire.user.displayName;
-    this.post.authorPhoto = this.author.profilePhoto.thumbnailUrl;
+
+    // @Deprecated - We need to change it when author changes its profile photo
+    // this.post.authorPhoto = this.author.profilePhoto.thumbnailUrl;
+
     this.post.liveChatExpires = (new Date()).getTime() + 86400000; // 24 hours from the time created.
     this.post.id = this.post.uid + '-' + (new Date()).getTime();
 

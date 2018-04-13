@@ -4,7 +4,7 @@
 <div class="chat-box" >
   <div #chat class="chat-container" *ngIf="fire.comment.commentIds" [scrollTop]="scrollHeight">
     <div *ngFor=" let id of commentIds">
-      <app-comment [post]="post" [comment]="comments(id)" [id]="id"></app-comment>
+      <app-comment [post]="post" [comment]="comments(id)" *ngIf="! comments(id).deleted"></app-comment>
     </div>
   </div>
   <div class="input-box">

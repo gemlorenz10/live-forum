@@ -46,7 +46,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, OnChanges {
   /**
   * The data to be deleted
   */
-  @Input() currentData: DATA_UPLOAD;
+  @Input() data: DATA_UPLOAD;
 
   /**
   * Emit if upload is starts
@@ -123,8 +123,8 @@ export class FileUploadComponent implements OnInit, OnDestroy, OnChanges {
         /**
         * Delete older files if needed.
         */
-        if (this.currentData && !this.allowMultipleFiles && this.deleteOldFiles && this.currentData.fullPath !== upload.fullPath) {
-          this.fire.data.delete(this.currentData)
+        if (this.data && !this.allowMultipleFiles && this.deleteOldFiles && this.data.fullPath !== upload.fullPath) {
+          this.fire.data.delete(this.data)
           .then(a => {
             console.log('Old file deleted.');
           })
