@@ -2,13 +2,13 @@
     height: 63vh;
     width: 100%;
     padding: 0;
-    .balloon-container {
+    .chat-container {
         overflow-y: scroll;
         height: 100%;
     }
-    .text-area {
+    .input-box {
         form {
-            textarea {
+            .input-text {
                 width: 100%;
                 padding: 0.4em;
             }

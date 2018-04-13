@@ -32,7 +32,6 @@ export class CommentComponent implements OnInit, OnChanges, OnDestroy {
 
   initComment() {
     this.form = { id: this.fire.comment.getId(), data: [] };
-    this.comment.date = (new Date(this.comment.created)).toLocaleTimeString();
   }
   ngOnInit() {
     if (!this.post.id) {
@@ -50,6 +49,11 @@ export class CommentComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
+  }
+
+
+  get commentDate() {
+    return (new Date(this.comment.created)).toLocaleTimeString();
   }
 
   myComment() {
