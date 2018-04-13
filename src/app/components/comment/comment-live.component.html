@@ -1,8 +1,8 @@
 
 
-<div class="loader" *ngIf="loader.commentList && ! commentIds">Loading comments. Please wait.</div>
-<div class="chat-box" *ngIf="commentIds">
-  <div #chat class="chat-container" [scrollTop]="scrollHeight">
+<div class="loader" *ngIf="loader.commentList">Loading comments. Please wait.</div>
+<div class="chat-box" >
+  <div #chat class="chat-container" *ngIf="fire.comment.commentIds" [scrollTop]="scrollHeight">
     <div *ngFor=" let id of commentIds">
       <app-comment [post]="post" [comment]="comments(id)" [id]="id"></app-comment>
     </div>

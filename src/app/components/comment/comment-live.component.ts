@@ -12,9 +12,6 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
 
     @Input() post: POST = {};
 
-    // @ViewChild('chat') chatElement: ElementRef;
-
-
     @ViewChild('chat') set chatElement(content: ElementRef) {
         if (content) {
             setTimeout(() => {
@@ -63,11 +60,10 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
     }
 
     ngAfterViewinit() {
-
+        this.initComment();
     }
 
     ngOnDestroy() {
-        // this.fire.comment.destory(this.post);
         this.fire.comment.destory(this.post);
         this.fire.comment.commentIds[this.post.id] = []; // clear commentIds
     }
