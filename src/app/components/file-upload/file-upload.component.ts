@@ -155,24 +155,5 @@ export class FileUploadComponent implements OnInit, OnDestroy, OnChanges {
       this.uploadDone.emit(this.uploadList);
       this.loader = false;
     }
-
-    // updateUserDoc(user) {
-    //   this.fire.user.update(user)
-    //   .then((re: USER_CREATE) => {
-    //     console.log('User data update correct!');
-    //   });
-
-    // }
-
-    // listenToUserDoc() {
-    //   console.log('Listening to user....');
-    //   this.fire.user.listen( (user: USER) => {
-    //     if (user.profilePhoto && user.profilePhoto.thumbnailUrl) {
-    //       this.updateUploadList(user.profilePhoto);
-    //       this.emitDone();
-    //       console.log('Changes on user: ', user);
-    //     }
-    //   });
-    // }
   }
 

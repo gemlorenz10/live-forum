@@ -1,15 +1,15 @@
 
 
 <div class="loader" *ngIf="loader.commentList">Loading comments. Please wait.</div>
-<div class="chat-box">
-  <div #balloon class="balloon-container" [scrollTop]="scroll">
+<div class="chat-box" >
+  <div #chat class="chat-container" *ngIf="fire.comment.commentIds" [scrollTop]="scrollHeight">
     <div *ngFor=" let id of commentIds">
       <app-comment [post]="post" [comment]="comments(id)" [id]="id"></app-comment>
     </div>
   </div>
-  <div class="text-area">
+  <div class="input-box">
     <form (ngSubmit)=" onSubmit( $event ) ">
-      <textarea name="content" [(ngModel)]="comment.content" [disabled]="loader.creating"></textarea>
+      <input type="text" class="input-text" name="content" [(ngModel)]="comment.content" [disabled]="loader.creating">
       
       <!-- <app-file-upload [pathToStorage]=" 'posts/' + post.id + '/comments/' + comment.id " [currentData]=" comment.data " [allowMultipleFiles]="true"></app-file-upload> -->
       

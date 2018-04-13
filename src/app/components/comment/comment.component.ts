@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { FireService, POST, COMMENT } from '../../modules/firelibrary/core';
 
 
@@ -7,13 +7,12 @@ import { FireService, POST, COMMENT } from '../../modules/firelibrary/core';
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss']
 })
-export class CommentComponent implements OnInit, OnChanges, OnDestroy {
+export class CommentComponent implements OnInit, OnDestroy {
 
 
   @Input() post: POST = {};
   @Input() comment: COMMENT = {};
   form: COMMENT;
-  liveChatStatus;
   loader = {
     progress: false
   };
@@ -32,24 +31,20 @@ export class CommentComponent implements OnInit, OnChanges, OnDestroy {
 
   initComment() {
     this.form = { id: this.fire.comment.getId(), data: [] };
-    this.comment.date = (new Date(this.comment.created)).toLocaleTimeString();
   }
   ngOnInit() {
     if (!this.post.id) {
       console.error('Post ID is empty. Something is wrong.');
       return;
     }
-
-    this.liveChatStatus = true; // Determine live chat status by comparing date now and live chat expires
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['comments']) {
-      // this.comment.date = (new Date(this.comment.created)).toLocaleTimeString();
-    }
   }
 
   ngOnDestroy() {
+  }
+
+
+  get commentDate() {
+    return (new Date(this.comment.created)).toLocaleTimeString();
   }
 
   myComment() {
@@ -91,8 +86,6 @@ export class CommentComponent implements OnInit, OnChanges, OnDestroy {
    * Sets the form to edit.
    */
   onClickEdit() {
-    // this.form = this.comment;
-    // this.form.id = this.comment.id;
     this.form = this.comment;
   }
   /**

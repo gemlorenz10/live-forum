@@ -2,9 +2,6 @@
 .forum-container {
     margin: 0;
     .post-list {
-        // z-index: 1;
-        // position: absolute; 
-        // position: relative;
         .category-container {
             margin: 0;
             padding: 0.5em 0 0.5em 0;
@@ -14,20 +11,5 @@
             
         }
         
-    }
-
-    // .post-view {
-    //     // z-index: 2;
-    //     // position: absolute;
-    //     // background-color: $secondary-color;
-        
-    // }
-    
+    }    
 }
-
-
-
-// <div>
-//   <div id="backdrop" style="z-index: 1; position: absolute; top: 0px; left: 0px;"><img alt="" src='/backdrop.png' /></div>
-//   <div id="curtain" style="z-index: 2; position: absolute; top: 0px; left: 0px; background-image:url(/curtain.png);background-position:100px 200px; height:250px; width:500px;">&nbsp;</div>
-// </div>
