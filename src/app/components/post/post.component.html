@@ -8,6 +8,7 @@
   <div *ngIf="fire.post.pagePosts">
       <div class="post-list" *ngFor=" let id of postIds">
           <app-post-item 
+          *ngIf="! fire.post.pagePosts[id].deleted"
           [post]="fire.post.pagePosts[id]" 
           [showCategory]="category.id === 'all' ? true : false"
           (open) = "open.emit(fire.post.pagePosts[id])"

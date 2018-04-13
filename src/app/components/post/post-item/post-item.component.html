@@ -1,28 +1,65 @@
-<div *ngIf="post" class="post-item">
-    <div class="post-container">
-        <div class="title-container">
-            <h5>
-                <span class="title pointer" *ngIf="post.title" (click)="open.emit()"> 
-                    {{ post.title }} 
-                </span>
-                <button class="btn btn-outline-primary right" *ngIf="! hideCommentButton" (click)="open.emit()"> 
-                    {{ post.numberOfComments }} Comment 
-                </button>
-            </h5>
-            <span class="category" *ngIf="showCategory" pointer>Category: {{ post.category }}</span>
+<section>
+    <div *ngIf="post && ! editPost" class="post-item">
+        <div class="post-container">
+            <div class="title-container">
+                <h5>
+                    <span class="title pointer" *ngIf="post.title" (click)="open.emit()"> 
+                        {{ post.title }} 
+                    </span>
+                    <button class="btn btn-outline-primary right" *ngIf="! hideCommentButton" (click)="open.emit()"> 
+                        {{ post.numberOfComments }} Comment 
+                    </button>
+                    <button class="btn btn-outline-primary right" (click)="editPost = true" *ngIf="myPost(getPost(post.id))">Edit</button>
+                    <button class="btn btn-outline-primary right" (click)="onClickDelete( post.id )" *ngIf="myPost(getPost(post.id))">Delete</button>
+                </h5>
+                <span class="category" *ngIf="showCategory" pointer>Category: {{ post.category }}</span>
+            </div>
+            <div class="content-container">
+                <p>{{ post.content }}</p>
+            </div>
+                <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data.length > 0">
+                    <div class="file-list" *ngFor="let data of post.data">
+                        <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
+                    </div>
+                </div>
         </div>
-        <div class="content-container">
-            <p>{{ post.content }}</p>
+        
+        <div class="author-container">
+            <div class="photo">
+                <!-- <app-avatar [profilePhoto]="post.authorPhoto"></app-avatar> @deprecated - will not be updated when user decides to change profile pic --> 
+            </div>
+            <div class="info">
+                <span class="author-name"><b>{{ post.displayName }}</b></span>
+                <span>{{ getPostDate }}</span>
+            </div>
         </div>
     </div>
-    <div class="author-container">
-        <div class="photo">
-            <!-- <app-avatar [profilePhoto]="post.authorPhoto"></app-avatar> @deprecated - will not be updated when user decides to change profile pic --> 
-        </div>
-        <div class="info">
-            <span class="author-name"><b>{{ post.displayName }}</b></span>
-            <span>{{ getPostDate }}</span>
-        </div>
+    <!-- <app-post-form [categoryId]="post.category" [post]="post" *ngIf="editPost" (edited)="editPost = false" ></app-post-form> -->
+    <!-- {{ author | json }} -->
+    <div class="edit-post" *ngIf="editPost">
+            <div class="info right">
+                    <span class="author-name"><b>{{ post.displayName }}</b></span>
+                    <span>{{ getPostDate }}</span>
+                </div><br>
+        <form (ngSubmit)="onSubmitEdit($event)">
+            <div class="title">
+                <input type="text" name="title" id="" class="form-item-text" [(ngModel)]="post.title"  [disabled]="loader"><br>
+
+            </div>
+            <div class="content">
+                <textarea type="text" name="content" id="" [(ngModel)]="post.content" [disabled]="loader"></textarea><br>
+            </div>
+            <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data.length > 0">
+                <div class="file-list" *ngFor="let data of post.data">
+                    <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
+                    <button>Delete</button>
+                </div>
+            </div><br>
+            <div class="buttons right">
+                <button type="submit" class="btn btn-primary" [disabled]="loader">{{loader ? 'Updating...' : 'Update'}}</button>
+                <button (click)="editPost = false" class="btn btn-outline-primary" [disabled]="loader">Cancel</button>
+            </div>
+        </form>
+        
     </div>
-</div>
-<!-- {{ author | json }} -->
+</section>

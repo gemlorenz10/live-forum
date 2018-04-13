@@ -62,12 +62,12 @@ export class UpdateProfilePage implements OnInit, OnChanges, OnDestroy {
     console.log('Upload starts...');
   }
 
-  onUploadDone(data: DATA_UPLOAD[]) {
+  onUploadDone(data: DATA_UPLOAD) {
     console.log('Upload Emits: ', data);
 
-    if (data.length > 0) {
-      this.user.profilePhoto = data[0];
-      this.user.photoURL = data[0].url;
+    if (data) {
+      this.user.profilePhoto = data;
+      this.user.photoURL = data.url;
     } else {
       alert('User is not updated!');
     }

@@ -1,8 +1,24 @@
 <div class="post-form-container center" *ngIf="author">
     <form (ngSubmit)="onSubmit($event)">
-            <input type="text" name="title" id="" class="post-title" placeholder="Post title..." [(ngModel)]="post.title"><br>
-            <textarea name="content" cols="60" rows="5" class="post-content" placeholder="Post content..." [(ngModel)]="post.content"></textarea><br>
-            <button class="btn btn-primary right" [disabled]="loader">Submit</button>
+        <input type="text" name="title" id="" class="post-title" placeholder="Post title..." [(ngModel)]="post.title" [disabled]="loader"><br>
+        <textarea name="content" cols="60" rows="5" class="post-content" placeholder="Post content..." [(ngModel)]="post.content" [disabled]="loader"></textarea><br>
+        
+        <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data">
+            <div class="file-list" *ngFor="let data of post.data">
+                <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
+            </div>
+            <!-- {{ post.data | json }} -->
+        </div>
+        
+        <app-file-upload
+            class="left"
+            [hidden] = "loader"
+            [pathToStorage]="'posts/' + post.id"
+            [data]="post.data"
+            (uploadStart)="loader = true"
+            (uploadDone)="onUploadDone($event)"
+        ></app-file-upload>
+        <button class="btn btn-primary right" [disabled]="loader">Submit</button>
     </form>
 </div>
 <!-- {{ post | json }} / {{ loader }} -->
