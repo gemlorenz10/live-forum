@@ -18,7 +18,7 @@ import { PostComponent } from './components/post/post.component';
 import { PostViewComponent } from './components/post/post-view/post-view.component';
 import { CommentListComponent } from './components/comment/comment-list.component';
 import { CommentLiveComponent } from './components/comment/comment-live.component';
-import { CommentComponent } from './components/comment/comment.component';
+import { CommentItemComponent } from './components/comment/comment-item/comment-item.component';
 
 import { RegisterPage } from './pages/register-page/register-page';
 import { ForumPage } from './pages/forum-page/forum-page';
@@ -60,7 +60,7 @@ const appRoutes: Routes = [
     CategoryComponent,
     PostFormComponent,
     PostItemComponent,
-    CommentComponent,
+    CommentItemComponent,
     CommentListComponent,
     CommentLiveComponent,
     PostComponent,

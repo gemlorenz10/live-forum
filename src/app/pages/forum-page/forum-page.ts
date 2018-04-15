@@ -17,6 +17,7 @@ export class ForumPage implements OnInit, OnDestroy {
 
   postViewData = <POST>{}; // Post data to be viewed
 
+  loader;
   constructor( public fire: FireService, public lib: LibService ) { }
 
   ngOnInit() {
@@ -35,10 +36,11 @@ export class ForumPage implements OnInit, OnDestroy {
     })
     .then(() => {
       this.fire.setSettings(<FIRESERVICE_SETTINGS>{
-        listenOnPostChange: true,    // Set listen settings
-        // listenOnCommentChange: true,
+        // listenOnPostChange: true,    // Set listen settings
+        // listenOnCommentChan  ge: true,
+        listenOnPostLikes: true
       });
-      this.getPostPage();
+      this.loadPostPage();
     })
     .catch(e => {
       this.lib.failure(e, 'Error on loading all posts on init.');
@@ -57,9 +59,14 @@ export class ForumPage implements OnInit, OnDestroy {
   }
 
   onClickCategory(category?: CATEGORY) {
+    this.loader = true;
+    console.log('Load starts  ', this.fire.post.pagePostIds);
     if (category) {
       this.activeCategory = category;
-      this.getPostPage();
+      this.loadPostPage(category.id)
+      .then(() => {
+        this.loader = false;
+      });
     }
   }
 
@@ -69,13 +76,16 @@ export class ForumPage implements OnInit, OnDestroy {
 
   }
 
-  getPostPage() {
-    if (this.activeCategory.id) {
-      this.fire.post.page({ category: this.activeCategory.id, limit: this.activeCategory.numberOfPostsPerPage})
-      .catch(e => {
-        this.lib.failure(e, 'Error on geting post page.');
-      });
-    }
+  loadPostPage(categoryId = 'all') {
+    return this.fire.post.page({ category: categoryId, limit: this.activeCategory.numberOfPostsPerPage})
+    .then(re => {
+      if (re) {
+        console.log('Load finishes', this.fire.post.pagePostIds);
+      }
+    })
+    .catch(e => {
+      this.lib.failure(e, 'Error on geting post page.');
+    });
   }
 
 }

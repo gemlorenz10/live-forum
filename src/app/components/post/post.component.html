@@ -6,7 +6,7 @@
   <br>
 
   <div *ngIf="fire.post.pagePosts">
-      <div class="post-list" *ngFor=" let id of postIds">
+      <div class="post-list" *ngFor=" let id of fire.post.pagePostIds">
           <app-post-item 
           *ngIf="! fire.post.pagePosts[id].deleted"
           [post]="fire.post.pagePosts[id]" 

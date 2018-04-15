@@ -8,6 +8,6 @@
 <div class="loader" *ngIf="loader.commentList">Loading comments. Please wait.</div>
 <ul>
   <li *ngFor=" let id of commentIds">
-    <app-comment [post]="post" [comment]="comments(id)"></app-comment>
+    <app-comment-item [post]="post" [comment]="comments(id)"></app-comment-item>
   </li>
 </ul>

@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-sm">
         <div class="center">
-            <input *ngIf="!loader" (change)="onChangeFile($event)" type="file" name="file" id="file">
+            <input *ngIf="!loader" (change)="onChangeFile($event)" type="file" name="file" id="file" accept="image/*">
             <span *ngIf="loader">Uploading...</span>
             <!-- <input type="file" name="file" id="file" (change)="onChangeFile($event)" [multiple]="allowMultipleFiles"> -->
         </div>

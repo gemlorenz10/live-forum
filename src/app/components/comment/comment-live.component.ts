@@ -19,7 +19,7 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
             }, 10);
         }
     }
-    scrollHeight;
+    scrollHeight; // Height of the comment live box
     comment = <COMMENT>{};
     loader = {
         creating: false,
@@ -31,20 +31,6 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
         public fire: FireService
     ) {
     }
-
-    initComment() {
-        this.comment = { id: this.fire.comment.getId(), date: '', data: [] };
-    }
-    comments(id): COMMENT {
-        return this.fire.comment.getComment(id);
-    }
-    get commentIds(): Array<string> {
-        if (this.fire.comment.commentIds) {
-            return this.fire.comment.commentIds[this.post.id]; // .reverse();
-        }
-
-    }
-
     ngOnInit() {
         if (!this.post.id) {
             console.error('Post ID is empty. Something is wrong.');
@@ -66,6 +52,26 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.fire.comment.destory(this.post);
         this.fire.comment.commentIds[this.post.id] = []; // clear commentIds
+    }
+
+
+
+    initComment() {
+        this.comment = { id: this.fire.comment.getId(), date: '', data: [] };
+    }
+    comments(id): COMMENT {
+        return this.fire.comment.getComment(id);
+    }
+
+    isMyComment() {
+        console.log('isMyCOmment=====>', this.comment.uid === this.fire.user.uid);
+        return this.comment.uid === this.fire.user.uid;
+      }
+    get commentIds(): Array<string> {
+        if (this.fire.comment.commentIds) {
+            return this.fire.comment.commentIds[this.post.id]; // .reverse();
+        }
+
     }
 
     /**

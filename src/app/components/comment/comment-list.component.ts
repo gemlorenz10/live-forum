@@ -20,17 +20,6 @@ export class CommentListComponent implements OnInit, AfterViewInit, OnDestroy {
         public fire: FireService
     ) {
     }
-
-    initComment() {
-        this.comment = { id: this.fire.comment.getId(), date: '', data: [] };
-    }
-    comments(id): COMMENT {
-        return this.fire.comment.getComment(id);
-    }
-    get commentIds(): Array<string> {
-        return this.fire.comment.commentIds[this.post.id];
-    }
-
     ngOnInit() {
         if (!this.post.id) {
             console.error('Post ID is empty. Something is wrong.');
@@ -51,6 +40,16 @@ export class CommentListComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnDestroy() {
         this.fire.comment.destory(this.post);
         this.fire.comment.commentIds[this.post.id] = []; // clear commentIds
+    }
+
+    initComment() {
+        this.comment = { id: this.fire.comment.getId(), date: '', data: [] };
+    }
+    comments(id): COMMENT {
+        return this.fire.comment.getComment(id);
+    }
+    get commentIds(): Array<string> {
+        return this.fire.comment.commentIds[this.post.id];
     }
 
     /**

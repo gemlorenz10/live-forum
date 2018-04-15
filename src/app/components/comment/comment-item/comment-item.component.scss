@@ -1,0 +1,31 @@
+@import '~sass/variables';
+
+.comment {
+    padding: 0.5em;
+    margin: 1em 0;
+    width: 100%;
+    .my-comment {
+        float: right;
+        clear: right;
+        max-width: 85%;
+        padding: 1em;
+        .content {
+            padding: 0.5em;
+            color: $light;
+            background-color: $secondary-color;
+        }
+
+    }
+    .other-comment {
+        float: left;
+        clear: left;
+        width: 85%;
+        padding: 1em;
+        .content {
+            padding: 0.5em;
+            color: black;
+            background-color: $secondary-shade;
+        }
+
+    }
+}

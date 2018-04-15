@@ -51,7 +51,7 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
   onUploadDone(data) {
     this.post.data.push(data);
     this.loader = false;
-    console.log('Data URLs', this.post.data, data);
+    // console.log('Data URLs', this.post.data, data);
   }
 
   onSubmit(event: Event) {

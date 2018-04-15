@@ -31,7 +31,7 @@ export class CategoryComponent implements OnInit {
 
     } else {
       this.loader = false;
-      console.log('FIelds did not pass validator');
+      // console.log('FIelds did not pass validator');
     }
   }
 

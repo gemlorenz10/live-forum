@@ -9,8 +9,8 @@ import { POST, USER, FireService, RESPONSE, COMMENT, DATA_UPLOAD, POST_EDIT } fr
 export class PostItemComponent implements OnInit, OnChanges {
 
   /**
-   * Option to show category.
-   */
+  * Option to show category.
+  */
   @Input() showCategory: boolean;
 
 
@@ -23,10 +23,17 @@ export class PostItemComponent implements OnInit, OnChanges {
   @Output() open = new EventEmitter();
 
   editPost;
-  loader;
+  deletePhotoList = [];
+  loader = {
+    main: false,
+    like: {},
+    dislike: {}
+  };
   constructor( public fire: FireService, public lib: FireService ) { }
 
   ngOnInit() {
+    this.getPost(this.post.id)['likeInProgress'] = false;
+    this.getPost(this.post.id)['DislikeInProgress'] = false;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -43,7 +50,7 @@ export class PostItemComponent implements OnInit, OnChanges {
     }
   }
 
-    removeFile(file) {
+  removeFile(file) {
     if (this.post.data) {
       const pos = this.post.data.findIndex(f => f.fullPath === file.fullPath);
       if (pos !== -1) {
@@ -60,9 +67,21 @@ export class PostItemComponent implements OnInit, OnChanges {
     return this.fire.post.pagePosts[id];
   }
 
-    /**
-   * Updates the post edit form with the post to edit.
-   */
+  onUploadDone(data) {
+    this.post.data.push(data);
+    this.loader.main = false;
+    console.log('Data URLs', this.post.data, data);
+  }
+  onClickDeletePhoto(data: DATA_UPLOAD) {
+    if ( confirm('Do yo really want to delete this photo?') ) {
+      this.deletePhotoList.push(data);
+      const p = this.post.data.indexOf(data);
+      this.post.data.splice(p, 1);
+    }
+  }
+  /**
+  * Updates the post edit form with the post to edit.
+  */
   onClickEdit(post: POST) {
     if (post.deleted) {
       return alert('Post is already deleted.');
@@ -79,41 +98,50 @@ export class PostItemComponent implements OnInit, OnChanges {
     this.post = post;
   }
 
-  onClickDelete(id: string) {
+  onClickDeletePost(id: string) {
     if (confirm('Do you really want to delete this post?')) {
       console.log('Going to delete: ', id);
       this.fire.post.delete(id).then(re => {
         console.log('deleted: ', re.data.id);
-      }).catch(e => alert(e.message));
-      if (this.post.data) {
-        let i;
-        for ( i = 0; i < this.post.data.length; i++) {
-          this.deleteData(this.post.data[i]);
+        if (this.post.data) {
+          let i;
+          for ( i = 0; i < this.post.data.length; i++) {
+            this.deleteData(this.post.data[i]);
+          }
         }
-      }
+      }).catch(e => alert(e.message));
     }
   }
 
   onSubmitEdit(event: Event) {
-    this.loader = true;
+    this.loader.main = true;
     if (event) {
       event.preventDefault();
     }
     this.fire.post.edit(this.post)
     .then((re: POST_EDIT) => {
+      if (this.deletePhotoList.length > 0) {
+          let i;
+          for ( i = 0; i < this.deletePhotoList.length; i++) {
+            this.deleteData(this.deletePhotoList[i]);
+          }
+        }
+    })
+    .then(() => {
+      this.deletePhotoList = [];
       this.editPost = false;
-      this.loader = false;
-      alert('Post edited:' + re.data.id);
+      this.loader.main = false;
+      alert('Post edited!');
     })
     .catch(e => {
       this.editPost = false;
-      this.loader = false;
+      this.loader.main = false;
       this.lib.failure(e, 'Error editing post: ' + this.post.id);
     });
   }
 
   deleteData(data: DATA_UPLOAD) {
-    this.fire.data.delete(data)
+    return this.fire.data.delete(data)
     .then((re: RESPONSE) => {
       if (re.data) {
         console.log('File deleted!', data.name);
@@ -122,5 +150,20 @@ export class PostItemComponent implements OnInit, OnChanges {
     .catch(e => {
       this.lib.failure(e, 'Error on deleting data' + data.name);
     });
+  }
+
+  onClickLike(id: string) {
+    // this.getPost(id)['likeInProgress'] = true;
+    this.loader.like[id] = true;
+    this.fire.post.like(id).then(re => {
+      this.loader.like[id] = false;
+    }).catch(e => alert(e.message));
+  }
+  onClickDislike(id: string) {
+    this.loader.dislike[id] = true;
+    this.fire.post.dislike(id).then(() => {
+      this.loader.dislike[id] = false;
+    })
+      .catch(e => alert(e.message));
   }
 }

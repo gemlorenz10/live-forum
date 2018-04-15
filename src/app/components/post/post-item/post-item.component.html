@@ -6,18 +6,29 @@
                     <span class="title pointer" *ngIf="post.title" (click)="open.emit()"> 
                         {{ post.title }} 
                     </span>
+                    
+                    <button class="btn btn-outline-danger right" (click)="onClickDeletePost( post.id )" *ngIf="myPost(getPost(post.id))">Delete</button>
+                    <button class="btn btn-outline-primary right" (click)="editPost = true" *ngIf="myPost(getPost(post.id))">Edit</button>
                     <button class="btn btn-outline-primary right" *ngIf="! hideCommentButton" (click)="open.emit()"> 
                         {{ post.numberOfComments }} Comment 
                     </button>
-                    <button class="btn btn-outline-primary right" (click)="editPost = true" *ngIf="myPost(getPost(post.id))">Edit</button>
-                    <button class="btn btn-outline-primary right" (click)="onClickDelete( post.id )" *ngIf="myPost(getPost(post.id))">Delete</button>
+                    <!-- like -->
+                    <button class="btn btn-outline-primary right" (click)="onClickLike(post.id)" [disabled]="loader.like[post.id]">
+                        <span *ngIf=" !loader.like[post.id]"> Like({{getPost(post.id).numberOfLikes ? getPost(post.id).numberOfLikes : 0}})</span>
+                        <span class="loader" *ngIf="loader.like[post.id] ">Like...</span>
+                    </button>
+                   <!-- dislike -->
+                    <button class="btn btn-outline-primary right" (click)="onClickDislike(post.id)" [disabled]="loader.dislike[post.id]">
+                        <span  *ngIf=" !loader.dislike[post.id] ">Dislike({{getPost(post.id).numberOfDislikes ? getPost(post.id).numberOfDislikes : 0}})</span>
+                        <span class="loader" *ngIf=" loader.dislike[post.id] ">Dislike...</span>
+                    </button>
                 </h5>
                 <span class="category" *ngIf="showCategory" pointer>Category: {{ post.category }}</span>
             </div>
             <div class="content-container">
                 <p>{{ post.content }}</p>
             </div>
-                <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data.length > 0">
+                <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data && post.data.length > 0">
                     <div class="file-list" *ngFor="let data of post.data">
                         <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
                     </div>
@@ -34,6 +45,12 @@
             </div>
         </div>
     </div>
+    <!-- 
+
+
+        EDITING POST
+
+     -->
     <!-- <app-post-form [categoryId]="post.category" [post]="post" *ngIf="editPost" (edited)="editPost = false" ></app-post-form> -->
     <!-- {{ author | json }} -->
     <div class="edit-post" *ngIf="editPost">
@@ -52,11 +69,22 @@
             <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data.length > 0">
                 <div class="file-list" *ngFor="let data of post.data">
                     <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
-                    <button>Delete</button>
+                    <button type="button" (click)="onClickDeletePhoto(data)" [disabled]="loader">Delete</button>
                 </div>
             </div><br>
+
+            <app-file-upload
+            class="left"
+            [hidden] = "loader"
+            [pathToStorage]="'posts/' + post.id"
+            [data]="post.data"
+            (uploadStart)="loader = true"
+            (uploadDone)="onUploadDone($event)"
+        ></app-file-upload>
+
+        <span *ngIf="loader">Uploading...</span>
             <div class="buttons right">
-                <button type="submit" class="btn btn-primary" [disabled]="loader">{{loader ? 'Updating...' : 'Update'}}</button>
+                <button type="submit" class="btn btn-primary" [disabled]="loader">{{loader ? 'Please wait...' : 'Update'}}</button>
                 <button (click)="editPost = false" class="btn btn-outline-primary" [disabled]="loader">Cancel</button>
             </div>
         </form>
