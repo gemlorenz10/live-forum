@@ -1,6 +1,8 @@
 @import '~sass/mixins';
 
-.live-chat {
+.live-chat-timeout {
     @include no-select;
     cursor: pointer;
+    width: 16.5em;
+    padding: 0.5em;
 }

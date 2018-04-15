@@ -4,7 +4,7 @@
             <div class="title-container">
                 <h5>
                     <span class="title pointer" *ngIf="post.title" (click)="open.emit()"> 
-                        {{ post.title }} 
+                        {{ post.title }}
                     </span>
                     
                     <button class="btn btn-outline-danger right" (click)="onClickDeletePost( post.id )" *ngIf="myPost(getPost(post.id))">Delete</button>
@@ -24,6 +24,7 @@
                     </button>
                 </h5>
                 <span class="category" *ngIf="showCategory" pointer>Category: {{ post.category }}</span>
+                <span class="category" pointer>Live Chat Expires in: {{  lib.dayToSec(post.liveChatExpires) - lib.nowInSeconds() }}</span>
             </div>
             <div class="content-container">
                 <p>{{ post.content }}</p>
@@ -54,6 +55,9 @@
     <!-- <app-post-form [categoryId]="post.category" [post]="post" *ngIf="editPost" (edited)="editPost = false" ></app-post-form> -->
     <!-- {{ author | json }} -->
     <div class="edit-post" *ngIf="editPost">
+        <!-- <app-post-form>
+
+        </app-post-form> -->
             <div class="info right">
                     <span class="author-name"><b>{{ post.displayName }}</b></span>
                     <span>{{ getPostDate }}</span>

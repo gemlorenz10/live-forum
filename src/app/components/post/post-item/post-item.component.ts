@@ -1,3 +1,4 @@
+import { LibService } from './../../../providers/lib.service';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { POST, USER, FireService, RESPONSE, COMMENT, DATA_UPLOAD, POST_EDIT } from '../../../modules/firelibrary/core';
 
@@ -29,11 +30,11 @@ export class PostItemComponent implements OnInit, OnChanges {
     like: {},
     dislike: {}
   };
-  constructor( public fire: FireService, public lib: FireService ) { }
+  constructor( public fire: FireService, public lib: LibService ) { }
 
   ngOnInit() {
-    this.getPost(this.post.id)['likeInProgress'] = false;
-    this.getPost(this.post.id)['DislikeInProgress'] = false;
+    // this.getPost(this.post.id)['likeInProgress'] = false;
+    // this.getPost(this.post.id)['DislikeInProgress'] = false;
   }
 
   ngOnChanges(changes: SimpleChanges) {

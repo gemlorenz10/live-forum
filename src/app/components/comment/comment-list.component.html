@@ -6,8 +6,5 @@
 </form> -->
 
 <div class="loader" *ngIf="loader.commentList">Loading comments. Please wait.</div>
-<ul>
-  <li *ngFor=" let id of commentIds">
-    <app-comment-item [post]="post" [comment]="comments(id)"></app-comment-item>
-  </li>
-</ul>
+<app-comment-item *ngFor=" let id of commentIds" [post]="post" [comment]="comments(id)"></app-comment-item>
+

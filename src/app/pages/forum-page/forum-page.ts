@@ -10,7 +10,7 @@ import { POST, FireService, CATEGORY, FIRESERVICE_SETTINGS } from '../../modules
 export class ForumPage implements OnInit, OnDestroy {
 
   categoryList: Array<CATEGORY> = []; // List of all categories available.
-  activeCategory = <CATEGORY>{id: ''}; // Active category shown.
+  activeCategory = <CATEGORY>{id: ''}; // Active category shown. @Todo remove this and work with fire.post.selectedCategory
 
   showCategory: boolean; // for post-list `true` if show in post-item otherwise `false`.
   openPostView: boolean;

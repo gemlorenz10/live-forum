@@ -2,6 +2,7 @@ import { RESPONSE, USER, DATA_UPLOAD, POST_EDIT } from './../../../modules/firel
 import { LibService } from './../../../providers/lib.service';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { POST, FireService, POST_CREATE } from '../../../modules/firelibrary/core';
+import { CATEGORY } from '../../../modules/firelibrary/providers/etc/interface';
 
 @Component({
   selector: 'app-post-form',
@@ -13,7 +14,9 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
   /**
   * ID of the category on which the post will be submitted.
   */
-  @Input() categoryId: string;
+  @Input() category = <CATEGORY>{
+    liveChatTimeout: 0
+  };
 
   /**
   * Emits newly created post.
@@ -44,6 +47,7 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
   initPost() {
     this.post = <POST>{
       id: this.postId,
+      liveChatTimeout: this.category.liveChatTimeout, // set default timeout from category
       data: []
     };
   }
@@ -59,13 +63,13 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
       event.preventDefault();
     }
     this.loader = true;
-    this.post.category = this.categoryId;
+    this.post.category = this.category.id;
     this.post.uid = this.fire.user.uid;
     this.post.displayName = this.fire.user.displayName;
     // @Deprecated - We need to change it when author changes its profile photo
     // this.post.authorPhoto = this.author.profilePhoto.thumbnailUrl;
-
-    this.post.liveChatExpires = (new Date()).getTime() + 86400000; // 24 hours from the time created.
+    const chatExpiraton = this.lib.secToMilliSec((new Date()).getTime()) + this.lib.dayToSec(this.post.liveChatExpires); // in Milliseconds
+    this.post.liveChatExpires = this.lib.milliSecToSec(chatExpiraton); // seconds upto now + liveChatExpires input;
 
     if (this.post.id) { // might be defined in file upload.
       this.post.id = this.post.uid + '-' + (new Date()).getTime();

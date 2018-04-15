@@ -1,6 +1,6 @@
 <div class="post-list-container">
   
-  <app-post-form [categoryId]="category.id" *ngIf="fire.user.isLogin && category.id"></app-post-form>
+  <app-post-form [category]="category" *ngIf="fire.user.isLogin && category.id"></app-post-form>
 
   <br>
   <br>
