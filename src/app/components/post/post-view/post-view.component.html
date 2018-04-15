@@ -10,6 +10,6 @@
 
 <!-- <app-comment [post]="post" [comment]="comment"></app-comment> -->
 
-<app-comment-live [post]="post"></app-comment-live>
+<app-comment-live [post]="post" *ngIf="post.liveChatExpires < now "></app-comment-live>
 
-<!-- <app-comment-list [post]="post" *ngIf="post.liveChatExpires > now"></app-comment-list> -->
+<app-comment-list [post]="post" *ngIf="post.liveChatExpires >= now"></app-comment-list> 

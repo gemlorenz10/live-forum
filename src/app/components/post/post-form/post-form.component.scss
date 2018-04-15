@@ -13,6 +13,12 @@
             padding: 0.8em;
             width: 100%;
         }
+
+        .post-livechat-timeout {
+            padding: 0.5em;
+            margin: 0;
+            @include no-select;
+        }
         
         .file-container {
             margin: 0.5em;

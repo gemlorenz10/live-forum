@@ -1,7 +1,8 @@
 <div class="post-form-container center" *ngIf="author">
     <form (ngSubmit)="onSubmit($event)">
-        <input type="text" name="title" id="" class="post-title" placeholder="Post title..." [(ngModel)]="post.title" [disabled]="loader"><br>
+        <input type="text" name="title" class="post-title" placeholder="Post title..." [(ngModel)]="post.title" [disabled]="loader"><br>
         <textarea name="content" cols="60" rows="5" class="post-content" placeholder="Post content..." [(ngModel)]="post.content" [disabled]="loader"></textarea><br>
+        <label class="post-livechat-timeout">Live chat timeout: <input type="date" name="livechat-timeout"></label><br>
         
         <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data && post.data.length > 0">
             <div class="file-list" *ngFor="let data of post.data">

@@ -14,8 +14,10 @@ export class PostViewComponent implements OnInit, OnDestroy {
   @Output() close = new EventEmitter();
 
   comment = <COMMENT>{};
-  now: number; // date now in milliseconds.
-  constructor(public fire: FireService, public lib: LibService) { }
+  now: number; // date now
+  constructor(public fire: FireService, public lib: LibService) {
+    this.now = (new Date).getTime() / 1000; // date now in secs since midnight of Jan 1 1970
+  }
 
   ngOnInit() {
     if (this.post.id) {

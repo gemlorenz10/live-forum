@@ -18,8 +18,8 @@ export class CommentListComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(
         public ngZone: NgZone,
         public fire: FireService
-    ) {
-    }
+    ) {}
+
     ngOnInit() {
         if (!this.post.id) {
             console.error('Post ID is empty. Something is wrong.');
