@@ -4,7 +4,7 @@
         <textarea name="content" cols="60" rows="5" class="post-content" placeholder="Post content..." [(ngModel)]="post.content" [disabled]="loader.form"></textarea><br>
         
         <div>
-            <label class="post-livechat-timeout left" *ngIf = "! loader.form">Live Chat Timeout: <input type="number" name="livechat-timeout" [(ngModel)]="post.liveChatExpires"> Days</label>
+            <label class="post-livechat-timeout left" *ngIf = "! loader.form">Live Chat Timeout: <input type="date" name="livechat-timeout" [(ngModel)]="post.liveChatExpires"> Days</label>
         </div><br>
 
         <span>{{ loader.form ? 'Live Chat Timeout: ' + lib.secondToTimeFormat(post.liveChatExpires - lib.nowInSeconds() + 1) : '' }}</span><br>

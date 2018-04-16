@@ -2,12 +2,14 @@ LIVE
 
 <div class="loader" *ngIf="loader.commentList">Loading comments. Please wait.</div>
 <div class="chat-box" >
-  <div #chat class="chat-container" *ngIf="fire.comment.commentIds" [scrollTop]="scrollHeight">
+  <div class="chat-container" *ngIf="fire.comment.commentIds" [scrollTop]="scrollHeight">
     <span *ngIf="! commentIds">No comments yet...</span>
-    <div *ngFor=" let id of commentIds">
+
+    <div #chatMessage *ngFor=" let id of commentIds">
       <app-comment-item [post]="post" [comment]="comments(id)" *ngIf="! comments(id).deleted"></app-comment-item>
     </div>
   </div>
+
   <div class="input-box" *ngIf="fire.user.isLogin">
     <form (ngSubmit)=" onSubmit( $event ) ">
       <input type="text" class="input-text" name="content" [(ngModel)]="comment.content" [disabled]="loader.creating">

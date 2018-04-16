@@ -12,13 +12,15 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
 
     @Input() post: POST = {};
 
-    @ViewChild('chat') set chatElement(content: ElementRef) {
+    @ViewChild('chatMessage') set chatMessage(content: ElementRef) {
         if (content) {
             setTimeout(() => {
+                console.log(`@ViewChild('chat-message') scrolling.`, content);
                 this.scrollHeight = content.nativeElement['scrollHeight'];
             }, 10);
         }
     }
+
     scrollHeight; // Height of the comment live box
     comment = <COMMENT>{};
     loader = {
@@ -30,6 +32,9 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
         public ngZone: NgZone,
         public fire: FireService
     ) {
+        // fire.comment.newComment.subsucribe( comment => {
+        //     content.scrollHeight = '200px;';
+        // });
     }
     ngOnInit() {
         if (!this.post.id) {
@@ -41,7 +46,7 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
             console.log(`comments: `, comments);
             this.loader.commentList = false;
             this.initComment();
-            setTimeout(() => this.ngZone.run(() => {}), 2000);
+            setTimeout(() => this.ngZone.run(() => { }), 2000);
         }).catch(e => alert(e.message));
     }
 
@@ -66,7 +71,7 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
     isMyComment() {
         console.log('isMyCOmment=====>', this.comment.uid === this.fire.user.uid);
         return this.comment.uid === this.fire.user.uid;
-      }
+    }
     get commentIds(): Array<string> {
         if (this.fire.comment.commentIds) {
             return this.fire.comment.commentIds[this.post.id]; // .reverse();
@@ -81,7 +86,7 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
     *
     */
     onSubmit(event: Event) {
-        if ( ! this.comment.content ) {
+        if (!this.comment.content) {
             alert('Comment has no content.');
             return false;
         }
@@ -102,6 +107,6 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
     onUploadDone(data) {
         this.comment.data.push(data);
         this.loader.creating = false;
-      }
+    }
 
 }
