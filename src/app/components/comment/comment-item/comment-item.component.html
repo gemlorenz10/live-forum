@@ -1,0 +1,91 @@
+<section class="comment" *ngIf="post.liveChatExpires > lib.nowInSeconds()">
+  <!-- <section class="comment"> -->
+    <div [class]="comment.uid === fire.user.uid ? 'my-comment ': 'other-comment'" >
+      
+      <div [class]=" myComment()? 'text-right content' : 'text-left content'" *ngIf=" ! form.created && ! showEditForm">
+        <div >
+          {{ comment.content }}
+        </div>
+        
+        <div class="file-container d-flex align-items-center justify-content-center" *ngIf="comment.data && comment.data.length > 0">
+          <div class="file-list" *ngFor="let data of comment.data">
+            <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
+          </div>
+        </div>
+        
+        <div>
+          <span style="font-size: 0.6em;">
+            {{ comment.displayName }} at {{ commentDate }}
+          </span>
+        </div>
+
+      </div>
+      
+      <div class="edit-form live" *ngIf="showEditForm">
+        {{ comment.displayName }} at {{ commentDate }}
+        <form (ngSubmit)="onSubmit($event)">
+          <input type="text" name="edit-comment" class="edit-input" [(ngModel)]="form.content">
+          <button type="submit" [disabled]="loader.progress">{{ loader.progress ? 'Please wait...' : 'Update' }}</button>
+        </form>
+      </div>
+      
+      
+      <div class="buttons" *ngIf="!form.created">
+        <!-- <button>Reply</button> -->
+        <button (click)="onClickLike()" *ngIf=" !comment['likeInProgress'] ">Like({{comment.numberOfLikes ? comment.numberOfLikes : 0}})</button>
+        <span class="loader" *ngIf=" comment['likeInProgress'] ">Like...</span>
+        <button (click)="onClickDislike()" *ngIf=" !comment['dislikeInProgress'] ">Dislike({{comment.numberOfDislikes ? comment.numberOfDislikes : 0}})</button>
+        <span class="loader" *ngIf=" comment['dislikeInProgress'] ">Dislike...</span>
+        
+        <button (click)="onClickEdit()" *ngIf="myComment()">Edit</button>
+        <button (click)="onClickDelete()" *ngIf="myComment()">Delete</button>
+        
+      </div>
+      
+      
+    </div>
+  </section>
+  
+  <section class="comment"  [style.margin]="0" [style.margin-left]="comment.depth * 30 + 'px'" *ngIf="post.liveChatExpires <= lib.nowInSeconds()" >
+    <!-- FOR LISTING (NON-LIVE) -->
+    <div class="comment-list" >
+      
+      <div class="content" *ngIf=" ! form.created ">
+        
+        <div class="info">
+          <span>{{ comment.displayName }} at {{ commentDate }}</span>
+        </div>
+        
+        <div class="comment-content" [style.margin]="comment.parentId ? '0' : '1em'">
+          <span>{{ comment.content }}</span>
+        </div>
+        
+        <div class="file-container d-flex align-items-center justify-content-center" *ngIf="comment.data && comment.data.length > 0">
+          <div class="file-list" *ngFor="let data of comment.data">
+            <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
+          </div>
+        </div>
+      </div>
+      
+      
+      <div class="buttons" *ngIf="!form.created">
+        <button (click)="showEditForm = !showEditForm" *ngIf="myComment()">Reply</button>
+        <button (click)="onClickEdit()" *ngIf="myComment()">Edit</button>
+        <button (click)="onClickDelete()" *ngIf="myComment()">Delete</button>
+        <button (click)="onClickLike()" *ngIf=" !comment['likeInProgress'] ">Like({{comment.numberOfLikes ? comment.numberOfLikes : 0}})</button>
+        <span class="loader" *ngIf=" comment['likeInProgress'] ">Like...</span>
+        <button (click)="onClickDislike()" *ngIf=" !comment['dislikeInProgress'] ">Dislike({{comment.numberOfDislikes ? comment.numberOfDislikes : 0}})</button>
+        <span class="loader" *ngIf=" comment['dislikeInProgress'] ">Dislike...</span>
+      </div>
+      <!-- {{ comment | json }} -->
+      <form (ngSubmit)=" onSubmit( $event ) " *ngIf="showEditForm">
+        <input type="text" name="content" [(ngModel)]="form.content" [disabled]="loader.progress">
+        <!-- <app-file-upload [pathToStorage]=" 'posts/' + post.id + '/comments/' + form.id " [data]=" form.data "></app-file-upload> -->
+        <button type="submit" *ngIf=" ! loader.progress ">{{ form.created ? 'Edit' : 'Create' }} Comment</button>
+        <button type="button" (click)="onClickEditCancel()" *ngIf=" form.created && ! loader.progress">Cancel</button>
+        <span class="loader" *ngIf="loader.progress">Requesting. Please wait.</span>
+      </form>
+      
+    </div>
+  </section>
+  

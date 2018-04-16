@@ -1,6 +1,7 @@
 import { Category } from './../../modules/firelibrary/providers/category/category';
 import { Component, OnInit } from '@angular/core';
 import { CATEGORY, FireService, CATEGORY_CREATE, CATEGORY_GET, CATEGORY_EDIT } from '../../modules/firelibrary/core';
+import { LibService } from '../../providers/lib.service';
 
 @Component({
   selector: 'app-category',
@@ -12,9 +13,14 @@ export class CategoryComponent implements OnInit {
   categoryList = <Array<CATEGORY>>[];
   category = <CATEGORY>{ numberOfPostsPerPage: 5 };
   loader;
-  constructor( public fire: FireService, public lib: FireService ) { }
+  liveChatTimeout; // store date value
+  constructor( public fire: FireService, public lib: LibService ) {
+    // Lib for default settings for now. @Todo set it somewhere else .ts or .json
+    this.category.liveChatTimeout =  Math.round(this.lib.secToDay(this.lib.DEFAULT_LIVECHAT_TIMEOUT));
+  }
 
   ngOnInit() {
+    // this.liveChatTimeout = this.lib.DEFAULT_LIVECHAT_TIMEOUT;
     this.fire.category.categories()
     .then(categories => {
       this.categoryList = categories;
@@ -31,12 +37,13 @@ export class CategoryComponent implements OnInit {
 
     } else {
       this.loader = false;
-      console.log('FIelds did not pass validator');
+      // console.log('FIelds did not pass validator');
     }
   }
 
   onClickEdit(category) {
-    this.category = category;
+    Object.assign(this.category, category);
+    this.category.liveChatTimeout = Math.round(this.lib.secToDay(category.liveChatTimeout)); // display days to form
   }
 
   onClickCancel() {
@@ -51,32 +58,44 @@ export class CategoryComponent implements OnInit {
   }
 
   private createCategory() {
+    this.category.liveChatTimeout = Math.round(this.lib.dayToSec(this.category.liveChatTimeout));
+
     this.loader = true;
-      this.fire.category.create(this.category).then((cat: CATEGORY_CREATE) => {
-        alert(`Category ${cat.data.id} is created!`);
-        return this.getCategory(cat.data.id);
-      })
-      .then((category: CATEGORY_GET) => {
-        this.categoryList.push(category.data);
+
+    this.fire.category.create(this.category).then((cat: CATEGORY_CREATE) => {
+      alert(`Category ${cat.data.id} is created!`);
+      return this.getCategory(cat.data.id);
+    })
+    .then((category: CATEGORY_GET) => {
+      this.categoryList.push(category.data);
+      this.loader = false;
+      this.clearForm();
+    })
+    .catch(e => {
+      if (e.message) {
+        this.lib.failure(e, 'Error on creating category');
         this.loader = false;
-        this.clearForm();
-      })
-      .catch(e => {
-        if (e.message) {
-          this.lib.failure(e, 'Error on creating category');
-          this.loader = false;
-        }
-      });
+      }
+    });
   }
 
   private editCategory() {
     // this.category = category;
+    this.category.liveChatTimeout = Math.round(this.lib.dayToSec(this.category.liveChatTimeout));
+
+
     this.loader = true;
+    const newCategory = this.category;
     this.fire.category.edit(this.category)
     .then((re: CATEGORY_EDIT) => {
       this.loader = false;
       this.clearForm();
       alert('Category edit successful!');
+    })
+    .then(() => {
+      // update list
+      const index = this.categoryList.findIndex((v, i) => v.id === newCategory.id);
+      this.categoryList.splice(index, 1, newCategory);
     })
     .catch(e => {
       this.lib.failure(e, 'Error on editing category');

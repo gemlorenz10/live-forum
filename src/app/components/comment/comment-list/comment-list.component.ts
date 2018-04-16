@@ -5,12 +5,13 @@ import { FireService, POST, COMMENT } from '../../modules/firelibrary/core';
 
 @Component({
     selector: 'app-comment-list',
-    templateUrl: './comment-list.component.html'
+    templateUrl: './comment-list.component.html',
+    styleUrls: ['./comment-list.component.scss']
 })
 export class CommentListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @Input() post: POST = {};
-    comment: COMMENT;
+    comment = <COMMENT>{};
     loader = {
         creating: false,
         commentList: false
@@ -18,18 +19,7 @@ export class CommentListComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(
         public ngZone: NgZone,
         public fire: FireService
-    ) {
-    }
-
-    initComment() {
-        this.comment = { id: this.fire.comment.getId(), date: '', data: [] };
-    }
-    comments(id): COMMENT {
-        return this.fire.comment.getComment(id);
-    }
-    get commentIds(): Array<string> {
-        return this.fire.comment.commentIds[this.post.id];
-    }
+    ) {}
 
     ngOnInit() {
         if (!this.post.id) {
@@ -53,6 +43,21 @@ export class CommentListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.fire.comment.commentIds[this.post.id] = []; // clear commentIds
     }
 
+    initComment() {
+        this.comment = { id: this.fire.comment.getId(), date: '', data: [] };
+    }
+    comments(id): COMMENT {
+        return this.fire.comment.getComment(id);
+    }
+    get commentIds(): Array<string> {
+        return this.fire.comment.commentIds[this.post.id];
+    }
+
+    onUploadDone(data) {
+        this.comment.data.push(data);
+        this.loader.creating = false;
+        // console.log('Data URLs', this.post.data, data);
+      }
     /**
      * Creates a comment.
      * This is being invoked when user submits the comment form.

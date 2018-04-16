@@ -6,17 +6,26 @@
         .post-title {
             margin: 0.5em 0 0.5em 0;
             padding: 0.5em;
-            width: 32em;
+            width: 100%;
         }
         .post-content {
             margin:0 0 0.5em 0;
             padding: 0.8em;
             width: 100%;
         }
+
+        .post-livechat-timeout {
+            padding: 0.5em;
+            margin: 0;
+            @include no-select;
+            input {
+                width: 5em;
+            }
+        }
         
         .file-container {
             margin: 0.5em;
-            overflow: scroll;
+            overflow-x: scroll;
             background-color: $primary-shade;
             img {
                 max-width: 10em;

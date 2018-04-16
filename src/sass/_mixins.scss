@@ -4,3 +4,17 @@
     -ms-user-select: none;      
     user-select: none;
 }
+
+@mixin file-container() {
+    
+    .file-container {
+        margin: 0.5em;
+        overflow-x: scroll;
+        background-color: $primary-shade;
+        img {
+            max-width: 10em;
+            max-height: 10em;
+            margin: 0.3em;
+        }
+    }
+}

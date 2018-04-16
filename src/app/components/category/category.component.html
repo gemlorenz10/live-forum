@@ -1,21 +1,28 @@
 <h3 class="center title">Category Management</h3>
 
 <div class="category-create-contianer center">
-  <input type="text" name="" id="" class="form-item-text" placeholder="Category ID" [(ngModel)]="category.id"><br>
-  <input type="text" name="" id="" class="form-item-text" placeholder="Category Name" [(ngModel)]="category.name"><br>
-  <input type="text" name="" id="" class="form-item-text" placeholder="Category Description" [(ngModel)]="category.description"><br>
-  <input type="number" name="" id="" class="form-item-text" placeholder="Number of posts per page" [(ngModel)]="category.numberOfPostsPerPage"><br>
-  <!-- <label for="liveChat" class="live-chat form-item-text" ><input type="checkbox" name="liveChat" id="liveChat" [(ngModel)]="category.enableLiveChat"><span style="margin: 0.3em;">Enable Live Chat</span></label> -->
-  <button class="btn btn-primary form-item-text" (click)="onClickSubmitCategory()" [disabled]="loader">{{ loader ? 'Please wait...' : category.created ? 'Edit Category' : 'Create Category' }}</button>
-  <button class="btn btn-default form-item-text" (click)="onClickCancel()" *ngIf="category.created && ! loader">Cancel</button>
+  <form (ngSubmit)="onClickSubmitCategory($event)">
+    <input type="text" name="id" id="" class="form-item-text" placeholder="Category ID" [(ngModel)]="category.id" [disabled]="loader"><br>
+    <input type="text" name="name" id="" class="form-item-text" placeholder="Category Name" [(ngModel)]="category.name" [disabled]="loader"><br>
+    <input type="text" name="desc" id="" class="form-item-text" placeholder="Category Description" [(ngModel)]="category.description" [disabled]="loader"><br>
+    <label>
+      <span>Number of page per posts: </span><input type="number" name="num-post-per-page" id="" class="number-post-page" placeholder="Number of posts per page"  [(ngModel)]="category.numberOfPostsPerPage" [disabled]="loader"> Page
+    </label>
+    <label>
+      <span>Live Chat Timeout: </span><input type="number" name="live-chat-timeout" class="live-chat-timeout" [(ngModel)]="category.liveChatTimeout" [hidden]="loader"> {{ (loader) ? lib.secToDay(category.liveChatTimeout): '' }} Days
+    </label>
+    <button type="submit" class="btn btn-primary form-item-text" [disabled]="loader">{{ loader ? 'Please wait...' : category.created ? 'Edit Category' : 'Create Category' }}</button>
+    <button type="button" class="btn btn-default form-item-text" (click)="onClickCancel()" *ngIf="category.created && ! loader">Cancel</button>
+  </form>
 </div>
 
 <h5>Category List</h5>
-<ul *ngFor="let category of categoryList" >
-  <li>{{ category.id }} / {{ category.name }} / {{ category.description }} / {{ category.numberOfPostsPerPage }}<br>
-    <button (click)="onClickEdit(category)">edit</button>
-    <button (click)="onClickDelete(category)">Delete</button>
-  </li>
-</ul>
+  <ul *ngFor="let category of categoryList" >
+    <li>{{ category.id }} / {{ category.name }} / {{ category.description }} / {{ category.numberOfPostsPerPage }} Pages / {{ lib.secToDay(category.liveChatTimeout) }}  Days<br>
+      <button (click)="onClickEdit(category)">edit</button>
+      <button (click)="onClickDelete(category)">Delete</button>
+    </li>
+  </ul>
 
-<!-- {{ category | json }} -->
+
+{{ category | json }}

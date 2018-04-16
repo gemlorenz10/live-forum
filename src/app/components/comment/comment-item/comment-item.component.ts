@@ -1,13 +1,14 @@
 import { Component, Input, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
-import { FireService, POST, COMMENT } from '../../modules/firelibrary/core';
+import { FireService, POST, COMMENT } from '../../../modules/firelibrary/core';
+import { LibService } from '../../../providers/lib.service';
 
 
 @Component({
-  selector: 'app-comment',
-  templateUrl: './comment.component.html',
-  styleUrls: ['./comment.component.scss']
+  selector: 'app-comment-item',
+  templateUrl: './comment-item.component.html',
+  styleUrls: ['./comment-item.component.scss']
 })
-export class CommentComponent implements OnInit, OnDestroy {
+export class CommentItemComponent implements OnInit, OnDestroy {
 
 
   @Input() post: POST = {};
@@ -18,7 +19,8 @@ export class CommentComponent implements OnInit, OnDestroy {
     progress: false
   };
   constructor(
-    public fire: FireService
+    public fire: FireService,
+    public lib: LibService
   ) {
     this.initComment();
   }
@@ -39,6 +41,10 @@ export class CommentComponent implements OnInit, OnDestroy {
       return;
     }
   }
+
+  // isMyComment() {
+  //   return this.comment.uid === this.fire.user.uid;
+  // }
 
   ngOnDestroy() {
   }

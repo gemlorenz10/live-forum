@@ -7,14 +7,13 @@
                 <button
                 class="btn {{ (activeCategory.id === category.id) ? 'btn-secondary' : 'btn-outline-secondary' }}"
                 [value]="category"
+                [disabled]="activeCategory.id === category.id || loader"
                 (click)="onClickCategory(category)">{{ category.name }}</button>
             </div>
 
         </div>
 
         <app-post
-        *ngIf="fire.post.pagePosts"
-        [postIds]="fire.post.pagePostIds"
         [category]="activeCategory"
         (open)="onOpenPost($event)"
         ></app-post>
@@ -24,6 +23,5 @@
     <div *ngIf="openPostView" class="post-view">
         <app-post-view [post]="postViewData" (close)="openPostView = false"></app-post-view>
     </div>
-
 
 </div>

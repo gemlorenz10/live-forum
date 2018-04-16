@@ -1,11 +1,16 @@
 @import '~sass/variables';
-.post-container {
-    display: inline;
+
+form {
+    overflow: hidden;
+    margin: 0.3em 0;
+    textarea {
+        width: 100%;
+    }
 
     .file-container {
         margin: 0.5em;
         overflow-x: scroll;
-        background-color: white;
+        background-color: $primary-shade;
         img {
             max-width: 10em;
             max-height: 10em;
@@ -13,3 +18,9 @@
         }
     }
 }
+
+
+.comment-item {
+    border-top: 1px solid $secondary-shade;
+}
+

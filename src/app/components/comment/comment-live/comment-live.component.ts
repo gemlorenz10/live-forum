@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, NgZone, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
-import { FireService, POST, COMMENT } from '../../modules/firelibrary/core';
+import { FireService, POST, COMMENT } from '../../../modules/firelibrary/core';
 
 
 
@@ -19,7 +19,7 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
             }, 10);
         }
     }
-    scrollHeight;
+    scrollHeight; // Height of the comment live box
     comment = <COMMENT>{};
     loader = {
         creating: false,
@@ -31,20 +31,6 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
         public fire: FireService
     ) {
     }
-
-    initComment() {
-        this.comment = { id: this.fire.comment.getId(), date: '', data: [] };
-    }
-    comments(id): COMMENT {
-        return this.fire.comment.getComment(id);
-    }
-    get commentIds(): Array<string> {
-        if (this.fire.comment.commentIds) {
-            return this.fire.comment.commentIds[this.post.id]; // .reverse();
-        }
-
-    }
-
     ngOnInit() {
         if (!this.post.id) {
             console.error('Post ID is empty. Something is wrong.');
@@ -68,6 +54,26 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
         this.fire.comment.commentIds[this.post.id] = []; // clear commentIds
     }
 
+
+
+    initComment() {
+        this.comment = { id: this.fire.comment.getId(), date: '', data: [] };
+    }
+    comments(id): COMMENT {
+        return this.fire.comment.getComment(id);
+    }
+
+    isMyComment() {
+        console.log('isMyCOmment=====>', this.comment.uid === this.fire.user.uid);
+        return this.comment.uid === this.fire.user.uid;
+      }
+    get commentIds(): Array<string> {
+        if (this.fire.comment.commentIds) {
+            return this.fire.comment.commentIds[this.post.id]; // .reverse();
+        }
+
+    }
+
     /**
     * Creates a comment.
     * This is being invoked when user submits the comment form.
@@ -75,6 +81,10 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
     *
     */
     onSubmit(event: Event) {
+        if ( ! this.comment.content ) {
+            alert('Comment has no content.');
+            return false;
+        }
         event.preventDefault();
         this.comment.postId = this.post.id;
         this.comment.parentId = '';
@@ -88,5 +98,10 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
         });
         return false;
     }
+
+    onUploadDone(data) {
+        this.comment.data.push(data);
+        this.loader.creating = false;
+      }
 
 }

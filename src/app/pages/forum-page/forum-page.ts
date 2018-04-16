@@ -10,13 +10,14 @@ import { POST, FireService, CATEGORY, FIRESERVICE_SETTINGS } from '../../modules
 export class ForumPage implements OnInit, OnDestroy {
 
   categoryList: Array<CATEGORY> = []; // List of all categories available.
-  activeCategory = <CATEGORY>{id: ''}; // Active category shown.
+  activeCategory = <CATEGORY>{id: ''}; // Active category shown. @Todo remove this and work with fire.post.selectedCategory
 
   showCategory: boolean; // for post-list `true` if show in post-item otherwise `false`.
   openPostView: boolean;
 
   postViewData = <POST>{}; // Post data to be viewed
 
+  loader;
   constructor( public fire: FireService, public lib: LibService ) { }
 
   ngOnInit() {
@@ -36,9 +37,11 @@ export class ForumPage implements OnInit, OnDestroy {
     .then(() => {
       this.fire.setSettings(<FIRESERVICE_SETTINGS>{
         listenOnPostChange: true,    // Set listen settings
-        // listenOnCommentChange: true,
+        listenOnPostLikes: true,
+        listenOnCommentChange: true,
+        listenOnCommentLikes: true,
       });
-      this.getPostPage();
+      this.loadPostPage();
     })
     .catch(e => {
       this.lib.failure(e, 'Error on loading all posts on init.');
@@ -57,9 +60,14 @@ export class ForumPage implements OnInit, OnDestroy {
   }
 
   onClickCategory(category?: CATEGORY) {
+    this.loader = true;
+    console.log('Load starts  ', this.fire.post.pagePostIds);
     if (category) {
       this.activeCategory = category;
-      this.getPostPage();
+      this.loadPostPage(category.id)
+      .then(() => {
+        this.loader = false;
+      });
     }
   }
 
@@ -69,13 +77,16 @@ export class ForumPage implements OnInit, OnDestroy {
 
   }
 
-  getPostPage() {
-    if (this.activeCategory.id) {
-      this.fire.post.page({ category: this.activeCategory.id, limit: this.activeCategory.numberOfPostsPerPage})
-      .catch(e => {
-        this.lib.failure(e, 'Error on geting post page.');
-      });
-    }
+  loadPostPage(categoryId = 'all') {
+    return this.fire.post.page({ category: categoryId, limit: this.activeCategory.numberOfPostsPerPage})
+    .then(re => {
+      if (re) {
+        console.log('Load finishes', this.fire.post.pagePostIds);
+      }
+    })
+    .catch(e => {
+      this.lib.failure(e, 'Error on geting post page.');
+    });
   }
 
 }
