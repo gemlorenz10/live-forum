@@ -18,11 +18,6 @@ export class PostViewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.post.id) {
-      this.fire.setSettings(<FIRESERVICE_SETTINGS>{
-        // When handing live chat status
-        listenOnCommentChange: this.post.liveChatExpires > this.lib.nowInSeconds(),
-        listenOnCommentLikes: true,
-      });
     }
   }
 

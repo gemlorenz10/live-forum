@@ -1,10 +1,26 @@
-<!-- <form (ngSubmit)=" onSubmit( $event ) ">
-  <input type="text" name="content" [(ngModel)]="comment.content" [disabled]="loader.creating">
-  <app-file-upload [pathToStorage]=" 'posts/' + post.id + '/comments/' + comment.id " [currentData]=" comment.data " [allowMultipleFiles]="true"></app-file-upload>
-  <button type="submit" *ngIf=" ! loader.creating ">Create Comment</button>
-  <span class="loader" *ngIf="loader.creating">Creating a post. Please wait.</span>
-</form> -->
-LIST
 <div class="loader" *ngIf="loader.commentList">Loading comments. Please wait.</div>
-<app-comment-item *ngFor=" let id of commentIds" [post]="post" [comment]="comments(id)"></app-comment-item>
+
+<form (ngSubmit)=" onSubmit( $event ) ">
+  <textarea type="text" name="content" [(ngModel)]="comment.content" [disabled]="loader.creating"></textarea>
+  
+  <div class="file-container d-flex align-items-center justify-content-center" *ngIf="comment.data && comment.data.length > 0">
+    <div class="file-list" *ngFor="let data of comment.data">
+      <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
+    </div>
+  </div>
+  
+  <app-file-upload 
+  [pathToStorage]=" 'posts/' + post.id + '/comments/' + comment.id " 
+  [data]=" comment.data " 
+  (uploadStart)="loader.creating = true"
+  (uploadDone)="onUploadDone($event)"></app-file-upload>
+  <button type="submit" class="btn btn-primary right" *ngIf=" ! loader.creating ">Create Comment</button>
+  <span class="loader" *ngIf="loader.creating">Creating a post. Please wait.</span>
+</form>
+
+<div class="loader" *ngIf="loader.commentList">Loading comments. Please wait.</div>
+<div class="comment-item" *ngFor=" let id of commentIds" >
+  <app-comment-item [post]="post" [comment]="comments(id)" *ngIf="! comments(id).deleted"></app-comment-item>
+</div>
+
 

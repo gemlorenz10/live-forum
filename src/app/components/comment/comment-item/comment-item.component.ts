@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { FireService, POST, COMMENT } from '../../../modules/firelibrary/core';
+import { LibService } from '../../../providers/lib.service';
 
 
 @Component({
@@ -18,7 +19,8 @@ export class CommentItemComponent implements OnInit, OnDestroy {
     progress: false
   };
   constructor(
-    public fire: FireService
+    public fire: FireService,
+    public lib: LibService
   ) {
     this.initComment();
   }

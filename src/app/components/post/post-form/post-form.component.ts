@@ -24,7 +24,10 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
   @Output() posted = new EventEmitter<POST>();
 
   post = <POST>{}; // post to be submitted.
-  loader;
+  loader = {
+    form: false,
+    file: false
+  };
   author = <USER>{};
   constructor( public fire: FireService, public lib: LibService ) { }
 
@@ -56,7 +59,7 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
 
   onUploadDone(data) {
     this.post.data.push(data);
-    this.loader = false;
+    this.loader.file = false;
     // console.log('Data URLs', this.post.data, data);
   }
 
@@ -64,7 +67,7 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
     if (event) {
       event.preventDefault();
     }
-    this.loader = true;
+    this.loader.form = true;
     this.post.category = this.category.id;
     this.post.uid = this.fire.user.uid;
     this.post.displayName = this.fire.user.displayName;
@@ -84,17 +87,17 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
       .then((re: POST_CREATE) => {
         this.posted.emit(re.data.post);
         alert('Post created!');
-        this.loader = false;
+        this.loader.form = false;
         this.initPost();
       })
       .catch(e => {
         this.lib.failure(e, 'Error on creating post');
-        this.loader = false;
+        this.loader.form = false;
         this.initPost();
       });
 
     } else {
-      this.loader = false;
+      this.loader.form = false;
     }
   }
 

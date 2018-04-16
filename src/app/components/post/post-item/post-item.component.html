@@ -23,79 +23,82 @@
                         <span class="loader" *ngIf=" loader.dislike[post.id] ">Dislike...</span>
                     </button>
                 </h5>
-                <div class="category" *ngIf="showCategory" pointer>Category: {{ post.category }}</div>
-                <div class="category" pointer>
-                    LiveChat: {{ post.liveChatExpires > lib.nowInSeconds() ? lib.secondToTimeFormat(post.liveChatExpires - lib.nowInSeconds()) + ' left':  'Expired' }}</div>
-                </div>
-                <div class="content-container">
-                    <p>{{ post.content }}</p>
-                </div>
-                <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data && post.data.length > 0">
-                    <div class="file-list" *ngFor="let data of post.data">
-                        <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
-                    </div>
+                <div class="category pointer info" *ngIf="showCategory">Category: {{ post.category }}</div>
+                <div class="live-chat pointer info">
+                    LiveChat: {{ post.liveChatExpires > lib.nowInSeconds() ? lib.secondToTimeFormat(post.liveChatExpires - lib.nowInSeconds()) + ' left':  'Expired' }}
                 </div>
             </div>
             
-            <div class="author-container">
-                <div class="photo">
-                    <!-- <app-avatar [profilePhoto]="post.authorPhoto"></app-avatar> @deprecated - will not be updated when user decides to change profile pic -->
-                </div>
-                <div class="info">
-                    <span class="author-name"><b>{{ post.displayName }}</b></span>
-                    <span>{{ getPostDate }}</span>
+            <div class="content-container">
+                <p>{{ post.content }}</p>
+            </div>
+            <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data && post.data.length > 0">
+                <div class="file-list" *ngFor="let data of post.data">
+                    <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
                 </div>
             </div>
         </div>
-        <!--
-            
-            
-            EDITING POST
-            
-        -->
-        <!-- <app-post-form [categoryId]="post.category" [post]="post" *ngIf="editPost" (edited)="editPost = false" ></app-post-form> -->
-        <!-- {{ author | json }} -->
-        <div class="edit-post" *ngIf="editPost">
-            <!-- <app-post-form>
-                
-            </app-post-form> -->
-            <div class="info right">
+        
+        <div class="author-container">
+            <div class="photo">
+                <!-- <app-avatar [profilePhoto]="post.authorPhoto"></app-avatar> @deprecated - will not be updated when user decides to change profile pic -->
+            </div>
+            <div class="info">
                 <span class="author-name"><b>{{ post.displayName }}</b></span>
                 <span>{{ getPostDate }}</span>
-            </div><br>
-            <form (ngSubmit)="onSubmitEdit($event)">
-                <div class="title">
-                    <input type="text" name="title" id="" class="form-item-text" [(ngModel)]="post.title"  [disabled]="loader.main"><br>
-                    
-                </div>
-                <div class="content">
-                    <textarea type="text" name="content" id="" [(ngModel)]="post.content" [disabled]="loader.main"></textarea><br>
-                </div>
-                
-                <label class="post-livechat-timeout" *ngIf="!loader.main" >Extend live chat timeout:<input type="number" name="livechat-timeout" [(ngModel)]="post.liveChatExpires">Days</label><br>
-                <span>{{ loader.main ? 'Live Chat Timeout: ' + lib.secondToTimeFormat(post.liveChatExpires - lib.nowInSeconds() + 1) : '' }}</span>
-                <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data.length > 0">
-                    <div class="file-list" *ngFor="let data of post.data">
-                        <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
-                        <button type="button" (click)="onClickDeletePhoto(data)" [disabled]="loader.main">Delete</button>
-                    </div>
-                </div><br>
-                
-                <app-file-upload
-                class="left"
-                [hidden] = "loader.main"
-                [pathToStorage]="'posts/' + post.id"
-                [data]="post.data"
-                (uploadStart)="loader.main = true"
-                (uploadDone)="onUploadDone($event)"
-                ></app-file-upload>
-                
-                <span *ngIf="loader.main">Uploading...</span>
-                <div class="buttons right">
-                    <button type="submit" class="btn btn-primary" [disabled]="loader.main">{{ loader.main ? 'Please wait...' : 'Update' }}</button>
-                    <button (click)="editPost = false" class="btn btn-outline-primary" [disabled]="loader.main">Cancel</button>
-                </div>
-            </form>
-            
+            </div>
         </div>
-    </section>
+    </div>
+    <!--
+        
+        
+        EDITING POST
+        
+    -->
+    <!-- <app-post-form [categoryId]="post.category" [post]="post" *ngIf="editPost" (edited)="editPost = false" ></app-post-form> -->
+    <!-- {{ author | json }} -->
+    <div class="edit-post" *ngIf="editPost">
+        <!-- <app-post-form>
+            
+        </app-post-form> -->
+        <div class="info right">
+            <span class="author-name"><b>{{ post.displayName }}</b></span>
+            <span>{{ getPostDate }}</span>
+        </div><br>
+        <form (ngSubmit)="onSubmitEdit($event)">
+            <div class="title">
+                <input type="text" name="title" id="" class="form-item-text" [(ngModel)]="post.title"  [disabled]="loader.main"><br>
+                
+            </div>
+            <div class="content">
+                <textarea type="text" name="content" id="" [(ngModel)]="post.content" [disabled]="loader.main"></textarea><br>
+            </div>
+            
+            <label class="post-livechat-timeout" *ngIf="!loader.main" >Extend live chat timeout:<input type="number" name="livechat-timeout" [(ngModel)]="post.liveChatExpires">Days</label><br>
+            <span>{{ loader.main ? 'Live Chat Timeout: ' + lib.secondToTimeFormat(post.liveChatExpires - lib.nowInSeconds() + 1) : '' }}</span>
+            
+            <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data.length > 0">
+                <div class="file-list" *ngFor="let data of post.data">
+                    <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
+                    <button type="button" (click)="onClickDeletePhoto(data)" [disabled]="loader.main">Delete</button>
+                </div>
+            </div><br>
+            
+            <app-file-upload
+            class="left"
+            [hidden] = "loader.main"
+            [pathToStorage]="'posts/' + post.id"
+            [data]="post.data"
+            (uploadStart)="loader.main = true"
+            (uploadDone)="onUploadDone($event)"
+            ></app-file-upload>
+            
+            <span *ngIf="loader.main">Uploading...</span>
+            <div class="buttons right">
+                <button type="submit" class="btn btn-primary" [disabled]="loader.main">{{ loader.main ? 'Please wait...' : 'Update' }}</button>
+                <button (click)="editPost = false" class="btn btn-outline-primary" [disabled]="loader.main">Cancel</button>
+            </div>
+        </form>
+        
+    </div>
+</section>

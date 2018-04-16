@@ -6,24 +6,9 @@
     .chat-container {
         overflow-y: scroll;
         max-height: 100%;
-        // .comment-item {
-        //     width: 100%;
-        //     padding: 1em;
-        //     float: right;
-        //     clear: right;
-        //     color: $light;
-        //     background-color: $secondary-color;
-        // }
-        // .other-comment {
-        //     float: left;
-        //     clear: left;
-        //     width: 100%;
-        //     padding: 1em;
-        //     color: black;
-        //     background-color: $secondary-shade;
-        // }
     }
     .input-box {
+        margin: 0 0 1em;
         form {
             .input-text {
                 width: 100%;

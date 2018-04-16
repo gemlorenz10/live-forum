@@ -4,6 +4,8 @@
     padding: 0.5em;
     margin: 1em 0;
     width: 100%;
+    height: auto;
+    overflow: hidden;
     .my-comment {
         float: right;
         clear: right;
@@ -14,18 +16,44 @@
             color: $light;
             background-color: $secondary-color;
         }
-
+        
     }
     .other-comment {
         float: left;
         clear: left;
-        width: 85%;
+        max-width: 85%;
         padding: 1em;
         .content {
             padding: 0.5em;
             color: black;
             background-color: $secondary-shade;
         }
+        
+    }
+    
+    .comment-list {
+        .content {
+            .info {
+                span {
+                    font-size: 0.8em;
+                }
+            }
+            // .comment-content {
+            //     margin: 1em;
+            // }
+        }
+    }
+    
+}
 
+.file-container {
+    margin: 0.5em;
+    overflow-x: scroll;
+    background-color: $primary-shade;
+    img {
+        max-width: 10em;
+        max-height: 10em;
+        margin: 0.3em;
     }
 }
+

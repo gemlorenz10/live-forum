@@ -5,12 +5,13 @@ import { FireService, POST, COMMENT } from '../../modules/firelibrary/core';
 
 @Component({
     selector: 'app-comment-list',
-    templateUrl: './comment-list.component.html'
+    templateUrl: './comment-list.component.html',
+    styleUrls: ['./comment-list.component.scss']
 })
 export class CommentListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @Input() post: POST = {};
-    comment: COMMENT;
+    comment = <COMMENT>{};
     loader = {
         creating: false,
         commentList: false
@@ -52,6 +53,11 @@ export class CommentListComponent implements OnInit, AfterViewInit, OnDestroy {
         return this.fire.comment.commentIds[this.post.id];
     }
 
+    onUploadDone(data) {
+        this.comment.data.push(data);
+        this.loader.creating = false;
+        // console.log('Data URLs', this.post.data, data);
+      }
     /**
      * Creates a comment.
      * This is being invoked when user submits the comment form.

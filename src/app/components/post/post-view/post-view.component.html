@@ -4,8 +4,16 @@
         <span class="title">{{ post.title }}</span>
         <span class="back"><button class="btn btn-outline-danger .right" (click)="close.emit()">Back</button></span>
     </h4>
-    <!-- <div class="content toggle"></div> -->
+    <div class="content" *ngIf="post.liveChatExpires <= lib.nowInSeconds()"> {{ post.content }} </div>
+    
+    <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data && post.data.length > 0">
+        <div class="file-list" *ngFor="let data of post.data">
+            <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
+        </div>
+    </div>
+    
 </div>
+<hr>
 
 
 <!-- <app-comment [post]="post" [comment]="comment"></app-comment> -->
