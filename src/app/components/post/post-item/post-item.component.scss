@@ -10,12 +10,7 @@
                 color: $secondary-color;
                 border-bottom: 1px solid $secondary-color;
             }
-        }   
-        // .content-container {
-        //     .content-container {
-        //     }
-
-        // }
+        }
     }
     .author-container {
         float: left;
@@ -29,9 +24,45 @@
             margin: 0em;
         }
     }
+    
 }
 
+.edit-post {
+    border: 1px solid $primary-shade;
+    margin: 1em 0;
+    padding: 1em;
+    overflow: hidden;
+}
+
+// available for both edit-post and post-item
+.file-container {
+    margin: 0.5em;
+    overflow-x: scroll;
+    background-color: $primary-shade;
+    img {
+        max-width: 10em;
+        max-height: 10em;
+        margin: 0.3em;
+    }
+}
+
+.title {
+    input {
+        margin: 0.5em 0 0.5em 0;
+        padding: 0.5em;
+        width: 32em;
+    }
+}
+.content {
+    textarea {
+        
+        margin:0 0 0.5em 0;
+        padding: 0.8em;
+        width: 100%;
+    }
+}
 // a.disabled {
-//     pointer-events: none;
-//     cursor: default;
-//  }
+    //     pointer-events: none;
+    //     cursor: default;
+    //  }
+    

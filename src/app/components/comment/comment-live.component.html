@@ -11,7 +11,7 @@
     <form (ngSubmit)=" onSubmit( $event ) ">
       <input type="text" class="input-text" name="content" [(ngModel)]="comment.content" [disabled]="loader.creating">
       
-      <!-- <app-file-upload [pathToStorage]=" 'posts/' + post.id + '/comments/' + comment.id " [currentData]=" comment.data " [allowMultipleFiles]="true"></app-file-upload> -->
+      <!-- <app-file-upload [pathToStorage]=" 'posts/' + post.id + '/comments/' + comment.id " [data]=" comment.data "></app-file-upload> -->
       
       <button type="submit" class="btn btn-primary" *ngIf=" ! loader.creating ">Create Comment</button>
       <span class="loader" *ngIf="loader.creating">Creating a post. Please wait.</span>

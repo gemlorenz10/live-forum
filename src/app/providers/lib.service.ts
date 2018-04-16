@@ -30,6 +30,6 @@ export class LibService {
    if (e.message) {
      alert(info + ': ' + e.message);
    }
-   console.log(info, e);
+   console.error(info, e);
   }
 }

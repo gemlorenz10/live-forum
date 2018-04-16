@@ -1,4 +1,5 @@
 @import '~sass/mixins';
+@import '~sass/variables';
 
 .post-form-container {
     form {
@@ -12,10 +13,21 @@
             padding: 0.8em;
             width: 100%;
         }
-    
+        
+        .file-container {
+            margin: 0.5em;
+            overflow: scroll;
+            background-color: $primary-shade;
+            img {
+                max-width: 10em;
+                max-height: 10em;
+                margin: 0.3em;
+            }
+        }
+        
         .btn-primary {
             width: 5em;
         }
     }
-
+    
 }

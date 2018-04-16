@@ -29,7 +29,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, OnChanges {
   /**
   * Boolean `true` to allow. Otherwise false
   */
-  @Input() allowMultipleFiles: boolean;
+  // @Input() allowMultipleFiles: boolean;
 
   /**
   * Deletes older files in the storage.
@@ -58,7 +58,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, OnChanges {
   @Output() uploadDone = new EventEmitter<Array<DATA_UPLOAD>>();
 
   loader: boolean;
-  uploadList: Array<DATA_UPLOAD> = [];
+  // uploadList: Array<DATA_UPLOAD> = [];
   // oldFile = <DATA_UPLOAD>{};
 
   constructor(private fire: FireService, private lib: LibService ) { }
@@ -85,9 +85,9 @@ export class FileUploadComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     const file: File = files[0];
-    if (!this.allowMultipleFiles) {
+    // if (!this.allowMultipleFiles) {
       this.uploadFile(file);
-    }
+    // }
 
   }
 
@@ -119,11 +119,11 @@ export class FileUploadComponent implements OnInit, OnDestroy, OnChanges {
         upload.url = uploadTask.snapshot.downloadURL;
         upload.fullPath = fileRef.fullPath;
         upload.name = uploadTask.snapshot.metadata.name;
-        this.updateUploadList(upload);
+        // this.updateUploadList(upload);
         /**
         * Delete older files if needed.
         */
-        if (this.data && !this.allowMultipleFiles && this.deleteOldFiles && this.data.fullPath !== upload.fullPath) {
+        if (this.data && this.deleteOldFiles && this.data.fullPath !== upload.fullPath) {
           this.fire.data.delete(this.data)
           .then(a => {
             console.log('Old file deleted.');
@@ -137,22 +137,21 @@ export class FileUploadComponent implements OnInit, OnDestroy, OnChanges {
         /**
          * Listen to user changes specifically to thumbnailUrl
          */
-        // this.listenToUserDoc();
         console.log('UPLOAD IN FILE', upload);
-        this.emitDone();
+        this.emitDone(upload);
         closeUploadTask();
       });
     }
 
-    updateUploadList(image) {
-      if (!this.allowMultipleFiles) {
-        this.uploadList = [];
-      }
-      this.uploadList.push(image);
-    }
+    // updateUploadList(image) {
+      // if (!this.allowMultipleFiles) {
+      //   this.uploadList = [];
+      // }
+      // this.uploadList.push(image);
+    // }
 
-    emitDone() {
-      this.uploadDone.emit(this.uploadList);
+    emitDone(data) {
+      this.uploadDone.emit(data);
       this.loader = false;
     }
   }
