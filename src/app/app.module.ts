@@ -16,8 +16,8 @@ import { PostItemComponent } from './components/post/post-item/post-item.compone
 import { CategoryComponent } from './components/category/category.component';
 import { PostComponent } from './components/post/post.component';
 import { PostViewComponent } from './components/post/post-view/post-view.component';
-import { CommentListComponent } from './components/comment/comment-list.component';
-import { CommentLiveComponent } from './components/comment/comment-live.component';
+import { CommentListComponent } from './components/comment/comment-list/comment-list.component';
+import { CommentLiveComponent } from './components/comment/comment-live/comment-live.component';
 import { CommentItemComponent } from './components/comment/comment-item/comment-item.component';
 
 import { RegisterPage } from './pages/register-page/register-page';

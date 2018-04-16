@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, NgZone, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
-import { FireService, POST, COMMENT } from '../../modules/firelibrary/core';
+import { FireService, POST, COMMENT } from '../../../modules/firelibrary/core';
 
 
 
@@ -81,6 +81,10 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
     *
     */
     onSubmit(event: Event) {
+        if ( ! this.comment.content ) {
+            alert('Comment has no content.');
+            return false;
+        }
         event.preventDefault();
         this.comment.postId = this.post.id;
         this.comment.parentId = '';
@@ -94,5 +98,10 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
         });
         return false;
     }
+
+    onUploadDone(data) {
+        this.comment.data.push(data);
+        this.loader.creating = false;
+      }
 
 }

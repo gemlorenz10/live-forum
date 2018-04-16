@@ -5,14 +5,25 @@ LIVE
   <div #chat class="chat-container" *ngIf="fire.comment.commentIds" [scrollTop]="scrollHeight">
     <span *ngIf="! commentIds">No comments yet...</span>
     <div *ngFor=" let id of commentIds">
-          <app-comment-item [post]="post" [comment]="comments(id)" *ngIf="! comments(id).deleted"></app-comment-item>
+      <app-comment-item [post]="post" [comment]="comments(id)" *ngIf="! comments(id).deleted"></app-comment-item>
     </div>
   </div>
   <div class="input-box" *ngIf="fire.user.isLogin">
     <form (ngSubmit)=" onSubmit( $event ) ">
       <input type="text" class="input-text" name="content" [(ngModel)]="comment.content" [disabled]="loader.creating">
       
-      <!-- <app-file-upload [pathToStorage]=" 'posts/' + post.id + '/comments/' + comment.id " [data]=" comment.data "></app-file-upload> -->
+      <app-file-upload
+      [hidden]="loader.creating"
+      [pathToStorage]=" 'posts/' + post.id + '/comments/' + comment.id " 
+      [data]=" comment.data " 
+      (uploadStart)="loader.creating = true"
+      (uploadDone)="onUploadDone($event)"></app-file-upload>
+
+      <div class="file-container d-flex align-items-center justify-content-center" *ngIf="comment.data && comment.data.length > 0">
+        <div class="file-list" *ngFor="let data of comment.data">
+          <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
+        </div>
+      </div>
       
       <button type="submit" class="btn btn-primary" *ngIf=" ! loader.creating ">Create Comment</button>
       <span class="loader" *ngIf="loader.creating">Creating a post. Please wait.</span>
@@ -20,4 +31,3 @@ LIVE
   </div>
 </div>
 
-  

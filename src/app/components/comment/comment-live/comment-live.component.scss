@@ -1,4 +1,5 @@
 @import '~sass/variables';
+@import '~sass/mixins';
 .chat-box {
     height: 30em;
     width: 100%;
@@ -16,6 +17,8 @@
             }
         }
     }
+    @include file-container();
+    
 }
 
 
