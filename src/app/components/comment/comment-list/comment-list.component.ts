@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, NgZone, AfterViewInit } from '@angular/core';
-import { FireService, POST, COMMENT } from '../../modules/firelibrary/core';
+import { FireService, POST, COMMENT } from '../../../modules/firelibrary/core';
 
 
 
