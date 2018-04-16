@@ -33,11 +33,13 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-    // this.getAuthorData();
     this.initPost();
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes['category']) {
+      this.initPost();
+    }
   }
 
   ngOnDestroy() {
@@ -47,7 +49,7 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
   initPost() {
     this.post = <POST>{
       id: this.postId,
-      liveChatTimeout: this.category.liveChatTimeout, // set default timeout from category
+      liveChatExpires: this.lib.secToDay(this.category.liveChatTimeout), // days to input
       data: []
     };
   }
@@ -68,8 +70,9 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
     this.post.displayName = this.fire.user.displayName;
     // @Deprecated - We need to change it when author changes its profile photo
     // this.post.authorPhoto = this.author.profilePhoto.thumbnailUrl;
-    const chatExpiraton = this.lib.secToMilliSec((new Date()).getTime()) + this.lib.dayToSec(this.post.liveChatExpires); // in Milliseconds
-    this.post.liveChatExpires = this.lib.milliSecToSec(chatExpiraton); // seconds upto now + liveChatExpires input;
+
+    // update expires plus the date now in seconds.
+    this.post.liveChatExpires = this.lib.dayToSec(this.post.liveChatExpires) + this.lib.nowInSeconds();
 
     if (this.post.id) { // might be defined in file upload.
       this.post.id = this.post.uid + '-' + (new Date()).getTime();
@@ -79,7 +82,6 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
     if (this.postValidator()) {
       this.fire.post.create(this.post)
       .then((re: POST_CREATE) => {
-        // re.data.post.created = (new Date()).getTime();
         this.posted.emit(re.data.post);
         alert('Post created!');
         this.loader = false;

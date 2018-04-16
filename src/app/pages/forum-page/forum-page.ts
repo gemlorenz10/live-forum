@@ -36,7 +36,7 @@ export class ForumPage implements OnInit, OnDestroy {
     })
     .then(() => {
       this.fire.setSettings(<FIRESERVICE_SETTINGS>{
-        // listenOnPostChange: true,    // Set listen settings
+        listenOnPostChange: true,    // Set listen settings
         // listenOnCommentChan  ge: true,
         listenOnPostLikes: true
       });

@@ -15,7 +15,7 @@ export class PostItemComponent implements OnInit, OnChanges {
   @Input() showCategory: boolean;
 
 
-  @Input() isRouterLink = true;
+  // @Input() isRouterLink = true;
 
   @Input() post = <POST>{};
 
@@ -25,12 +25,14 @@ export class PostItemComponent implements OnInit, OnChanges {
 
   editPost;
   deletePhotoList = [];
+
   loader = {
     main: false,
     like: {},
     dislike: {}
   };
-  constructor( public fire: FireService, public lib: LibService ) { }
+  constructor( public fire: FireService, public lib: LibService ) {
+  }
 
   ngOnInit() {
     // this.getPost(this.post.id)['likeInProgress'] = false;
@@ -38,7 +40,9 @@ export class PostItemComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes['post']) {
 
+    }
   }
 
   get getPostDate() {
@@ -96,7 +100,10 @@ export class PostItemComponent implements OnInit, OnChanges {
       return;
     }
     this.editPost = true;
+    post.liveChatExpires = Math.round(this.lib.secToDay(post.liveChatExpires  - this.lib.nowInSeconds()));
     this.post = post;
+    // this.post.liveChatExpires = this.post.liveChatExpires  - this.lib.nowInSeconds();
+    // console.log('LIVE CHAT EXPIRES ON EDIT', post.liveChatExpires);
   }
 
   onClickDeletePost(id: string) {
@@ -119,6 +126,7 @@ export class PostItemComponent implements OnInit, OnChanges {
     if (event) {
       event.preventDefault();
     }
+    this.post.liveChatExpires = this.lib.dayToSec(this.post.liveChatExpires) + this.lib.nowInSeconds();
     this.fire.post.edit(this.post)
     .then((re: POST_EDIT) => {
       if (this.deletePhotoList.length > 0) {

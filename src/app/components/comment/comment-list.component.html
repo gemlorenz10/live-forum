@@ -4,7 +4,7 @@
   <button type="submit" *ngIf=" ! loader.creating ">Create Comment</button>
   <span class="loader" *ngIf="loader.creating">Creating a post. Please wait.</span>
 </form> -->
-
+LIST
 <div class="loader" *ngIf="loader.commentList">Loading comments. Please wait.</div>
 <app-comment-item *ngFor=" let id of commentIds" [post]="post" [comment]="comments(id)"></app-comment-item>
 

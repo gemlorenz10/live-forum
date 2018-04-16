@@ -7,10 +7,10 @@
     <input type="text" name="desc" id="" class="form-item-text" placeholder="Category Description" [(ngModel)]="category.description" [disabled]="loader"><br>
     <label>
       <span>Number of page per posts: </span><input type="number" name="num-post-per-page" id="" class="number-post-page" placeholder="Number of posts per page"  [(ngModel)]="category.numberOfPostsPerPage" [disabled]="loader"> Page
-    </label><br>
+    </label>
     <label>
-      <span>Live Chat Timeout:</span> <input type="number" name="live-chat-timeout" class="live-chat-timeout" [(ngModel)]="category.liveChatTimeout" [hidden]="loader"> {{ (loader) ? lib.secToDay(category.liveChatTimeout): '' }} Days
-    </label><br>
+      <span>Live Chat Timeout: </span><input type="number" name="live-chat-timeout" class="live-chat-timeout" [(ngModel)]="category.liveChatTimeout" [hidden]="loader"> {{ (loader) ? lib.secToDay(category.liveChatTimeout): '' }} Days
+    </label>
     <button type="submit" class="btn btn-primary form-item-text" [disabled]="loader">{{ loader ? 'Please wait...' : category.created ? 'Edit Category' : 'Create Category' }}</button>
     <button type="button" class="btn btn-default form-item-text" (click)="onClickCancel()" *ngIf="category.created && ! loader">Cancel</button>
   </form>

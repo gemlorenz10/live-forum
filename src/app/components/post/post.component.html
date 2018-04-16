@@ -1,6 +1,6 @@
 <div class="post-list-container">
   
-  <app-post-form [category]="category" *ngIf="fire.user.isLogin && category.id"></app-post-form>
+  <app-post-form [category]="category" *ngIf="fire.user.isLogin"></app-post-form>
 
   <br>
   <br>
@@ -10,7 +10,7 @@
           <app-post-item 
           *ngIf="! fire.post.pagePosts[id].deleted"
           [post]="fire.post.pagePosts[id]" 
-          [showCategory]="category.id === 'all' ? true : false"
+          [showCategory]="category.id === 'all'"
           (open) = "open.emit(fire.post.pagePosts[id])"
           ></app-post-item>
       </div>

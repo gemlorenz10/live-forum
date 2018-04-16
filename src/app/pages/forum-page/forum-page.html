@@ -14,7 +14,6 @@
         </div>
 
         <app-post
-        *ngIf="fire.post.pagePostIds && fire.post.pagePostIds.length > 0"
         [category]="activeCategory"
         (open)="onOpenPost($event)"
         ></app-post>

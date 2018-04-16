@@ -14,16 +14,13 @@ export class PostViewComponent implements OnInit, OnDestroy {
   @Output() close = new EventEmitter();
 
   comment = <COMMENT>{};
-  now: number; // date now
-  constructor(public fire: FireService, public lib: LibService) {
-    this.now = (new Date).getTime() / 1000; // date now in secs since midnight of Jan 1 1970
-  }
+  constructor(public fire: FireService, public lib: LibService) {}
 
   ngOnInit() {
     if (this.post.id) {
       this.fire.setSettings(<FIRESERVICE_SETTINGS>{
         // When handing live chat status
-        listenOnCommentChange: true,
+        listenOnCommentChange: this.post.liveChatExpires > this.lib.nowInSeconds(),
         listenOnCommentLikes: true,
       });
     }
