@@ -8,6 +8,7 @@ LIVE
       <app-comment-item [post]="post" [comment]="comments(id)" *ngIf="! comments(id).deleted"></app-comment-item>
     </div>
   </div>
+
   <div class="input-box" *ngIf="fire.user.isLogin">
     <form (ngSubmit)=" onSubmit( $event ) ">
       <input type="text" class="input-text" name="content" [(ngModel)]="comment.content" [disabled]="loader.creating">

@@ -29,7 +29,6 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
         public fire: FireService,
         public lib: LibService
     ) {
-
     }
     ngOnInit() {
         if (!this.post.id) {

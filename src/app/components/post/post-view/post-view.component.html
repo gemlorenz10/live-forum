@@ -20,4 +20,4 @@
 
 <app-comment-live [post]="post" *ngIf="post.liveChatExpires > lib.nowInSeconds() "></app-comment-live>
 
-<app-comment-list [post]="post" *ngIf="post.liveChatExpires <= lib.nowInSeconds() "></app-comment-list> 
+<app-comment-list [post]="post" *ngIf="post.liveChatExpires <= lib.nowInSeconds() "></app-comment-list>
