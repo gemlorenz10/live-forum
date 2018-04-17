@@ -9,7 +9,7 @@
       <span>Number of page per posts: </span><input type="number" name="num-post-per-page" id="" class="number-post-page" placeholder="Number of posts per page"  [(ngModel)]="category.numberOfPostsPerPage" [disabled]="loader"> Page
     </label>
     <label>
-      <span>Live Chat Timeout: </span><input type="number" name="live-chat-timeout" class="live-chat-timeout" [(ngModel)]="category.liveChatTimeout" [hidden]="loader"> {{ (loader) ? lib.secToDay(category.liveChatTimeout): '' }} Days
+      <span>Live Chat Timeout: </span><input type="number" name="live-chat-timeout" class="live-chat-timeout" [(ngModel)]="category.liveChatTimeout" [hidden]="loader"> {{ (loader) ? date.secToDay(category.liveChatTimeout): '' }} Days
     </label>
     <button type="submit" class="btn btn-primary form-item-text" [disabled]="loader">{{ loader ? 'Please wait...' : category.created ? 'Edit Category' : 'Create Category' }}</button>
     <button type="button" class="btn btn-default form-item-text" (click)="onClickCancel()" *ngIf="category.created && ! loader">Cancel</button>
@@ -18,7 +18,7 @@
 
 <h5>Category List</h5>
   <ul *ngFor="let category of categoryList" >
-    <li>{{ category.id }} / {{ category.name }} / {{ category.description }} / {{ category.numberOfPostsPerPage }} Pages / {{ lib.secToDay(category.liveChatTimeout) }}  Days<br>
+    <li>{{ category.id }} / {{ category.name }} / {{ category.description }} / {{ category.numberOfPostsPerPage }} Pages / {{ date.secToDay(category.liveChatTimeout) }}  Days<br>
       <button (click)="onClickEdit(category)">edit</button>
       <button (click)="onClickDelete(category)">Delete</button>
     </li>

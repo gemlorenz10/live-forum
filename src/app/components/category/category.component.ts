@@ -2,6 +2,7 @@ import { Category } from './../../modules/firelibrary/providers/category/categor
 import { Component, OnInit } from '@angular/core';
 import { CATEGORY, FireService, CATEGORY_CREATE, CATEGORY_GET, CATEGORY_EDIT } from '../../modules/firelibrary/core';
 import { LibService } from '../../providers/lib.service';
+import { DateService } from '../../providers/date.service';
 
 @Component({
   selector: 'app-category',
@@ -14,9 +15,9 @@ export class CategoryComponent implements OnInit {
   category = <CATEGORY>{ numberOfPostsPerPage: 5 };
   loader;
   liveChatTimeout; // store date value
-  constructor( public fire: FireService, public lib: LibService ) {
+  constructor( public fire: FireService, public lib: LibService, public date: DateService ) {
     // Lib for default settings for now. @Todo set it somewhere else .ts or .json
-    this.category.liveChatTimeout =  Math.round(this.lib.secToDay(this.lib.DEFAULT_LIVECHAT_TIMEOUT));
+    this.category.liveChatTimeout =  Math.round(this.date.secToDay(this.lib.DEFAULT_LIVECHAT_TIMEOUT));
   }
 
   ngOnInit() {
@@ -43,7 +44,7 @@ export class CategoryComponent implements OnInit {
 
   onClickEdit(category) {
     Object.assign(this.category, category);
-    this.category.liveChatTimeout = Math.round(this.lib.secToDay(category.liveChatTimeout)); // display days to form
+    this.category.liveChatTimeout = Math.round(this.date.secToDay(category.liveChatTimeout)); // display days to form
   }
 
   onClickCancel() {
@@ -58,7 +59,7 @@ export class CategoryComponent implements OnInit {
   }
 
   private createCategory() {
-    this.category.liveChatTimeout = Math.round(this.lib.dayToSec(this.category.liveChatTimeout));
+    this.category.liveChatTimeout = Math.round(this.date.dayToSec(this.category.liveChatTimeout));
 
     this.loader = true;
 
@@ -81,7 +82,7 @@ export class CategoryComponent implements OnInit {
 
   private editCategory() {
     // this.category = category;
-    this.category.liveChatTimeout = Math.round(this.lib.dayToSec(this.category.liveChatTimeout));
+    this.category.liveChatTimeout = Math.round(this.date.dayToSec(this.category.liveChatTimeout));
 
 
     this.loader = true;
