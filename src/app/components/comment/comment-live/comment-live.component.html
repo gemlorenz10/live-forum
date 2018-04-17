@@ -1,9 +1,9 @@
 LIVE
 
 <div class="loader" *ngIf="loader.commentList">Loading comments. Please wait.</div>
+<span *ngIf="lib.isEmpty(fire.comment.commentIds[post.id])">No comments yet...</span>
 <div class="chat-box" >
-  <div #chat class="chat-container" *ngIf="fire.comment.commentIds" [scrollTop]="scrollHeight">
-    <span *ngIf="! commentIds">No comments yet...</span>
+  <div #chat class="chat-container" [scrollTop]="scrollTop">
     <div *ngFor=" let id of commentIds">
       <app-comment-item [post]="post" [comment]="comments(id)" *ngIf="! comments(id).deleted"></app-comment-item>
     </div>
@@ -15,17 +15,17 @@ LIVE
       <app-file-upload
       [hidden]="loader.creating"
       [pathToStorage]=" 'posts/' + post.id + '/comments/' + comment.id " 
-      [data]=" comment.data " 
+      [data]=" comment.data "
       (uploadStart)="loader.creating = true"
       (uploadDone)="onUploadDone($event)"></app-file-upload>
-
+      
       <div class="file-container d-flex align-items-center justify-content-center" *ngIf="comment.data && comment.data.length > 0">
         <div class="file-list" *ngFor="let data of comment.data">
           <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
         </div>
       </div>
       
-      <button type="submit" class="btn btn-primary" *ngIf=" ! loader.creating ">Create Comment</button>
+      <button type="submit" class="btn btn-primary" *ngIf=" ! loader.creating ">Send Comment</button>
       <span class="loader" *ngIf="loader.creating">Creating a post. Please wait.</span>
     </form>
   </div>

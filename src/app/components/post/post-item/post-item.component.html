@@ -58,13 +58,17 @@
     <!-- <app-post-form [categoryId]="post.category" [post]="post" *ngIf="editPost" (edited)="editPost = false" ></app-post-form> -->
     <!-- {{ author | json }} -->
     <div class="edit-post" *ngIf="editPost">
-        <!-- <app-post-form>
-            
-        </app-post-form> -->
         <div class="info right">
             <span class="author-name"><b>{{ post.displayName }}</b></span>
             <span>{{ getPostDate }}</span>
         </div><br>
+
+    <!-- <app-post-form
+    [category]="post.category"
+    [post]="post"
+    (posted)="editPost = false"
+    ></app-post-form> -->
+
         <form (ngSubmit)="onSubmitEdit($event)">
             <div class="title">
                 <input type="text" name="title" id="" class="form-item-text" [(ngModel)]="post.title"  [disabled]="loader.main"><br>
@@ -99,6 +103,6 @@
                 <button (click)="editPost = false" class="btn btn-outline-primary" [disabled]="loader.main">Cancel</button>
             </div>
         </form>
-        
+    
     </div>
 </section>

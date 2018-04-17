@@ -18,12 +18,12 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
     liveChatTimeout: 0
   };
 
+  @Input() post = <POST>{}; // post to be submitted.
   /**
   * Emits newly created post.
   */
   @Output() posted = new EventEmitter<POST>();
 
-  post = <POST>{}; // post to be submitted.
   loader = {
     form: false,
     file: false
@@ -72,7 +72,7 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
     this.post.uid = this.fire.user.uid;
     this.post.displayName = this.fire.user.displayName;
     // @Deprecated - We need to change it when author changes its profile photo
-    // this.post.authorPhoto = this.author.profilePhoto.thumbnailUrl;
+    this.post.authorPhoto = this.author.profilePhoto.thumbnailUrl;
 
     // update expires plus the date now in seconds.
     this.post.liveChatExpires = this.lib.dayToSec(this.post.liveChatExpires) + this.lib.nowInSeconds();

@@ -24,6 +24,7 @@
         (uploadDone)="onUploadDone($event)"
         ></app-file-upload>
         <button class="btn btn-primary right" [disabled]="loader.form || loader.file">Submit</button>
+        <!-- <button class="btn btn-primary right" *ngIf="showCancel">Cancel</button> -->
     </form>
 </div>
 <!-- {{ post | json }} / {{ loader }} -->

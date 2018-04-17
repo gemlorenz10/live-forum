@@ -74,6 +74,11 @@ export class LibService {
     return (new Date()).getTime() / 1000;
   }
 
+  /**
+   * Converts seconds into time format.
+   *
+   * @param seconds
+   */
   secondToTimeFormat(seconds) {
     const d = Math.round(seconds / 86400);
     const h = Math.floor(seconds / 3600);
@@ -89,4 +94,18 @@ export class LibService {
     }
 
   }
+
+  /**
+   * Checks if object is empty.
+   *
+   * @param obj
+   */
+  isEmpty(obj) {
+    for (const prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+          return false;
+        }
+    }
+    return true;
+}
 }

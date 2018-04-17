@@ -46,9 +46,11 @@ export class CommentListComponent implements OnInit, AfterViewInit, OnDestroy {
     initComment() {
         this.comment = { id: this.fire.comment.getId(), date: '', data: [] };
     }
+
     comments(id): COMMENT {
         return this.fire.comment.getComment(id);
     }
+
     get commentIds(): Array<string> {
         return this.fire.comment.commentIds[this.post.id];
     }
@@ -56,7 +58,6 @@ export class CommentListComponent implements OnInit, AfterViewInit, OnDestroy {
     onUploadDone(data) {
         this.comment.data.push(data);
         this.loader.creating = false;
-        // console.log('Data URLs', this.post.data, data);
       }
     /**
      * Creates a comment.
