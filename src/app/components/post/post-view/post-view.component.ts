@@ -11,17 +11,19 @@ export class PostViewComponent implements OnInit, OnDestroy {
 
   @Input() post: POST;
 
-  @Output() close = new EventEmitter();
+  @Output() close = new EventEmitter<POST>();
 
   comment = <COMMENT>{};
   constructor(public fire: FireService, public lib: LibService) {}
 
   ngOnInit() {
-    if (this.post.id) {
-    }
   }
 
   ngOnDestroy() {
-    this.close.emit();
+  }
+
+  onClickBack() {
+    // this.fire.comment.created.unsubscribe();
+    this.close.emit(this.post);
   }
 }

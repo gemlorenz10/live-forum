@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnDestroy, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { CATEGORY, POST, FireService } from '../../modules/firelibrary/core';
+import { CATEGORY, POST, FireService, FIRESERVICE_SETTINGS } from '../../modules/firelibrary/core';
 
 @Component({
   selector: 'app-post',
@@ -17,7 +17,12 @@ export class PostComponent implements OnInit, OnChanges, OnDestroy {
   constructor( public fire: FireService, public lib: FireService ) { }
 
   ngOnInit() {
-
+    // this.fire.setSettings(<FIRESERVICE_SETTINGS>{
+      // listenOnPostChange: true,    // Set listen settings
+      // listenOnPostLikes: true,
+      // listenOnCommentChange: true,
+      // listenOnCommentLikes: true,
+    // });
   }
 
   ngOnChanges(changes: SimpleChanges) {

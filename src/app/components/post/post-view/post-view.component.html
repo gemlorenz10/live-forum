@@ -2,7 +2,7 @@
 <div class="post-container">
     <h4>
         <span class="title">{{ post.title }}</span>
-        <span class="back"><button class="btn btn-outline-danger .right" (click)="close.emit()">Back</button></span>
+        <span class="back"><button class="btn btn-outline-danger .right" (click)="onClickBack()">Back</button></span>
     </h4>
     <div class="content" *ngIf="post.liveChatExpires <= lib.nowInSeconds()"> {{ post.content }} </div>
     

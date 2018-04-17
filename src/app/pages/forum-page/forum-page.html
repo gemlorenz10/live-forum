@@ -13,15 +13,12 @@
 
         </div>
 
-        <app-post
-        [category]="activeCategory"
-        (open)="onOpenPost($event)"
-        ></app-post>
+        <app-post [category]="activeCategory" (open)="onOpenPost($event)" ></app-post>
 
     </div>
 
     <div *ngIf="openPostView" class="post-view">
-        <app-post-view [post]="postViewData" (close)="openPostView = false"></app-post-view>
+        <app-post-view [post]="postViewData" (close)="onClosePostView($event)"></app-post-view>
     </div>
 
 </div>

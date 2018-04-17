@@ -48,6 +48,9 @@ export class ForumPage implements OnInit, OnDestroy {
     });
   }
 
+  onClosePostView(post: POST) {
+    this.openPostView = false;
+  }
 
   getCategories() {
     return this.fire.category.categories()

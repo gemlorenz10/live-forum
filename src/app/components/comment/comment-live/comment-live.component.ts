@@ -44,10 +44,8 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
             setTimeout(() => this.ngZone.run(() => {}), 2000);
         }).catch(e => alert(e.message));
 
-        this.fire.comment.event.subscribe( e => {
-            if (e === 'insert') {
-                this.scrollTop = this.chatContainer.nativeElement['scrollHeight'];
-            }
+        this.fire.comment.created.subscribe( () => {
+            this.scrollTop = this.chatContainer.nativeElement['scrollHeight'];
         });
     }
 
@@ -58,7 +56,6 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.fire.comment.destory(this.post);
         this.fire.comment.commentIds[this.post.id] = []; // clear commentIds
-        this.fire.comment.event.unsubscribe();
     }
 
 

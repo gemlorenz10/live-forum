@@ -19,7 +19,8 @@
             margin: 0;
             @include no-select;
             input {
-                width: 5em;
+                width: 10em;
+                padding: 0.3em;
             }
         }
         
