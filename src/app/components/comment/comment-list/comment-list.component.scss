@@ -3,10 +3,11 @@
 form {
     overflow: hidden;
     margin: 0.3em 0;
+    padding: 0.5em;
+    background-color: $primary-shade;
     textarea {
         width: 100%;
     }
-
     .file-container {
         margin: 0.5em;
         overflow-x: scroll;

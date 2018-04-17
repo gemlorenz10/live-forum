@@ -1,6 +1,7 @@
 @import '~sass/variables';
 .post-container {
     display: inline;
+    overflow: hidden;
 
     .file-container {
         margin: 0.5em;
@@ -12,4 +13,8 @@
             margin: 0.3em;
         }
     }
+}
+
+.post-editor {
+    overflow: hidden;
 }

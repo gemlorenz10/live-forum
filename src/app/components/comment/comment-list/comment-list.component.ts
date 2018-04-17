@@ -8,7 +8,7 @@ import { FireService, POST, COMMENT } from '../../../modules/firelibrary/core';
     templateUrl: './comment-list.component.html',
     styleUrls: ['./comment-list.component.scss']
 })
-export class CommentListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CommentListComponent implements OnInit, OnDestroy {
 
     @Input() post: POST = {};
     comment = <COMMENT>{};
@@ -19,7 +19,9 @@ export class CommentListComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(
         public ngZone: NgZone,
         public fire: FireService
-    ) {}
+    ) {
+        this.initComment();
+    }
 
     ngOnInit() {
         if (!this.post.id) {
@@ -32,10 +34,6 @@ export class CommentListComponent implements OnInit, AfterViewInit, OnDestroy {
             this.loader.commentList = false;
             setTimeout(() => this.ngZone.run(() => {}), 2000);
         }).catch(e => alert(e.message));
-    }
-
-    ngAfterViewInit() {
-        this.initComment();
     }
 
     ngOnDestroy() {

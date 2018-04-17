@@ -1,3 +1,4 @@
+import { DateService } from './providers/date.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -80,7 +81,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     FirelibraryModule.forRoot( { firebaseApp: firebase.app(), functions: true } )
   ],
-  providers: [FirelibraryModule, LibService],
+  providers: [FirelibraryModule, LibService, DateService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

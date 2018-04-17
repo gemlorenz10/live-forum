@@ -1,10 +1,18 @@
 <!-- <app-post-item [post]="post" [hideCommentButton]="true"></app-post-item> -->
-<div class="post-container">
+<div class="post-container" *ngIf="! editPost">
     <h4>
         <span class="title">{{ post.title }}</span>
-        <span class="back"><button class="btn btn-outline-danger .right" (click)="onClickBack()">Back</button></span>
+        <span class="back">
+            <button class="btn btn-outline-danger right" (click)="onClickBack()">Back</button>
+        </span>
+        <span class="end-livechat" *ngIf="! date.isExpired(post.liveChatExpires)">
+            <button class="btn btn-danger right" (click)="onStopLiveChat()">End Live Chat</button>
+        </span>
+        <span class="edit">
+            <button class="btn btn-primary right" (click)="onClickEdit()">Edit</button>
+        </span>
     </h4>
-    <div class="content" *ngIf="post.liveChatExpires <= lib.nowInSeconds()"> {{ post.content }} </div>
+    <div class="content"> {{ post.content }} </div>
     
     <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data && post.data.length > 0">
         <div class="file-list" *ngFor="let data of post.data">
@@ -13,11 +21,14 @@
     </div>
     
 </div>
+<div class="post-editor" *ngIf="editPost">
+    <app-post-form [category]="post.category" [post]="form" [editMode]="true" (success)="editPost = false" (cancel)="onEditCancel()"></app-post-form>
+</div>
 <hr>
 
 
 <!-- <app-comment [post]="post" [comment]="comment"></app-comment> -->
 
-<app-comment-live [post]="post" *ngIf="post.liveChatExpires > lib.nowInSeconds() "></app-comment-live>
+<app-comment-live [post]="post" *ngIf="! date.isExpired(post.liveChatExpires)"></app-comment-live>
 
-<app-comment-list [post]="post" *ngIf="post.liveChatExpires <= lib.nowInSeconds() "></app-comment-list>
+<app-comment-list [post]="post" *ngIf="date.isExpired(post.liveChatExpires)"></app-comment-list>

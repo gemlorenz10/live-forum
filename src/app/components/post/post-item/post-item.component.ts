@@ -1,3 +1,4 @@
+import { DateService } from './../../../providers/date.service';
 import { LibService } from './../../../providers/lib.service';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { POST, USER, FireService, RESPONSE, COMMENT, DATA_UPLOAD, POST_EDIT } from '../../../modules/firelibrary/core';
@@ -31,7 +32,7 @@ export class PostItemComponent implements OnInit, OnChanges {
     like: {},
     dislike: {}
   };
-  constructor( public fire: FireService, public lib: LibService ) {
+  constructor( public fire: FireService, public lib: LibService, public date: DateService ) {
   }
 
   ngOnInit() {
@@ -100,7 +101,7 @@ export class PostItemComponent implements OnInit, OnChanges {
       return;
     }
     this.editPost = true;
-    post.liveChatExpires = Math.round(this.lib.secToDay(post.liveChatExpires  - this.lib.nowInSeconds()));
+    // post.liveChatExpires = Math.round(this.lib.secToDay(post.liveChatExpires  - this.lib.nowInSeconds()));
     this.post = post;
     // this.post.liveChatExpires = this.post.liveChatExpires  - this.lib.nowInSeconds();
     // console.log('LIVE CHAT EXPIRES ON EDIT', post.liveChatExpires);
@@ -126,7 +127,7 @@ export class PostItemComponent implements OnInit, OnChanges {
     if (event) {
       event.preventDefault();
     }
-    this.post.liveChatExpires = this.lib.dayToSec(this.post.liveChatExpires) + this.lib.nowInSeconds();
+    // this.post.liveChatExpires = this.lib.dayToSec(this.post.liveChatExpires) + this.lib.nowInSeconds();
     this.fire.post.edit(this.post)
     .then((re: POST_EDIT) => {
       if (this.deletePhotoList.length > 0) {

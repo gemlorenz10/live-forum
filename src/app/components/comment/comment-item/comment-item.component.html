@@ -1,4 +1,4 @@
-<section class="comment" *ngIf="post.liveChatExpires > lib.nowInSeconds()">
+<section class="comment" *ngIf="! date.isExpired(post.liveChatExpires)">
   <!-- <section class="comment"> -->
     <div [class]="comment.uid === fire.user.uid ? 'my-comment ': 'other-comment'" >
       
@@ -46,7 +46,7 @@
     </div>
   </section>
   
-  <section class="comment"  [style.margin]="0" [style.margin-left]="comment.depth * 30 + 'px'" *ngIf="post.liveChatExpires <= lib.nowInSeconds()" >
+  <section class="comment"  [style.margin]="0" [style.margin-left]="comment.depth * 30 + 'px'" *ngIf="date.isExpired(post.liveChatExpires)" >
     <!-- FOR LISTING (NON-LIVE) -->
     <div class="comment-list" >
       

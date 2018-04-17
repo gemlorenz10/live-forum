@@ -1,7 +1,7 @@
 @import '~sass/mixins';
 @import '~sass/variables';
 
-.post-form-container {
+.post-form {
     form {
         .post-title {
             margin: 0.5em 0 0.5em 0;
@@ -13,16 +13,22 @@
             padding: 0.8em;
             width: 100%;
         }
-
-        .post-livechat-timeout {
-            padding: 0.5em;
-            margin: 0;
-            @include no-select;
-            input {
-                width: 10em;
-                padding: 0.3em;
+        
+        .datepicker {
+            overflow: hidden;
+            height: auto;
+            margin: 0.5em;
+            .post-livechat-timeout {
+                padding: 0.5em;
+                margin: 0;
+                @include no-select;
+                input {
+                    width: 10em;
+                    padding: 0.3em;
+                }
             }
         }
+        
         
         .file-container {
             margin: 0.5em;

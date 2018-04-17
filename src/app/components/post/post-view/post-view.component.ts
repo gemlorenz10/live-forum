@@ -1,3 +1,4 @@
+import { DateService } from './../../../providers/date.service';
 import { LibService } from './../../../providers/lib.service';
 import { Component, OnInit, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { POST, COMMENT, FireService, FIRESERVICE_SETTINGS } from '../../../modules/firelibrary/core';
@@ -13,8 +14,11 @@ export class PostViewComponent implements OnInit, OnDestroy {
 
   @Output() close = new EventEmitter<POST>();
 
+  form = <POST>{};
   comment = <COMMENT>{};
-  constructor(public fire: FireService, public lib: LibService) {}
+  editPost: boolean;
+  constructor(public fire: FireService, public lib: LibService, public date: DateService) {
+  }
 
   ngOnInit() {
   }
@@ -25,5 +29,27 @@ export class PostViewComponent implements OnInit, OnDestroy {
   onClickBack() {
     // this.fire.comment.created.unsubscribe();
     this.close.emit(this.post);
+  }
+
+  onClickEdit() {
+    Object.assign(this.form, this.post);
+    this.editPost = true;
+  }
+
+  onEditCancel() {
+    this.editPost = false;
+    this.post = this.post;
+  }
+
+  onStopLiveChat() {
+    this.post.liveChatExpires = this.date.dateNow();
+    // console.log('Sanitize', this.post.liveChatExpires);
+    this.fire.post.edit(this.post)
+    .then(() => {
+      alert('Live chat stopped!');
+    })
+    .catch(e => {
+      this.lib.failure(e, 'Error on stopping Live Chat.');
+    });
   }
 }

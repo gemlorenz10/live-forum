@@ -1,3 +1,4 @@
+import { DateService } from './../../../providers/date.service';
 import { RESPONSE, USER, DATA_UPLOAD, POST_EDIT } from './../../../modules/firelibrary/providers/etc/interface';
 import { LibService } from './../../../providers/lib.service';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, EventEmitter, Output, OnDestroy } from '@angular/core';
@@ -19,17 +20,30 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
   };
 
   @Input() post = <POST>{}; // post to be submitted.
+
+  @Input() editMode: boolean;
+
   /**
   * Emits newly created post.
   */
-  @Output() posted = new EventEmitter<POST>();
+  @Output() success = new EventEmitter<POST>();
+
+  /**
+   * Emits when close button is pressed.
+   */
+  @Output() cancel = new EventEmitter<any>();
 
   loader = {
     form: false,
     file: false
   };
+  deletePhotoList = [];
   author = <USER>{};
-  constructor( public fire: FireService, public lib: LibService ) { }
+
+  editDate: boolean;
+
+
+  constructor( public fire: FireService, public lib: LibService, public date: DateService ) { }
 
   get postId() {
     return this.fire.user.uid + (new Date()).getTime();
@@ -37,6 +51,7 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.initPost();
+    this.getAuthorData();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -50,11 +65,13 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   initPost() {
-    this.post = <POST>{
-      id: this.postId,
-      liveChatExpires: this.lib.secToDay(this.category.liveChatTimeout), // days to input
-      data: []
-    };
+    if (! this.editMode) {
+      this.post = <POST>{
+        id: this.postId,
+        data: []
+      };
+      this.setExpiryToDefault();
+    }
   }
 
   onUploadDone(data) {
@@ -68,39 +85,12 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
       event.preventDefault();
     }
     this.loader.form = true;
-    this.post.category = this.category.id;
-    this.post.uid = this.fire.user.uid;
-    this.post.displayName = this.fire.user.displayName;
-    // @Deprecated - We need to change it when author changes its profile photo
-    this.post.authorPhoto = this.author.profilePhoto.thumbnailUrl;
-
-    // update expires plus the date now in seconds.
-    this.post.liveChatExpires = this.lib.dayToSec(this.post.liveChatExpires) + this.lib.nowInSeconds();
-
-    if (this.post.id) { // might be defined in file upload.
-      this.post.id = this.post.uid + '-' + (new Date()).getTime();
-    }
-
-
-    if (this.postValidator()) {
-      this.fire.post.create(this.post)
-      .then((re: POST_CREATE) => {
-        this.posted.emit(re.data.post);
-        alert('Post created!');
-        this.loader.form = false;
-        this.initPost();
-      })
-      .catch(e => {
-        this.lib.failure(e, 'Error on creating post');
-        this.loader.form = false;
-        this.initPost();
-      });
-
+    if (this.editMode) {
+      this.editPost();
     } else {
-      this.loader.form = false;
+      this.createPost();
     }
   }
-
   postValidator() {
     if (! this.post.content) {
       alert('Post has no content!');
@@ -113,6 +103,61 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  editPost() {
+    this.fire.post.edit(this.post)
+    .then((re: POST_EDIT) => {
+      if (this.deletePhotoList.length > 0) {
+          let i;
+          for ( i = 0; i < this.deletePhotoList.length; i++) {
+            this.deleteData(this.deletePhotoList[i]);
+          }
+        }
+    })
+    .then(() => {
+      this.deletePhotoList = [];
+      this.loader.form = false;
+      alert('Post edited!');
+      this.success.emit(this.post);
+    })
+    .catch(e => {
+      this.loader.form = false;
+      this.lib.failure(e, 'Error editing post: ' + this.post.id);
+    });
+  }
+
+  createPost() {
+    this.loader.form = true;
+    this.post.category = this.category.id;
+    this.post.uid = this.fire.user.uid;
+    this.post.displayName = this.fire.user.displayName;
+    this.post.authorPhoto = this.author.profilePhoto.thumbnailUrl;
+
+    // update expires plus the date now in seconds.
+    this.post.liveChatExpires = this.date.sanitizeDatepicker(this.post.liveChatExpires);
+
+    if (this.post.id) { // might be defined in file upload.
+      this.post.id = this.post.uid + '-' + (new Date()).getTime();
+    }
+
+
+    if (this.postValidator()) {
+      this.fire.post.create(this.post)
+      .then((re: POST_CREATE) => {
+        alert('Post created!');
+        this.loader.form = false;
+        this.initPost();
+        this.success.emit(re.data.post);
+      })
+      .catch(e => {
+        this.lib.failure(e, 'Error on creating post');
+        this.loader.form = false;
+        this.initPost();
+      });
+
+    } else {
+      this.loader.form = false;
+    }
+  }
   private getAuthorData() {
     this.fire.user.get(this.fire.user.uid)
     .then((re: RESPONSE) => {
@@ -134,5 +179,9 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
     .catch(e => {
       this.lib.failure(e, 'Error on deleting data' + data.name);
     });
+  }
+
+  setExpiryToDefault() {
+    this.post.liveChatExpires = this.date.secondsToDate(this.category.liveChatTimeout + this.date.dateNowInSeconds());
   }
 }

@@ -6,7 +6,7 @@
                     <span class="title pointer" *ngIf="post.title" (click)="open.emit()">
                         {{ post.title }}
                     </span>
-                    
+
                     <button class="btn btn-outline-danger right" (click)="onClickDeletePost( post.id )" *ngIf="myPost(getPost(post.id))">Delete</button>
                     <button class="btn btn-outline-primary right" (click)="onClickEdit( post )" *ngIf="myPost(getPost(post.id))">Edit</button>
                     <button class="btn btn-outline-primary right" *ngIf="! hideCommentButton" (click)="open.emit()">
@@ -25,10 +25,10 @@
                 </h5>
                 <div class="category pointer info" *ngIf="showCategory">Category: {{ post.category }}</div>
                 <div class="live-chat pointer info">
-                    LiveChat: {{ post.liveChatExpires > lib.nowInSeconds() ? lib.secondToTimeFormat(post.liveChatExpires - lib.nowInSeconds()) + ' left':  'Expired' }}
+                    LiveChat: {{ date.isExpired(post.liveChatExpires) ? 'Expired' : date.toLocaleDate(post.liveChatExpires) }}
                 </div>
             </div>
-            
+
             <div class="content-container">
                 <p>{{ post.content }}</p>
             </div>
@@ -38,7 +38,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="author-container">
             <div class="photo">
                 <!-- <app-avatar [profilePhoto]="post.authorPhoto"></app-avatar> @deprecated - will not be updated when user decides to change profile pic -->
@@ -50,10 +50,10 @@
         </div>
     </div>
     <!--
-        
-        
+
+
         EDITING POST
-        
+
     -->
     <!-- <app-post-form [categoryId]="post.category" [post]="post" *ngIf="editPost" (edited)="editPost = false" ></app-post-form> -->
     <!-- {{ author | json }} -->
@@ -63,46 +63,7 @@
             <span>{{ getPostDate }}</span>
         </div><br>
 
-    <!-- <app-post-form
-    [category]="post.category"
-    [post]="post"
-    (posted)="editPost = false"
-    ></app-post-form> -->
-
-        <form (ngSubmit)="onSubmitEdit($event)">
-            <div class="title">
-                <input type="text" name="title" id="" class="form-item-text" [(ngModel)]="post.title"  [disabled]="loader.main"><br>
-                
-            </div>
-            <div class="content">
-                <textarea type="text" name="content" id="" [(ngModel)]="post.content" [disabled]="loader.main"></textarea><br>
-            </div>
-            
-            <label class="post-livechat-timeout" *ngIf="!loader.main" >Extend live chat timeout:<input type="number" name="livechat-timeout" [(ngModel)]="post.liveChatExpires">Days</label><br>
-            <span>{{ loader.main ? 'Live Chat Timeout: ' + lib.secondToTimeFormat(post.liveChatExpires - lib.nowInSeconds() + 1) : '' }}</span>
-            
-            <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data.length > 0">
-                <div class="file-list" *ngFor="let data of post.data">
-                    <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
-                    <button type="button" (click)="onClickDeletePhoto(data)" [disabled]="loader.main">Delete</button>
-                </div>
-            </div><br>
-            
-            <app-file-upload
-            class="left"
-            [hidden] = "loader.main"
-            [pathToStorage]="'posts/' + post.id"
-            [data]="post.data"
-            (uploadStart)="loader.main = true"
-            (uploadDone)="onUploadDone($event)"
-            ></app-file-upload>
-            
-            <span *ngIf="loader.main">Uploading...</span>
-            <div class="buttons right">
-                <button type="submit" class="btn btn-primary" [disabled]="loader.main">{{ loader.main ? 'Please wait...' : 'Update' }}</button>
-                <button (click)="editPost = false" class="btn btn-outline-primary" [disabled]="loader.main">Cancel</button>
-            </div>
-        </form>
-    
+        <app-post-form [category]="post.category" [post]="post" [editMode]="true" (success)="editPost = false" (cancel)="editPost = false"></app-post-form>
     </div>
+
 </section>
