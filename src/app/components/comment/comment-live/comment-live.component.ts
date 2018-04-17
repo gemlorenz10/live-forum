@@ -98,29 +98,13 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
                 idList.pop();
             }
 
-            if ( idList && idList.length > 0 && this.comments( idList[idList.length - 1]).uid === this.fire.user.uid ) {
-                this.loader.creating = true;
-                this.comment.id = this.comments( idList[idList.length - 1]).id;
-                this.comment.content =  this.comments( idList[idList.length - 1]).content  + ' ' + this.comment.content;
-
-                if (this.comment.data && this.comment.data.length > 0) {
-                    this.comment.data = this.comments( idList[idList.length - 1]).data.concat(this.comment.data);
+            setTimeout(() => {
+                if ( idList && idList.length > 0 && this.comments( idList[idList.length - 1]).uid === this.fire.user.uid ) {
+                    this.updateComment(this.comments( idList[idList.length - 1]));
+                } else {
+                    this.insertComment();
                 }
-
-                this.fire.comment.edit(this.comment)
-                .then(re => {
-                    this.initComment();
-                    this.loader.creating = false;
-                }).catch(e => {
-                    this.initComment();
-                    this.loader.creating = false;
-                    alert(e.message);
-                });
-
-            } else {
-                this.insertComment();
-            }
-
+            });
         } else {
             alert('Comment has no content.');
             return false;
@@ -133,6 +117,26 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
         this.comment.parentId = '';
         this.loader.creating = true;
         this.fire.comment.create(this.comment)
+        .then(re => {
+            this.initComment();
+            this.loader.creating = false;
+        }).catch(e => {
+            this.initComment();
+            this.loader.creating = false;
+            alert(e.message);
+        });
+    }
+
+    updateComment(currentComment: COMMENT) {
+        this.loader.creating = true;
+        this.comment.id = currentComment.id;
+        this.comment.content =  currentComment.content  + ' ' + this.comment.content;
+
+        if (this.comment.data && this.comment.data.length > 0) {
+            this.comment.data = currentComment.data.concat(this.comment.data);
+        }
+
+        this.fire.comment.edit(this.comment)
         .then(re => {
             this.initComment();
             this.loader.creating = false;
