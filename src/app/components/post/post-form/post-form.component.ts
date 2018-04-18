@@ -29,8 +29,8 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
   @Output() success = new EventEmitter<POST>();
 
   /**
-   * Emits when close button is pressed.
-   */
+  * Emits when close button is pressed.
+  */
   @Output() cancel = new EventEmitter<any>();
 
   loader = {
@@ -72,6 +72,7 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
       };
       this.setExpiryToDefault();
     }
+    this.loader.form = false;
   }
 
   onUploadDone(data) {
@@ -91,6 +92,15 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
       this.createPost();
     }
   }
+
+  onClickClear() {
+    this.loader.form = true;
+    if (this.post.data && this.post.data.length > 0) {
+      this.deleteEachData(this.post.data);
+    }
+    this.initPost();
+  }
+
   postValidator() {
     if (! this.post.content) {
       alert('Post has no content!');
@@ -107,11 +117,11 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
     this.fire.post.edit(this.post)
     .then((re: POST_EDIT) => {
       if (this.deletePhotoList.length > 0) {
-          let i;
-          for ( i = 0; i < this.deletePhotoList.length; i++) {
-            this.deleteData(this.deletePhotoList[i]);
-          }
+        let i;
+        for ( i = 0; i < this.deletePhotoList.length; i++) {
+          this.deleteData(this.deletePhotoList[i]);
         }
+      }
     })
     .then(() => {
       this.deletePhotoList = [];
@@ -144,13 +154,11 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
       this.fire.post.create(this.post)
       .then((re: POST_CREATE) => {
         alert('Post created!');
-        this.loader.form = false;
         this.initPost();
         this.success.emit(re.data.post);
       })
       .catch(e => {
         this.lib.failure(e, 'Error on creating post');
-        this.loader.form = false;
         this.initPost();
       });
 
@@ -161,7 +169,6 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
   private getAuthorData() {
     this.fire.user.get(this.fire.user.uid)
     .then((re: RESPONSE) => {
-      // this.author = re.data;
       Object.assign(this.author, re.data);
     })
     .catch(e => {
@@ -169,18 +176,33 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  deleteData(data: DATA_UPLOAD) {
-    this.fire.data.delete(data)
+  deleteData(data: DATA_UPLOAD): Promise<RESPONSE> {
+    return this.fire.data.delete(data)
     .then((re: RESPONSE) => {
       if (re.data) {
         console.log('File deleted!', data.name);
       }
+      return re;
     })
     .catch(e => {
       this.lib.failure(e, 'Error on deleting data' + data.name);
+      return e;
     });
   }
 
+  deleteEachData(data: Array<DATA_UPLOAD>) {
+    this.loader.file = true;
+    let i, deleteCounter = 1;
+    for ( i = 0; i < data.length; i++) {
+      this.deleteData(data[i])
+      .then(re => {
+        if (data.length === deleteCounter) {
+          this.loader.file = false;
+        }
+        deleteCounter ++;
+      });
+    }
+  }
   setExpiryToDefault() {
     this.post.liveChatExpires = this.date.secondsToDate(this.category.liveChatTimeout + this.date.dateNowInSeconds());
   }

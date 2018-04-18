@@ -1,7 +1,11 @@
 import { DateService } from './../../../providers/date.service';
 import { LibService } from './../../../providers/lib.service';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { POST, USER, FireService, RESPONSE, COMMENT, DATA_UPLOAD, POST_EDIT } from '../../../modules/firelibrary/core';
+import {
+  POST, USER, FireService, RESPONSE,
+   COMMENT, DATA_UPLOAD, POST_EDIT,
+    CATEGORY, CATEGORY_GET
+  } from '../../../modules/firelibrary/core';
 
 @Component({
   selector: 'app-post-item',
@@ -15,7 +19,6 @@ export class PostItemComponent implements OnInit, OnChanges {
   */
   @Input() showCategory: boolean;
 
-
   // @Input() isRouterLink = true;
 
   @Input() post = <POST>{};
@@ -26,6 +29,7 @@ export class PostItemComponent implements OnInit, OnChanges {
 
   editPost;
   deletePhotoList = [];
+  category = <CATEGORY>{};
 
   loader = {
     main: false,
@@ -36,8 +40,6 @@ export class PostItemComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    // this.getPost(this.post.id)['likeInProgress'] = false;
-    // this.getPost(this.post.id)['DislikeInProgress'] = false;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -99,12 +101,18 @@ export class PostItemComponent implements OnInit, OnChanges {
     } else if (!this.myPost(post)) {
       alert('You are not the owner of the post');
       return;
+    } else {
+      this.fire.category.get(post.category)
+      .then((re: CATEGORY_GET) => {
+        this.editPost = true;
+        this.post = post;
+        this.category = re.data;
+      })
+      .catch(e => {
+        this.lib.failure(e, 'Error on getting category on editing post item.');
+      });
     }
-    this.editPost = true;
-    // post.liveChatExpires = Math.round(this.lib.secToDay(post.liveChatExpires  - this.lib.nowInSeconds()));
-    this.post = post;
-    // this.post.liveChatExpires = this.post.liveChatExpires  - this.lib.nowInSeconds();
-    // console.log('LIVE CHAT EXPIRES ON EDIT', post.liveChatExpires);
+
   }
 
   onClickDeletePost(id: string) {
@@ -131,11 +139,11 @@ export class PostItemComponent implements OnInit, OnChanges {
     this.fire.post.edit(this.post)
     .then((re: POST_EDIT) => {
       if (this.deletePhotoList.length > 0) {
-          let i;
-          for ( i = 0; i < this.deletePhotoList.length; i++) {
-            this.deleteData(this.deletePhotoList[i]);
-          }
+        let i;
+        for ( i = 0; i < this.deletePhotoList.length; i++) {
+          this.deleteData(this.deletePhotoList[i]);
         }
+      }
     })
     .then(() => {
       this.deletePhotoList = [];
@@ -174,6 +182,6 @@ export class PostItemComponent implements OnInit, OnChanges {
     this.fire.post.dislike(id).then(() => {
       this.loader.dislike[id] = false;
     })
-      .catch(e => alert(e.message));
+    .catch(e => alert(e.message));
   }
 }

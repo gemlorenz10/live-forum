@@ -1,4 +1,3 @@
-<!-- <app-post-item [post]="post" [hideCommentButton]="true"></app-post-item> -->
 <div class="post-container" *ngIf="! editPost">
     <h4>
         <span class="title">{{ post.title }}</span>
@@ -22,12 +21,9 @@
     
 </div>
 <div class="post-editor" *ngIf="editPost">
-    <app-post-form [category]="post.category" [post]="form" [editMode]="true" (success)="editPost = false" (cancel)="onEditCancel()"></app-post-form>
+    <app-post-form [category]="category" [post]="form" [editMode]="true" (success)="editPost = false" (cancel)="onEditCancel()"></app-post-form>
 </div>
 <hr>
-
-
-<!-- <app-comment [post]="post" [comment]="comment"></app-comment> -->
 
 <app-comment-live [post]="post" *ngIf="! date.isExpired(post.liveChatExpires)"></app-comment-live>
 

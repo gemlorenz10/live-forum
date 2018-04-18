@@ -3,6 +3,10 @@
 
 .post-form {
     form {
+        overflow: hidden;
+        .string-counter {
+            font-size: 0.8em;
+        }
         .post-title {
             margin: 0.5em 0 0.5em 0;
             padding: 0.5em;
@@ -29,21 +33,11 @@
             }
         }
         
-        
-        .file-container {
-            margin: 0.5em;
-            overflow-x: scroll;
-            background-color: $primary-shade;
-            img {
-                max-width: 10em;
-                max-height: 10em;
-                margin: 0.3em;
-            }
-        }
-        
         .btn-primary {
             width: 5em;
         }
     }
+
+    @include file-container;
     
 }

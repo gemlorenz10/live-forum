@@ -1,7 +1,7 @@
 import { DateService } from './../../../providers/date.service';
 import { LibService } from './../../../providers/lib.service';
 import { Component, OnInit, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
-import { POST, COMMENT, FireService, FIRESERVICE_SETTINGS } from '../../../modules/firelibrary/core';
+import { POST, COMMENT, FireService, FIRESERVICE_SETTINGS, CATEGORY, CATEGORY_GET } from '../../../modules/firelibrary/core';
 
 @Component({
   selector: 'app-post-view',
@@ -14,6 +14,7 @@ export class PostViewComponent implements OnInit, OnDestroy {
 
   @Output() close = new EventEmitter<POST>();
 
+  category = <CATEGORY>{};
   form = <POST>{};
   comment = <COMMENT>{};
   editPost: boolean;
@@ -21,6 +22,13 @@ export class PostViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.fire.category.get(this.post.category)
+    .then((re: CATEGORY_GET) => {
+      this.category = re.data;
+    })
+    .catch(e => {
+      this.lib.failure(e, 'Error on getting post category');
+    });
   }
 
   ngOnDestroy() {

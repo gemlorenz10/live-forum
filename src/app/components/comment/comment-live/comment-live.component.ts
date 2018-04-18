@@ -67,7 +67,7 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
 
 
     initComment() {
-        this.comment = { id: this.fire.comment.getId(), date: '', data: [] };
+        this.comment = { id: this.fire.comment.getId(), content: '', date: '', data: [] };
         this.chatInput.nativeElement.focus();
         console.log('Chat Input', this.chatInput);
     }
@@ -96,6 +96,10 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
         event.preventDefault();
         const idList = this.commentIds;
 
+        if (!this.comment.content) {
+            this.comment.content = '';
+        }
+
         if ( this.comment.content || this.comment.data.length > 0 ) {
 
             if ( idList && this.comments( idList[idList.length - 1]).deleted ) {
@@ -119,6 +123,9 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
     insertComment() {
         this.comment.postId = this.post.id;
         this.comment.parentId = '';
+        if (! this.comment.content) {
+            this.comment.content = '';
+        }
         this.loader.creating = true;
         this.fire.comment.create(this.comment)
         .then(re => {
@@ -132,23 +139,23 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
     }
 
     updateComment(currentComment: COMMENT) {
-        this.loader.creating = true;
-        this.comment.id = currentComment.id;
-        this.comment.content =  currentComment.content  + '\n' + this.comment.content;
-
-        if (this.comment.data && this.comment.data.length > 0) {
-            this.comment.data = currentComment.data.concat(this.comment.data);
+        if (currentComment.data && currentComment.data.length > 0) { // if there is a new data/file just insert new comment.
+            // this.comment.data = currentComment.data.concat(this.comment.data);
+            this.insertComment();
+        } else {
+            this.loader.creating = true;
+            this.comment.id = currentComment.id;
+            this.comment.content =  currentComment.content  + '\n' + this.comment.content;
+            this.fire.comment.edit(this.comment)
+            .then(re => {
+                this.initComment();
+                this.loader.creating = false;
+            }).catch(e => {
+                this.initComment();
+                this.loader.creating = false;
+                alert(e.message);
+            });
         }
-
-        this.fire.comment.edit(this.comment)
-        .then(re => {
-            this.initComment();
-            this.loader.creating = false;
-        }).catch(e => {
-            this.initComment();
-            this.loader.creating = false;
-            alert(e.message);
-        });
     }
 
     onUploadDone(data) {

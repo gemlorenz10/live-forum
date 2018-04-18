@@ -17,8 +17,11 @@
             padding: 0.5em;
             color: $light;
             background-color: $secondary-color;
+            p {
+                margin: 0.5em;
+            }
         }
-        
+
     }
     .other-comment {
         float: left;
@@ -30,10 +33,13 @@
             padding: 0.5em;
             color: black;
             background-color: $secondary-shade;
+            p {
+                margin: 0.5em;
+            }
         }
-        
+
     }
-    
+
     .comment-list {
         .content {
             .info {
@@ -46,9 +52,8 @@
                 // }
             }
         }
-        
+
     }
-    
+
     @include file-container();
-    
-    
+

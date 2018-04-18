@@ -1,7 +1,11 @@
 <div class="post-form center" *ngIf="author">
     <form (ngSubmit)="onSubmit($event)">
-        <input type="text" name="title" class="post-title" placeholder="Post title..." [(ngModel)]="post.title" [disabled]="loader.form"><br>
-        <textarea name="content" cols="60" rows="5" class="post-content" placeholder="Post content..." [(ngModel)]="post.content" [disabled]="loader.form"></textarea><br>
+        
+        <span class="string-counter left">{{ post.title ? post.title.length + '/255' : '0/255' }}</span>
+        <input type="text" name="title" maxlength="255" class="post-title" placeholder="Post title..." [(ngModel)]="post.title" [disabled]="loader.form"><br>
+        
+        <span  class="string-counter left">{{ post.content ? post.content.length + '/255' : '0/255' }}</span>
+        <textarea name="content" maxlength="255" cols="60" rows="5" class="post-content" placeholder="Post content..." [(ngModel)]="post.content" [disabled]="loader.form"></textarea><br>
         
         <div class="datepicker">
             <span *ngIf="! editDate" class="post-livechat-timeout">
@@ -20,14 +24,6 @@
             </span>
         </div>
         
-        <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data && post.data.length > 0">
-            <div class="file-list" *ngFor="let data of post.data">
-                <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
-            </div>
-            
-            <!-- {{ post.data | json }} -->
-        </div>
-        
         {{ loader.file ? 'Uploading...' : '' }}
         <app-file-upload
         class="left"
@@ -39,7 +35,15 @@
         ></app-file-upload>
         
         <button type="button" class="btn btn-outline-danger right" *ngIf="editMode" (click)="cancel.emit()">Cancel</button>
+        <button type="button" class="btn btn-outline-primary right" [disabled]="loader.form || loader.file" (click)="onClickClear()">Clear</button>
         <button type="submit" class="btn btn-primary right" [disabled]="loader.form || loader.file">Submit</button>
-    </form>
+    </form><br>
+            
+    <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data && post.data.length > 0">
+            <div class="file-list" *ngFor="let data of post.data">
+                <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
+            </div>
+            
+        </div>
 </div>
 <!-- {{ post | json }} -->

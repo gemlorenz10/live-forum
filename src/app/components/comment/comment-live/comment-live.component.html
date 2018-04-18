@@ -11,24 +11,27 @@ LIVE
 
   <div class="input-box" *ngIf="fire.user.isLogin">
     <form (ngSubmit)=" onSubmit( $event ) ">
-      <textarea #input type="text" class="input-text" name="content" placeholder="Write a comment..." [(ngModel)]="comment.content" [disabled]="loader.creating"></textarea>
-      
+      {{  comment.content? comment.content.length + '/255' : '0/255' }}
+      <textarea #input maxlength="255" class="input-text" name="content" placeholder="Write a comment..." [(ngModel)]="comment.content" [disabled]="loader.creating"></textarea>
+
       <app-file-upload
       [hidden]="loader.creating"
-      [pathToStorage]=" 'posts/' + post.id + '/comments/' + comment.id " 
+      [pathToStorage]=" 'posts/' + post.id + '/comments/' + comment.id "
       [data]=" comment.data "
       (uploadStart)="loader.creating = true"
       (uploadDone)="onUploadDone($event)"></app-file-upload>
-      
-      <div class="file-container d-flex align-items-center justify-content-center" *ngIf="comment.data && comment.data.length > 0">
+
+      <button type="submit" class="btn btn-primary" *ngIf=" ! loader.creating ">Send Comment</button>
+      <span class="loader" *ngIf="loader.creating">Creating a post. Please wait.</span>
+    </form>
+
+
+    <div class="file-container d-flex align-items-center justify-content-center" *ngIf="comment.data && comment.data.length > 0">
         <div class="file-list" *ngFor="let data of comment.data">
           <img [src]="data.thumbnailUrl ? data.thumbnailUrl : data.url" alt="">
         </div>
       </div>
-      
-      <button type="submit" class="btn btn-primary" *ngIf=" ! loader.creating ">Send Comment</button>
-      <span class="loader" *ngIf="loader.creating">Creating a post. Please wait.</span>
-    </form>
+
   </div>
 </div>
 
