@@ -19,8 +19,14 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
     liveChatTimeout: 0
   };
 
+  /**
+   * Post to be pushed.
+   */
   @Input() post = <POST>{}; // post to be submitted.
 
+  /**
+   * `true` if form will be in editMode. Current data will be displayed
+   */
   @Input() editMode: boolean;
 
   /**
@@ -50,13 +56,13 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-    this.initPost();
+    this.resetForm();
     this.getAuthorData();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['category']) {
-      this.initPost();
+      this.resetForm();
     }
   }
 
@@ -64,7 +70,7 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
 
   }
 
-  initPost() {
+  resetForm() {
     if (! this.editMode) {
       this.post = <POST>{
         id: this.postId,
@@ -83,7 +89,14 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
   onUploadDone(data) {
     this.post.data.push(data);
     this.loader.file = false;
-    // console.log('Data URLs', this.post.data, data);
+  }
+
+  onClickClear() {
+    this.loader.form = true;
+    if (this.post.data && this.post.data.length > 0) {
+      this.deleteEachData(this.post.data);
+    }
+    this.resetForm();
   }
 
   onSubmit(event: Event) {
@@ -97,15 +110,6 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
       this.createPost();
     }
   }
-
-  onClickClear() {
-    this.loader.form = true;
-    if (this.post.data && this.post.data.length > 0) {
-      this.deleteEachData(this.post.data);
-    }
-    this.initPost();
-  }
-
   postValidator() {
     if (! this.post.content) {
       alert('Post has no content!');
@@ -122,10 +126,11 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
     this.fire.post.edit(this.post)
     .then((re: POST_EDIT) => {
       if (this.deletePhotoList.length > 0) {
-        let i;
-        for ( i = 0; i < this.deletePhotoList.length; i++) {
-          this.deleteData(this.deletePhotoList[i]);
-        }
+        this.deleteEachData(this.deletePhotoList);
+        // let i;
+        // for ( i = 0; i < this.deletePhotoList.length; i++) {
+        //   this.deleteData(this.deletePhotoList[i]);
+        // }
       }
     })
     .then(() => {
@@ -159,12 +164,12 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
       this.fire.post.create(this.post)
       .then((re: POST_CREATE) => {
         alert('Post created!');
-        this.initPost();
+        this.resetForm();
         this.success.emit(re.data.post);
       })
       .catch(e => {
         this.lib.failure(e, 'Error on creating post');
-        this.initPost();
+        this.resetForm();
       });
 
     } else {

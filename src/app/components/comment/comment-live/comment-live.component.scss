@@ -7,6 +7,7 @@
     .chat-container {
         overflow-y: scroll;
         max-height: 100%;
+        background-color: $light;
     }
     .input-box {
         margin: 0 0 1em;
@@ -18,7 +19,7 @@
         }
     }
     @include file-container();
-
+    
 }
 
 
