@@ -2,9 +2,9 @@
 
 <div class="category-create-contianer center">
   <form (ngSubmit)="onClickSubmitCategory($event)">
-    <input type="text" name="id" id="" class="form-item-text" placeholder="Category ID" [(ngModel)]="category.id" [disabled]="loader"><br>
-    <input type="text" name="name" id="" class="form-item-text" placeholder="Category Name" [(ngModel)]="category.name" [disabled]="loader"><br>
-    <input type="text" name="desc" id="" class="form-item-text" placeholder="Category Description" [(ngModel)]="category.description" [disabled]="loader"><br>
+    <input type="text" name="id" class="form-item-text" placeholder="Category ID" [(ngModel)]="category.id" [disabled]="loader"><br>
+    <input type="text" name="name" class="form-item-text" placeholder="Category Name" [(ngModel)]="category.name" [disabled]="loader"><br>
+    <input type="text" name="desc" class="form-item-text" placeholder="Category Description" [(ngModel)]="category.description" [disabled]="loader"><br>
     <label>
       <span>Number of page per posts: </span><input type="number" name="num-post-per-page" id="" class="number-post-page" placeholder="Number of posts per page"  [(ngModel)]="category.numberOfPostsPerPage" [disabled]="loader"> Page
     </label>

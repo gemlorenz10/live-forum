@@ -9,10 +9,11 @@
     overflow: hidden;
     .my-comment {
         float: right;
-        clear: right;
+        // clear: right;
         max-width: 85%;
         padding: 1em;
         .content {
+            word-wrap: break-word;
             padding: 0.5em;
             color: $light;
             background-color: $secondary-color;
@@ -21,10 +22,11 @@
     }
     .other-comment {
         float: left;
-        clear: left;
+        // clear: left;
         max-width: 85%;
         padding: 1em;
         .content {
+            word-wrap: break-word;
             padding: 0.5em;
             color: black;
             background-color: $secondary-shade;
@@ -40,12 +42,13 @@
                 }
             }
             // .comment-content {
-            //     margin: 1em;
-            // }
+                //     margin: 1em;
+                // }
+            }
         }
+        
     }
     
-}
-
-@include file-container();
-
+    @include file-container();
+    
+    

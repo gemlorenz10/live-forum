@@ -11,7 +11,7 @@ LIVE
 
   <div class="input-box" *ngIf="fire.user.isLogin">
     <form (ngSubmit)=" onSubmit( $event ) ">
-      <input type="text" class="input-text" name="content" [(ngModel)]="comment.content" [disabled]="loader.creating">
+      <textarea type="text" class="input-text" name="content" placeholder="Write a comment..." [(ngModel)]="comment.content" [disabled]="loader.creating"></textarea>
       
       <app-file-upload
       [hidden]="loader.creating"

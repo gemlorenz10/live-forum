@@ -27,8 +27,27 @@ export class DateService {
     return (new Date()).getTime() > (new Date(expiryDate)).getTime();
   }
 
-  toLocaleDate(date: string, locale) {
-    return (new Date(date)).toLocaleDateString(this.DATE_LOCALE, this.DATE_FORMAT_OPTION);
+  isPastDay(date: string): boolean {
+    const now = (new Date()).getTime();
+    const dateNow = (new Date(now)).toDateString();
+
+    return (new Date(dateNow)).getTime() > (new Date(date)).getTime();
+  }
+
+  /**
+   * Gets or converts date into locale date string.
+   *
+   * @param date date to convert to locale. If empty it will get the current date.
+   * @param locale time locale
+   * @returns locale date string
+   */
+  toLocaleDate(date?: string, locale = this.DATE_LOCALE) {
+    if (date) {
+      return (new Date(date)).toLocaleDateString(locale, this.DATE_FORMAT_OPTION);
+    } else {
+      return (new Date()).toLocaleDateString(locale, this.DATE_FORMAT_OPTION);
+    }
+
   }
 
   toLocaleTime(time: string) {

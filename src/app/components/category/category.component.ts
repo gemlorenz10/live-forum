@@ -81,10 +81,7 @@ export class CategoryComponent implements OnInit {
   }
 
   private editCategory() {
-    // this.category = category;
     this.category.liveChatTimeout = Math.round(this.date.dayToSec(this.category.liveChatTimeout));
-
-
     this.loader = true;
     const newCategory = this.category;
     this.fire.category.edit(this.category)

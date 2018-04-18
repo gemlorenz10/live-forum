@@ -51,8 +51,11 @@ export class CommentItemComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
-
   get commentDate() {
+    return this.date.toLocaleDate(this.comment.created);
+  }
+
+  get commentTime() {
     return (new Date(this.comment.created)).toLocaleTimeString();
   }
 

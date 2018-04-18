@@ -55,4 +55,14 @@ export class LibService {
     return true;
   }
 
+  /**
+   * Sanitizes `multiLineString` to support HTML.
+   *
+   * Replaces '\n' into '<br>'
+   *
+   * @param multiLineString
+   */
+  // newLineToBreak(multiLineString: string) {
+  //   return multiLineString.replace(new RegExp('\n', 'g'), '<br>');
+  // }
 }

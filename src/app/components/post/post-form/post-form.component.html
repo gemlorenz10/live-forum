@@ -3,7 +3,7 @@
         <input type="text" name="title" class="post-title" placeholder="Post title..." [(ngModel)]="post.title" [disabled]="loader.form"><br>
         <textarea name="content" cols="60" rows="5" class="post-content" placeholder="Post content..." [(ngModel)]="post.content" [disabled]="loader.form"></textarea><br>
         
-        <div class="datepicker left">
+        <div class="datepicker">
             <span *ngIf="! editDate" class="post-livechat-timeout">
                 Live Chat Expiry Date: {{ date.isExpired(post.liveChatExpires) ? 'Expired' : date.toLocaleDate(post.liveChatExpires) }}
                 <button type="button" (click)="editDate = true">Change</button>

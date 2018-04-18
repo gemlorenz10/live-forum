@@ -12,7 +12,7 @@
             <button class="btn btn-primary right" (click)="onClickEdit()">Edit</button>
         </span>
     </h4>
-    <div class="content"> {{ post.content }} </div>
+    <div class="content"><p [innerText]="post.content"></p></div>
     
     <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data && post.data.length > 0">
         <div class="file-list" *ngFor="let data of post.data">

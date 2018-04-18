@@ -3,9 +3,9 @@
     <div [class]="comment.uid === fire.user.uid ? 'my-comment ': 'other-comment'" >
       
       <div [class]=" myComment()? 'text-right content' : 'text-left content'" *ngIf=" ! form.created && ! showEditForm">
-        <div >
-          {{ comment.content }}
-        </div>
+        
+        <!-- innterText instead of {{}} - because innerText reads new line '\n' -->
+        <p [innerText]="comment.content"></p>
         
         <div class="file-container d-flex align-items-center justify-content-center" *ngIf="comment.data && comment.data.length > 0">
           <div class="file-list" *ngFor="let data of comment.data">
@@ -15,7 +15,7 @@
         
         <div>
           <span style="font-size: 0.6em;">
-            {{ comment.displayName }} at {{ commentDate }}
+            {{ comment.displayName }} at {{ date.isPastDay(commentDate) ? commentDate + ' ' + commentTime : 'Today ' + commentTime }}
           </span>
         </div>
 
@@ -57,7 +57,7 @@
         </div>
         
         <div class="comment-content" [style.margin]="comment.parentId ? '0' : '1em'">
-          <span>{{ comment.content }}</span>
+          <p [innerText]="comment.content"></p>
         </div>
         
         <div class="file-container d-flex align-items-center justify-content-center" *ngIf="comment.data && comment.data.length > 0">

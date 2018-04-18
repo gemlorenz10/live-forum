@@ -47,6 +47,9 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
         this.fire.comment.created.subscribe( () => {
             this.scrollTop = this.chatContainer.nativeElement['scrollHeight'];
         });
+        this.fire.comment.updated.subscribe( () => {
+            this.scrollTop = this.chatContainer.nativeElement['scrollHeight'];
+        });
     }
 
     ngAfterViewinit() {
@@ -127,7 +130,7 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
     updateComment(currentComment: COMMENT) {
         this.loader.creating = true;
         this.comment.id = currentComment.id;
-        this.comment.content =  currentComment.content  + ' ' + this.comment.content;
+        this.comment.content =  currentComment.content  + '\n' + this.comment.content;
 
         if (this.comment.data && this.comment.data.length > 0) {
             this.comment.data = currentComment.data.concat(this.comment.data);

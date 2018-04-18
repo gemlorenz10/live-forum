@@ -25,12 +25,12 @@
                 </h5>
                 <div class="category pointer info" *ngIf="showCategory">Category: {{ post.category }}</div>
                 <div class="live-chat pointer info">
-                    LiveChat: {{ date.isExpired(post.liveChatExpires) ? 'Expired' : date.toLocaleDate(post.liveChatExpires) }}
+                    LiveChat Expires @ {{ date.isExpired(post.liveChatExpires) ? 'Expired' : date.toLocaleDate(post.liveChatExpires) }}
                 </div>
             </div>
 
             <div class="content-container">
-                <p>{{ post.content }}</p>
+                <div class="content"><p [innerText]="post.content"></p></div>
             </div>
             <div class="file-container d-flex align-items-center justify-content-center" *ngIf="post.data && post.data.length > 0">
                 <div class="file-list" *ngFor="let data of post.data">
