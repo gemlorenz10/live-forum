@@ -75,6 +75,11 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
     this.loader.form = false;
   }
 
+
+  setExpiryToDefault() {
+    this.post.liveChatExpires = this.date.secondsToDate(this.category.liveChatTimeout + this.date.dateNowInSeconds());
+  }
+
   onUploadDone(data) {
     this.post.data.push(data);
     this.loader.file = false;
@@ -166,15 +171,6 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
       this.loader.form = false;
     }
   }
-  private getAuthorData() {
-    this.fire.user.get(this.fire.user.uid)
-    .then((re: RESPONSE) => {
-      Object.assign(this.author, re.data);
-    })
-    .catch(e => {
-      this.lib.failure(e, 'Error on getting author data on post');
-    });
-  }
 
   deleteData(data: DATA_UPLOAD): Promise<RESPONSE> {
     return this.fire.data.delete(data)
@@ -200,10 +196,21 @@ export class PostFormComponent implements OnInit, OnChanges, OnDestroy {
           this.loader.file = false;
         }
         deleteCounter ++;
+      })
+      .catch(e => {
+        this.loader.file = false;
+        this.lib.failure(e, 'Error on deleting ' + data[i].name);
       });
     }
   }
-  setExpiryToDefault() {
-    this.post.liveChatExpires = this.date.secondsToDate(this.category.liveChatTimeout + this.date.dateNowInSeconds());
+
+  private getAuthorData() {
+    this.fire.user.get(this.fire.user.uid)
+    .then((re: RESPONSE) => {
+      Object.assign(this.author, re.data);
+    })
+    .catch(e => {
+      this.lib.failure(e, 'Error on getting author data on post');
+    });
   }
 }
