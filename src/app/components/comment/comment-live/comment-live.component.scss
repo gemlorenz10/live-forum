@@ -23,3 +23,17 @@
 }
 
 
+[me="true"] {
+    .meta {
+        text-align: right;
+    }
+    .messages {
+        display: flex;
+        flex-flow: row-reverse;
+        text-align: right;
+        background-color: yellow;
+        .message {
+            max-width: 200px;
+        }
+    }
+}

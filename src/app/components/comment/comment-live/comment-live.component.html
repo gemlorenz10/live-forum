@@ -4,15 +4,31 @@ LIVE
 <span *ngIf="lib.isEmpty(fire.comment.commentIds[post.id])">No comments yet...</span>
 <div class="chat-box" >
   <div #chat class="chat-container" [scrollTop]="scrollTop">
-    <div *ngFor=" let id of commentIds">
-      <app-comment-item [post]="post" [comment]="comments(id)" *ngIf="! comments(id).deleted"></app-comment-item>
+    <div *ngFor=" let id of commentIds " [attr.me]=" comments(id).uid == fire.user.uid ">
+      <!-- <app-comment-item [post]="post" [comment]="comments(id)" *ngIf="! comments(id).deleted"></app-comment-item> -->
+      
+      <div class="meta" *ngIf=" prevUid != comments(id).uid ">{{ comments(id).displayName }} wrote:</div>
+      {{ setPrevUid( comments(id).uid )}}
+      <div class="messages">
+        <div class="message">
+          {{ comments(id).content }}
+          <select (change)=" onCommand() " style="width: 20px; overflow: hidden">
+              <option>Edit</option>
+              <option>Delete</option>
+              <option>Like</option>
+              <option>Dislike</option>
+              <option>Report</option>
+          </select>
+        </div>
+      </div>
+      
     </div>
   </div>
 
   <div class="input-box" *ngIf="fire.user.isLogin">
     <form (ngSubmit)=" onSubmit( $event ) ">
       {{  comment.content? comment.content.length + '/255' : '0/255' }}
-      <textarea #input maxlength="255" class="input-text" name="content" placeholder="Write a comment..." [(ngModel)]="comment.content" [disabled]="loader.creating"></textarea>
+      <input #input type="text" class="input-text" name="content" placeholder="Write a comment..." [(ngModel)]="comment.content" [disabled]="loader.creating">
 
       <app-file-upload
       [hidden]="loader.creating"

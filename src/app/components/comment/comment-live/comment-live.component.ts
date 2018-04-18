@@ -25,11 +25,16 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
         commentList: false
     };
 
+    //
+    prevUid = '';
     constructor(
         public ngZone: NgZone,
         public fire: FireService,
         public lib: LibService
     ) {
+    }
+    setPrevUid(uid) {
+        this.prevUid = uid;
     }
     ngOnInit() {
         if (!this.post.id) {
@@ -102,17 +107,8 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
 
         if ( this.comment.content || this.comment.data.length > 0 ) {
 
-            if ( idList && this.comments( idList[idList.length - 1]).deleted ) {
-                idList.pop();
-            }
+            this.insertComment();
 
-            setTimeout(() => {
-                if ( idList && idList.length > 0 && this.comments( idList[idList.length - 1]).uid === this.fire.user.uid ) {
-                    this.updateComment(this.comments( idList[idList.length - 1]));
-                } else {
-                    this.insertComment();
-                }
-            });
         } else {
             alert('Comment has no content.');
             return false;
@@ -132,34 +128,18 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
             this.initComment();
             this.loader.creating = false;
         }).catch(e => {
-            this.initComment();
+
             this.loader.creating = false;
             alert(e.message);
         });
     }
 
-    updateComment(currentComment: COMMENT) {
-        if (currentComment.data && currentComment.data.length > 0) { // if there is a new data/file just insert new comment.
-            // this.comment.data = currentComment.data.concat(this.comment.data);
-            this.insertComment();
-        } else {
-            this.loader.creating = true;
-            this.comment.id = currentComment.id;
-            this.comment.content =  currentComment.content  + '\n' + this.comment.content;
-            this.fire.comment.edit(this.comment)
-            .then(re => {
-                this.initComment();
-                this.loader.creating = false;
-            }).catch(e => {
-                this.initComment();
-                this.loader.creating = false;
-                alert(e.message);
-            });
-        }
-    }
-
     onUploadDone(data) {
         this.comment.data.push(data);
         this.loader.creating = false;
+    }
+
+    onCommand() {
+
     }
 }
