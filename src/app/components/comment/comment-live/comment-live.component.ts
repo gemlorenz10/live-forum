@@ -16,6 +16,7 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
     @Input() post: POST = {};
 
     @ViewChild('chat') chatContainer: ElementRef;
+    @ViewChild('input') chatInput: ElementRef;
 
     scrollTop; //
     comment = <COMMENT>{};
@@ -46,9 +47,11 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
 
         this.fire.comment.created.subscribe( () => {
             this.scrollTop = this.chatContainer.nativeElement['scrollHeight'];
+            this.chatInput.nativeElement.focus();
         });
         this.fire.comment.updated.subscribe( () => {
             this.scrollTop = this.chatContainer.nativeElement['scrollHeight'];
+            this.chatInput.nativeElement.focus();
         });
     }
 
@@ -65,7 +68,8 @@ export class CommentLiveComponent implements OnInit, OnDestroy {
 
     initComment() {
         this.comment = { id: this.fire.comment.getId(), date: '', data: [] };
-
+        this.chatInput.nativeElement.focus();
+        console.log('Chat Input', this.chatInput);
     }
     comments(id): COMMENT {
         return this.fire.comment.getComment(id);

@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-sm">
             <div class="file-upload-container center">
-                <img *ngIf="! loader" [src]="photo" alt="">
+                <img *ngIf="! loader" [src]="photo" alt=""><br>
                 <app-file-upload
                 [hidden] = "loader"
                 [pathToStorage] = "'profile-photo'"
